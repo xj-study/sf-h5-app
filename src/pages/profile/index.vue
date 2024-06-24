@@ -8,5 +8,7 @@ definePage({
 </script>
 
 <template>
-  <base-container :padding-x="0">profile</base-container>
+  <base-container :padding-x="0">
+    profile
+  </base-container>
 </template>

@@ -44,10 +44,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             appSelector: '#app',
             viewportWidth: 375,
             maxDisplayWidth: 600,
-            rootContainingBlockSelectorList: [
-              'van-tabbar',
-              'van-popup',
-            ],
+            rootContainingBlockSelectorList: ['van-tabbar', 'van-popup'],
           }),
         ],
       },
@@ -56,6 +53,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     build: {
       cssCodeSplit: false,
       chunkSizeWarningLimit: 2048,
+      sourcemap: true,
     },
 
     optimizeDeps: { include, exclude },

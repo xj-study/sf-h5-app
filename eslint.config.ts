@@ -9,8 +9,9 @@ export default antfu({
     css: true,
   },
 
-  ignores: [
-    '.github/**',
-    'scripts/**',
-  ],
+  ignores: ['.github/**', 'scripts/**'],
+}, {
+  rules: {
+    'style/brace-style': ['error', '1tbs', { allowSingleLine: true }],
+  },
 })

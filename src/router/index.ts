@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 
 import NProgress from 'nprogress'
@@ -31,7 +31,7 @@ router.beforeEach((to: EnhancedRouteLocation, from, next) => {
     routeTransitionNameStore.setName('slide-fadein-right')
 
   else
-    routeTransitionNameStore.setName('')
+    routeTransitionNameStore.setName('fade')
 
   next()
 })

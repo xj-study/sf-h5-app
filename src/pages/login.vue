@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { setToken } from '@/utils/token'
+
 definePage({
   name: 'login',
   meta: {
@@ -6,7 +8,11 @@ definePage({
   },
 })
 
-const onSubmit = () => {}
+const router = useRouter()
+function onSubmit() {
+  setToken('token 123')
+  router.back()
+}
 const username = ref('')
 const password = ref('')
 </script>
@@ -14,7 +20,7 @@ const password = ref('')
 <template>
   <base-container :padding-x="0">
     <van-form @submit="onSubmit">
-      <van-cell-group inset>
+      <van-cell-group inset class="pt-16">
         <van-field
           v-model="username"
           name="用户名"
@@ -32,7 +38,9 @@ const password = ref('')
         />
       </van-cell-group>
       <div style="margin: 16px">
-        <van-button round block type="primary" native-type="submit"> 提交 </van-button>
+        <van-button block type="primary" native-type="submit">
+          提交
+        </van-button>
       </div>
     </van-form>
   </base-container>

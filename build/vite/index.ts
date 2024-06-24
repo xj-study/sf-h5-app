@@ -43,17 +43,14 @@ export function createVitePlugins() {
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      include: [
-        /\.[tj]sx?$/,
-        /\.vue$/,
-        /\.vue\?vue/,
-      ],
+      include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
       imports: [
         'vue',
         'vitest',
         '@vueuse/core',
         VueRouterAutoImports,
         {
+          'unplugin-vue-router/runtime': ['definePage'],
           'vue-router/auto': ['useLink'],
           '@/utils/i18n': ['i18n', 'locale'],
           'vue-i18n': ['useI18n'],
@@ -61,9 +58,7 @@ export function createVitePlugins() {
         unheadVueComposablesImports,
       ],
       dts: 'src/auto-imports.d.ts',
-      dirs: [
-        'src/composables',
-      ],
+      dirs: ['src/composables'],
     }),
 
     // https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n

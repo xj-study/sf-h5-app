@@ -4,14 +4,24 @@ defineProps({
     type: Number,
     default: 16,
   },
+  hFull: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
 <template>
-  <main
-    class="absolute left-0 h-full w-full overflow-y-auto pt-46"
+  <div
+    class="pt-46"
+    :class="{
+      'absolute': hFull,
+      'left-0': hFull,
+      'h-full': hFull,
+      'overflow-y-auto': hFull,
+    }"
     :style="`padding-left: ${paddingX}px; padding-right: ${paddingX}px`"
   >
     <slot />
-  </main>
+  </div>
 </template>
