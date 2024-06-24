@@ -23,10 +23,10 @@ const loading = ref(false)
 const finished = ref(false)
 
 const finishedTextStr = computed(() => {
-  if (finished.value && !list.value.length) {
-    return ''
-  }
-  return props.finishedText
+  // if (finished.value && !list.value.length) {
+  //   return ''
+  // }
+  return props.finishedText || '没有更多了'
 })
 
 function onLoad() {
@@ -87,6 +87,7 @@ onMounted(() => {
 })
 
 defineExpose({
+  list,
   onRefresh,
 })
 </script>

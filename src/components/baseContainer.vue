@@ -13,7 +13,7 @@ defineProps({
 
 <template>
   <div
-    class="pt-46"
+    class="min-h-screen pt-46"
     :class="{
       'absolute': hFull,
       'left-0': hFull,
