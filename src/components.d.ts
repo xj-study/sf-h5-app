@@ -7,6 +7,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Base1Container: typeof import('./components/base1Container.vue')['default']
+    Base1NavBar: typeof import('./components/base1NavBar.vue')['default']
+    Base1RefreshList: typeof import('./components/base1RefreshList.vue')['default']
+    Base1TabBar: typeof import('./components/base1TabBar.vue')['default']
     BaseContainer: typeof import('./components/BaseContainer.vue')['default']
     BaseNavBar: typeof import('./components/BaseNavBar.vue')['default']
     BaseRefreshList: typeof import('./components/BaseRefreshList.vue')['default']
