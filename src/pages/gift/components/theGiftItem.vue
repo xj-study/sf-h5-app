@@ -1,27 +1,8 @@
 <script setup lang="ts">
-import type { TagType } from 'vant'
-import { isCompleteStatus, isInitStatus, isWaitVerifyStatus } from '../utils/taskStatusUtils'
-
 const props = defineProps({
   item: { type: Object, default: () => ({}) },
 })
 const emits = defineEmits(['verify'])
-const statusCompleteFlag = computed(() => isCompleteStatus(props.item.status))
-const statusInitFlag = computed(() => isInitStatus(props.item.status))
-const statusWaitVerifyFlag = computed(() => isWaitVerifyStatus(props.item.status))
-const tagData = computed<{ text: string, type: TagType }>(() => {
-  if (statusInitFlag.value) {
-    return { text: '未完成', type: 'warning' }
-  }
-  if (statusWaitVerifyFlag.value) {
-    return { text: '待审核', type: 'primary' }
-  }
-  if (statusCompleteFlag.value) {
-    return { text: '已完成', type: 'success' }
-  }
-  return { text: '', type: 'default' }
-})
-const btnFlag = computed(() => statusWaitVerifyFlag.value)
 
 const verifyLoadingFlag = ref(false)
 async function onVerify() {
@@ -44,20 +25,15 @@ function delay(duration: number) {
 <template>
   <div class="m-10 bg-white p-10">
     <div class="flex text-16">
-      <van-tag v-if="tagData.text" plain :type="tagData.type" class="mr-10">
-        {{ tagData.text }}
-      </van-tag>
       <span> {{ item.title }} </span>
     </div>
     <div class="mt-8 text-14">
       {{ item.content }}
     </div>
     <Transition name="fade-item">
-      <div v-if="btnFlag" class="mt-20">
-        <van-button size="small" plain type="primary" class="min-w-100" :loading="verifyLoadingFlag" @click="onVerify">
-          通过
-        </van-button>
-      </div>
+      <base-button size="small" plain type="primary" class="mt-20 min-w-100" :loading="verifyLoadingFlag" @click="onVerify">
+        兑换
+      </base-button>
     </Transition>
   </div>
 </template>

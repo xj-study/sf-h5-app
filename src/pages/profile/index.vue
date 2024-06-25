@@ -16,7 +16,7 @@ function toCustomTask() {
   router.push('/task/custom')
 }
 function toCustomGift() {
-
+  router.push('/gift')
 }
 </script>
 

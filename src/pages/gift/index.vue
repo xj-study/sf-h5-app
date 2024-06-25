@@ -5,7 +5,7 @@ definePage({
   name: 'gift',
   meta: {
     level: 2,
-    title: '任务列表',
+    title: '礼物中心',
   },
 })
 
@@ -14,6 +14,7 @@ async function getList() {
   const task = {
     title: '贴贴纸',
     content: '非常好看的贴贴纸',
+    price: 100,
   }
   const records = []
   for (let i = 0; i < 10; i++) {
