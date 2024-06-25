@@ -20,9 +20,12 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     'home': RouteRecordInfo<'home', '/', Record<never, never>, Record<never, never>>,
     '404': RouteRecordInfo<'404', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
+    'gift': RouteRecordInfo<'gift', '/gift', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'profile': RouteRecordInfo<'profile', '/profile', Record<never, never>, Record<never, never>>,
-    'taskList': RouteRecordInfo<'taskList', '/task', Record<never, never>, Record<never, never>>,
+    'task': RouteRecordInfo<'task', '/task', Record<never, never>, Record<never, never>>,
     'taskCustom': RouteRecordInfo<'taskCustom', '/task/custom', Record<never, never>, Record<never, never>>,
+    'taskList': RouteRecordInfo<'taskList', '/task copy', Record<never, never>, Record<never, never>>,
+    'taskCustom': RouteRecordInfo<'taskCustom', '/task copy/custom', Record<never, never>, Record<never, never>>,
   }
 }

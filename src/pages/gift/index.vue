@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import TheTaskItem from './components/theTaskItem.vue'
+import TheGiftItem from './components/theGiftItem.vue'
 
 definePage({
-  name: 'task',
+  name: 'gift',
   meta: {
     level: 2,
     title: '任务列表',
@@ -12,10 +12,8 @@ definePage({
 const listRef = ref(null)
 async function getList() {
   const task = {
-    title: '任务标题1',
-    content: '任务内容1',
-    status: 100,
-    index: 0,
+    title: '贴贴纸',
+    content: '非常好看的贴贴纸',
   }
   const records = []
   for (let i = 0; i < 10; i++) {
@@ -45,7 +43,7 @@ function onItemVerify() {
   <base-container :padding-x="0">
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheTaskItem v-for="data, index in list" :key="index" :item="data" @verify="onItemVerify" />
+        <TheGiftItem v-for="data, index in list" :key="index" :item="data" @verify="onItemVerify" />
       </template>
     </base-refresh-list>
   </base-container>
