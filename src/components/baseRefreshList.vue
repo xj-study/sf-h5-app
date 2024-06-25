@@ -59,10 +59,7 @@ function onRefresh(refresh = true) {
 async function getData(showLoading = true) {
   showLoading && (loading.value = true)
   if (props.getList) {
-    const {
-      records = [],
-      size = 10,
-    } = (await props.getList({ pageNum: pageNum.value, pageSize: props.pageSize })) || {}
+    const { records = [], size = 10 } = (await props.getList({ pageNum: pageNum.value, pageSize: props.pageSize })) || {}
     loading.value = false
     refreshLoading.value = false
     finished.value = records.length < size

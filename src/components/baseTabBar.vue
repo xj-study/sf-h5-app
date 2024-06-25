@@ -4,9 +4,7 @@ const active = ref(0)
 const route = useRoute()
 
 const display = computed(() => {
-  if (route.meta.level && route.meta.level !== 2)
-    return true
-  return false
+  return route.meta.tabbar
 })
 </script>
 

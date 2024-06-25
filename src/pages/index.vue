@@ -5,13 +5,14 @@ definePage({
   name: 'home',
   meta: {
     level: 1,
+    tabbar: true,
   },
 })
 
 const router = useRouter()
 function onStart() {
   useToken(() => {
-    router.push('/task')
+    router.push('/task/custom')
   })
 }
 </script>

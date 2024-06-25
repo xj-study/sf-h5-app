@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import TheTaskItem from './components/theTaskItem.vue'
+import TheCustomTaskItem from './components/theCustomTaskItem.vue'
+import TheTaskForm from './components/theTaskForm.vue'
 
 definePage({
-  name: 'taskList',
+  name: 'taskCustom',
   meta: {
     level: 2,
-    title: '任务列表',
+    title: '任务定制',
   },
 })
 
 const listRef = ref(null)
-async function getList() {
+function getList() {
   const task = {
     title: '任务标题1',
     content: '任务内容1',
@@ -18,26 +19,19 @@ async function getList() {
     index: 0,
   }
   const records = []
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 18; i++) {
     records.push({ ...task, index: i })
   }
-  await delay(1000)
   return {
     records,
-    size: 10,
+    size: 20,
   }
 }
 
-function delay(timeout) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, timeout)
-  })
-}
+const editShowFlag = ref(false)
 
-function onItemVerify(item) {
-  listRef.value.list[item.index].status = 200
+function onItemEdit() {
+  editShowFlag.value = true
 }
 </script>
 
@@ -45,8 +39,11 @@ function onItemVerify(item) {
   <base-container :padding-x="0">
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheTaskItem v-for="data, index in list" :key="index" :item="data" @verify="onItemVerify" />
+        <TheCustomTaskItem v-for="data, index in list" :key="index" :item="data" @edit="onItemEdit" />
       </template>
     </base-refresh-list>
+    <base-popup v-model:show="editShowFlag" title="编辑任务">
+      <TheTaskForm />
+    </base-popup>
   </base-container>
 </template>

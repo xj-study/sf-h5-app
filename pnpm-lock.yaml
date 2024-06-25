@@ -41,7 +41,7 @@ specifiers:
   unocss: 0.61.0
   unplugin-auto-import: ^0.17.6
   unplugin-vue-components: ^0.27.0
-  unplugin-vue-router: ^0.10.0
+  unplugin-vue-router: ^0.9.1
   vant: ^4.9.1
   vconsole: ^3.15.1
   vite: ^5.3.1
@@ -104,7 +104,7 @@ devDependencies:
   unocss: 0.61.0_rollup@4.18.0+vite@5.3.1
   unplugin-auto-import: 0.17.6_efud2u2hbfvrgefeekxf56ixy4
   unplugin-vue-components: 0.27.0_rollup@4.18.0+vue@3.4.29
-  unplugin-vue-router: 0.10.0_2ebz7nppysjfxli7gg7tf3pxti
+  unplugin-vue-router: 0.9.1_2ebz7nppysjfxli7gg7tf3pxti
   vite: 5.3.1_sdh4fte6jcgbbdnv36rs7j4cje
   vite-plugin-mock-dev-server: 1.5.0_rollup@4.18.0+vite@5.3.1
   vite-plugin-pwa: 0.20.0_vite@5.3.1
@@ -7634,10 +7634,10 @@ packages:
       - supports-color
     dev: true
 
-  /unplugin-vue-router/0.10.0_2ebz7nppysjfxli7gg7tf3pxti:
-    resolution: {integrity: sha512-t9cwRvNONcrh7CZLUYrd4kGOH4xZRhsHeT+exaAuYFn7z87pkTHiHh3wBnGerfKGs22SnmJIIjcKyEa62CO+4w==}
+  /unplugin-vue-router/0.9.1_2ebz7nppysjfxli7gg7tf3pxti:
+    resolution: {integrity: sha512-kQfplWIowamMLclOdJREiVqhuwTs5dSNPz7YftjKibwSmihds6KdMI9O/3WqilGFo6Q5+8gNwQTpu356wWs8KQ==}
     peerDependencies:
-      vue-router: ^4.4.0
+      vue-router: ^4.3.0
     peerDependenciesMeta:
       vue-router:
         optional: true

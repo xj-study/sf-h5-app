@@ -5,5 +5,6 @@ export interface EnhancedRouteLocation extends RouteLocationNormalized {
     level?: number | unknown
     name?: string
     keepAlive?: boolean
+    tabbar?: boolean
   }
 }

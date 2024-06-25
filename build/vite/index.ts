@@ -51,7 +51,6 @@ export function createVitePlugins() {
         '@vueuse/core',
         VueRouterAutoImports,
         {
-          'unplugin-vue-router/runtime': ['definePage'],
           'vue-router/auto': ['useLink'],
           '@/utils/i18n': ['i18n', 'locale'],
           'vue-i18n': ['useI18n'],

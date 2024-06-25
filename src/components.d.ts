@@ -7,16 +7,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Base1Container: typeof import('./components/base1Container.vue')['default']
-    Base1NavBar: typeof import('./components/base1NavBar.vue')['default']
-    Base1RefreshList: typeof import('./components/base1RefreshList.vue')['default']
-    Base1TabBar: typeof import('./components/base1TabBar.vue')['default']
+    BaseButton: typeof import('./components/baseButton.vue')['default']
     BaseContainer: typeof import('./components/baseContainer.vue')['default']
+    BaseHead: typeof import('./components/baseHead.vue')['default']
     BaseNavBar: typeof import('./components/baseNavBar.vue')['default']
+    BasePopup: typeof import('./components/basePopup.vue')['default']
     BaseRefreshList: typeof import('./components/baseRefreshList.vue')['default']
     BaseTabBar: typeof import('./components/baseTabBar.vue')['default']
-    Chart: typeof import('./components/Chart/index.vue')['default']
-    RefreshList: typeof import('./components/RefreshList.vue')['default']
+    BaseTitle: typeof import('./components/baseTitle.vue')['default']
+    copy: typeof import('./components/baseHead copy.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']
@@ -27,11 +26,10 @@ declare module 'vue' {
     VanIcon: typeof import('vant/es')['Icon']
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanPopup: typeof import('vant/es')['Popup']
     VanPullRefresh: typeof import('vant/es')['PullRefresh']
-    VanTab: typeof import('vant/es')['Tab']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
-    VanTabs: typeof import('vant/es')['Tabs']
     VanTag: typeof import('vant/es')['Tag']
   }
 }
