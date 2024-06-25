@@ -84,7 +84,6 @@ onMounted(() => {
 })
 
 defineExpose({
-  list,
   onRefresh,
 })
 </script>

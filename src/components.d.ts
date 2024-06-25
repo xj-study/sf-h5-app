@@ -8,8 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BaseButton: typeof import('./components/baseButton.vue')['default']
+    BaseCellHead: typeof import('./components/baseCellHead.vue')['default']
     BaseContainer: typeof import('./components/baseContainer.vue')['default']
     BaseHead: typeof import('./components/baseHead.vue')['default']
+    BaseHeadTool: typeof import('./components/baseHeadTool.vue')['default']
     BaseNavBar: typeof import('./components/baseNavBar.vue')['default']
     BasePopup: typeof import('./components/basePopup.vue')['default']
     BaseRefreshList: typeof import('./components/baseRefreshList.vue')['default']
@@ -28,6 +30,7 @@ declare module 'vue' {
     VanNavBar: typeof import('vant/es')['NavBar']
     VanPopup: typeof import('vant/es')['Popup']
     VanPullRefresh: typeof import('vant/es')['PullRefresh']
+    VanSticky: typeof import('vant/es')['Sticky']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VanTag: typeof import('vant/es')['Tag']

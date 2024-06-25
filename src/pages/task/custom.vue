@@ -29,21 +29,38 @@ function getList() {
 }
 
 const editShowFlag = ref(false)
+const formData = ref(null)
 
-function onItemEdit() {
+function toEdit(itemData) {
+  formData.value = itemData
   editShowFlag.value = true
+}
+
+function toAdd() {
+  formData.value = null
+  editShowFlag.value = true
+}
+
+function onConfirm() {
+  editShowFlag.value = false
 }
 </script>
 
 <template>
   <base-container :padding-x="0">
+    <base-head-tool>
+      <base-button icon="add" @click="toAdd">
+        新增任务
+      </base-button>
+    </base-head-tool>
+
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheCustomTaskItem v-for="data, index in list" :key="index" :item="data" @edit="onItemEdit" />
+        <TheCustomTaskItem v-for="data, index in list" :key="index" :item="data" @edit="toEdit" />
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag" title="编辑任务">
-      <TheTaskForm />
+      <TheTaskForm :item-data="formData" @confirm="onConfirm" />
     </base-popup>
   </base-container>
 </template>

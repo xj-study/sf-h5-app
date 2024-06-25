@@ -36,8 +36,8 @@ function delay(timeout) {
   })
 }
 
-function onItemVerify(item) {
-  listRef.value.list[item.index].status = 200
+function onItemVerify() {
+
 }
 </script>
 

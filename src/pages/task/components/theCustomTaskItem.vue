@@ -4,21 +4,8 @@ const props = defineProps({
 })
 const emits = defineEmits(['edit'])
 
-const verifyLoadingFlag = ref(false)
 async function onEdit() {
-  // 审核
-  verifyLoadingFlag.value = true
-
   emits('edit', props.item)
-  await delay(400)
-  verifyLoadingFlag.value = false
-}
-function delay(duration: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, duration)
-  })
 }
 </script>
 
@@ -32,7 +19,7 @@ function delay(duration: number) {
     </div>
 
     <div class="mt-20">
-      <van-button size="small" plain type="primary" class="min-w-100" :loading="verifyLoadingFlag" @click="onEdit">
+      <van-button size="small" plain type="primary" class="min-w-100" @click="onEdit">
         修改
       </van-button>
     </div>
