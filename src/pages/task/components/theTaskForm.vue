@@ -45,9 +45,9 @@ function onSubmit() {
       />
     </van-cell-group>
     <div style="margin: 16px">
-      <van-button block type="primary" native-type="submit">
+      <base-button block type="primary" native-type="submit">
         确认
-      </van-button>
+      </base-button>
     </div>
   </van-form>
 </template>

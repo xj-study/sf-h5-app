@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import TheCustomTaskItem from './components/theCustomTaskItem.vue'
-import TheTaskForm from './components/theTaskForm.vue'
+import { showToast } from 'vant'
+import TheCustomGiftItem from './components/theCustomGiftItem.vue'
+import TheGiftForm from './components/theGiftForm.vue'
 
 definePage({
-  name: 'taskCustom',
+  name: 'giftCustom',
   meta: {
     level: 2,
-    title: '任务定制',
+    title: '礼物管理',
   },
 })
 
 const listRef = ref(null)
 function getList() {
   const task = {
-    title: '任务标题1',
-    content: '任务内容1',
-    status: 100,
-    index: 0,
+    title: '贴贴纸',
+    content: '非常好看的贴贴纸',
+    price: 100,
   }
   const records = []
   for (let i = 0; i < 18; i++) {
-    records.push({ ...task, index: i })
+    records.push(task)
   }
   return {
     records,
@@ -36,6 +36,11 @@ function toEdit(itemData) {
   editShowFlag.value = true
 }
 
+function toOffShelf() {
+  //
+  showToast('操作成功')
+}
+
 function toAdd() {
   formData.value = null
   editShowFlag.value = true
@@ -43,6 +48,7 @@ function toAdd() {
 
 function onConfirm() {
   editShowFlag.value = false
+  showToast('操作成功')
 }
 </script>
 
@@ -50,17 +56,17 @@ function onConfirm() {
   <base-container :padding-x="0">
     <base-head-tool>
       <base-button icon="add" @click="toAdd">
-        新增任务
+        新增礼物
       </base-button>
     </base-head-tool>
 
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheCustomTaskItem v-for="data, index in list" :key="index" :item="data" @edit="toEdit" />
+        <TheCustomGiftItem v-for="data, index in list" :key="index" :item="data" @edit="toEdit" @off-shelf="toOffShelf" />
       </template>
     </base-refresh-list>
-    <base-popup v-model:show="editShowFlag" title="编辑任务">
-      <TheTaskForm :item-data="formData" @confirm="onConfirm" />
+    <base-popup v-model:show="editShowFlag" title="编辑礼物">
+      <TheGiftForm :item-data="formData" @confirm="onConfirm" />
     </base-popup>
   </base-container>
 </template>

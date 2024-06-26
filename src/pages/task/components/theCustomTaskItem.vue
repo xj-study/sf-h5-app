@@ -19,9 +19,9 @@ async function onEdit() {
     </div>
 
     <div class="mt-20">
-      <van-button size="small" plain type="primary" class="min-w-100" @click="onEdit">
+      <base-button size="small" plain type="primary" btn-cls="min-w-100" @click="onEdit">
         修改
-      </van-button>
+      </base-button>
     </div>
   </div>
 </template>

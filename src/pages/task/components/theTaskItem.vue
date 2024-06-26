@@ -53,11 +53,9 @@ function delay(duration: number) {
       {{ item.content }}
     </div>
     <Transition name="fade-item">
-      <div v-if="btnFlag" class="mt-20">
-        <van-button size="small" plain type="primary" class="min-w-100" :loading="verifyLoadingFlag" @click="onVerify">
-          通过
-        </van-button>
-      </div>
+      <base-button v-if="btnFlag" class="mt-20" btn-cls="min-w-100" size="small" plain type="primary" :loading="verifyLoadingFlag" @click="onVerify">
+        通过
+      </base-button>
     </Transition>
   </div>
 </template>

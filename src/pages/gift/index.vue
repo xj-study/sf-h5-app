@@ -18,7 +18,7 @@ async function getList() {
   }
   const records = []
   for (let i = 0; i < 10; i++) {
-    records.push({ ...task, index: i })
+    records.push(task)
   }
   await delay(1000)
   return {
