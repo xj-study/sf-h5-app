@@ -1,3 +1,7 @@
+export enum ResponseCode {
+  SUCCESS = 0,
+}
+
 export interface ResponseBody<T = any> {
   message?: string
   code?: number

@@ -1,20 +1,31 @@
 <script setup lang="ts">
-import { setToken } from '@/utils/token'
+import { showToast } from 'vant'
+import { login } from '@/api/user'
+import useUserStore from '@/stores/modules/user'
 
 definePage({
   name: 'login',
   meta: {
     level: 2,
+    common: true,
   },
 })
 
+const userName = ref('')
+const password = ref('')
+const userStore = useUserStore()
+
 const router = useRouter()
-function onSubmit() {
-  setToken('token 123')
+async function onSubmit() {
+  const result = await login({
+    userName: userName.value,
+    password: password.value,
+  })
+
+  userStore.user = result
+  showToast('登录成功')
   router.back()
 }
-const username = ref('')
-const password = ref('')
 </script>
 
 <template>
@@ -22,7 +33,7 @@ const password = ref('')
     <van-form @submit="onSubmit">
       <van-cell-group inset class="pt-16">
         <van-field
-          v-model="username"
+          v-model="userName"
           name="用户名"
           label="用户名"
           placeholder="用户名"

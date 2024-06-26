@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia'
 
 enum UserType {
+  INIT = 0,
   CHILD = 1,
   PARENT = 2,
 }
 
 const useUserStore = defineStore('user', () => {
-  const user = ref({ type: UserType.CHILD })
-  const token = ref('')
+  const user = ref({ type: UserType.INIT, token: '' })
+
   const parentTypeFlag = computed(() => user.value.type === UserType.PARENT)
+  const token = computed(() => user.value.token)
   return {
     user,
     token,

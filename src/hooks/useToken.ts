@@ -1,8 +1,8 @@
-import { getToken } from '@/utils/token'
 import router from '@/router'
+import useUserStore from '@/stores/modules/user'
 
 export default function useToken(callback: Function, ...args: any[]) {
-  const token = getToken()
+  const token = useUserStore().token
 
   if (token && callback) {
     // callback.apply(null, args)

@@ -6,6 +6,7 @@ definePage({
   meta: {
     level: 1,
     tabbar: true,
+    common: true,
   },
 })
 

@@ -6,5 +6,6 @@ export interface EnhancedRouteLocation extends RouteLocationNormalized {
     name?: string
     keepAlive?: boolean
     tabbar?: boolean
+    auth?: boolean
   }
 }

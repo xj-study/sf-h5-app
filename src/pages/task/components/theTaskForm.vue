@@ -44,8 +44,8 @@ function onSubmit() {
         :rules="[{ required: true, message: '请填写任务内容' }]"
       />
     </van-cell-group>
-    <div style="margin: 16px">
-      <base-button block type="primary" native-type="submit">
+    <div class="m-16">
+      <base-button :inline="false" btn-cls="w-full" type="primary" native-type="submit">
         确认
       </base-button>
     </div>

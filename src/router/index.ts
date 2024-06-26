@@ -7,6 +7,7 @@ import 'nprogress/nprogress.css'
 import type { EnhancedRouteLocation } from './types'
 import useRouteTransitionNameStore from '@/stores/modules/routeTransitionName'
 import useRouteCacheStore from '@/stores/modules/routeCache'
+import useUserStore from '@/stores/modules/user'
 
 NProgress.configure({ showSpinner: true, parent: '#app' })
 
@@ -17,6 +18,14 @@ const router = createRouter({
 
 router.beforeEach((to: EnhancedRouteLocation, from, next) => {
   NProgress.start()
+
+  if (!to.meta.common) {
+    const userStore = useUserStore()
+    if (!userStore.token) {
+      router.push('/login')
+      return
+    }
+  }
 
   const routeCacheStore = useRouteCacheStore()
   const routeTransitionNameStore = useRouteTransitionNameStore()
