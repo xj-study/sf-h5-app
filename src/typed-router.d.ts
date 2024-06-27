@@ -24,6 +24,7 @@ declare module 'vue-router/auto-routes' {
     'giftCustom': RouteRecordInfo<'giftCustom', '/gift/custom', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'profile': RouteRecordInfo<'profile', '/profile', Record<never, never>, Record<never, never>>,
+    'recordIntegral': RouteRecordInfo<'recordIntegral', '/record/integral', Record<never, never>, Record<never, never>>,
     'task': RouteRecordInfo<'task', '/task', Record<never, never>, Record<never, never>>,
     'taskCustom': RouteRecordInfo<'taskCustom', '/task/custom', Record<never, never>, Record<never, never>>,
   }

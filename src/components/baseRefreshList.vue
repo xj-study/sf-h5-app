@@ -100,9 +100,9 @@ onMounted(() => {
 function update(item, equals) {
   const index = list.value.findIndex(equals)
   if (index < 0) {
-    list.value.splice(list.value.length, 0, item)
+    list.value.splice(list.value.length, 0, { ...item })
   } else {
-    list.value.splice(index, 1, item)
+    list.value.splice(index, 1, { ...item })
   }
 }
 

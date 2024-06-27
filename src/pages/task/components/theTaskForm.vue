@@ -30,21 +30,28 @@ function onSubmit() {
     <van-cell-group inset>
       <van-field
         v-model="form.title"
-        name="任务标题"
-        label="任务标题"
-        placeholder="任务标题"
+        name="标题"
+        label="标题"
+        placeholder="标题"
         clearable
-        :rules="[{ required: true, message: '请填写任务标题' }]"
+        :rules="[{ required: true, message: '请填写标题' }]"
       />
       <van-field
         v-model="form.content"
         type="textarea"
         rows="2"
-        name="任务内容"
-        label="任务内容"
-        placeholder="任务内容"
+        name="内容"
+        label="内容"
+        placeholder="内容"
         clearable
-        :rules="[{ required: true, message: '请填写任务内容' }]"
+        :rules="[{ required: true, message: '请填写内容' }]"
+      />
+      <van-field
+        v-model="form.integral"
+        label="奖励积分"
+        placeholder="奖励积分"
+        clearable
+        :rules="[{ required: true, message: '请填写奖励积分' }]"
       />
       <van-field name="switch" label="是否审批">
         <template #input>

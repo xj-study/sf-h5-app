@@ -22,14 +22,17 @@ async function getList() {
 
 const editShowFlag = ref(false)
 const formData = ref(null)
+const taskFormTitle = ref('')
 
 function toEdit(itemData) {
   formData.value = itemData
+  taskFormTitle.value = '编辑任务'
   editShowFlag.value = true
 }
 
 function toAdd() {
   formData.value = null
+  taskFormTitle.value = '新增任务'
   editShowFlag.value = true
 }
 
@@ -64,7 +67,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
         <TheCustomTaskItem v-for="data in list" :key="data.id" :item="data" @edit="toEdit" />
       </template>
     </base-refresh-list>
-    <base-popup v-model:show="editShowFlag" title="编辑任务">
+    <base-popup v-model:show="editShowFlag" :title="taskFormTitle">
       <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
     </base-popup>
   </base-container>

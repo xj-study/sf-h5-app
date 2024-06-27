@@ -8,7 +8,7 @@ defineEmits(['update:show'])
 
 <template>
   <van-popup :show="show" position="bottom" @update:show="$emit('update:show', false)">
-    <base-title title="编辑任务" @close="$emit('update:show', false)">
+    <base-title :title="title" @close="$emit('update:show', false)">
       <slot />
     </base-title>
   </van-popup>

@@ -19,22 +19,23 @@ const taskTabs = computed<TaskTab[]>(() => {
   const result = [
     { title: '全部', value: -1 },
     { title: '未完成', value: TaskStatus.INIT },
-    { title: '已完成', value: TaskStatus.COMPLETE },
     { title: '待审核', value: TaskStatus.WATIT_VERIFY },
+    { title: '已完成', value: TaskStatus.COMPLETE },
   ]
   return result
 })
-const currentTabs = ref(-1)
+const route = useRoute()
+const routeQuery = computed<TaskRecordQuery>(() => {
+  return route.query
+})
+const tab = routeQuery.value.tab
+const currentTabs = ref(tab === null ? -1 : +tab)
 
 const listRef = ref(null)
 function onChange() {
   listRef.value.onRefresh()
 }
 
-const route = useRoute()
-const routeQuery = computed<TaskRecordQuery>(() => {
-  return route.query
-})
 const taskListType = computed(() => {
   return routeQuery.value.id ? TaskListType.MANAGER : TaskListType.USER
 })
@@ -59,7 +60,7 @@ function onItemUpdate(data) {
         <van-tab v-for="data in taskTabs" :key="data.value" :title="data.title" :name="data.value" />
       </van-tabs>
     </base-head-tool>
-    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
+    <base-refresh-list ref="listRef" class="min-h-80vh" :get-list="getList">
       <template #default="{ list }">
         <TheTaskItem v-for="data in list" :key="data.id" :type="taskListType" :item="data" @update="onItemUpdate" />
       </template>

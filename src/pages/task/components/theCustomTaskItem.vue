@@ -11,8 +11,12 @@ async function onEdit() {
 
 <template>
   <div class="m-10 bg-white p-10">
-    <div class="flex text-16">
-      <span> {{ item.title }} </span>
+    <div class="flex justify-between text-16">
+      <span>{{ item.title }} </span>
+      <div>
+        <span class="text-20 text-amber-500">{{ item.integral }}</span>
+        <span class="pl-8 text-12">积分</span>
+      </div>
     </div>
     <div class="mt-8 text-14">
       {{ item.content }}

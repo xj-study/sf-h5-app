@@ -5,6 +5,6 @@ export enum UserType {
 }
 
 export class LoginUser {
-  constructor(public type: number = UserType.INIT, public token: string = '', public userName: string = '') {
+  constructor(public type: number = UserType.INIT, public integral: number = 0, public token: string = '', public userName: string = '') {
   }
 }

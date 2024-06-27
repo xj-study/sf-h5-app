@@ -10,5 +10,5 @@ export enum TaskStatus {
 }
 
 export class TaskForm {
-  constructor(public title: string = '', public content: string = '', public taskId?: number, public verifyFlag?: boolean) {}
+  constructor(public title: string = '', public content: string = '', public integral: number = 0, public taskId?: number, public verifyFlag?: boolean) {}
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { queryUserChildren } from '@/api/userApi'
+import { TaskStatus } from '../task/types'
+import { queryIntegral, queryUserChildren } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 
 definePage({
@@ -14,15 +15,26 @@ definePage({
 const { parentTypeFlag, user, loginOut } = useUserStore()
 const router = useRouter()
 const userChildren = ref([])
-onMounted(async () => {
+
+onMounted(() => {
+  queryChildren()
+  queryUserIntegral()
+})
+
+async function queryChildren() {
   if (parentTypeFlag) {
     const list = await queryUserChildren()
     userChildren.value = list
   }
-})
+}
 
-function toTaskList() {
-  router.push(`/task`)
+async function queryUserIntegral() {
+  const integral = await queryIntegral()
+  user.integral = integral
+}
+
+function toTaskList(tab) {
+  router.push(`/task?tab=${tab}`)
 }
 function toChildrenTaskList(id: number) {
   router.push(`/task?id=${id}`)
@@ -36,6 +48,9 @@ function toCustomGift() {
 // 退出登录
 function toLoginOut() {
   loginOut()
+}
+function toIntegralRecord() {
+  router.push('/record/integral')
 }
 </script>
 
@@ -56,33 +71,49 @@ function toLoginOut() {
               退出登录 >
             </span>
           </div>
-          <div v-if="!parentTypeFlag">
-            {{ 1000 }}
+
+          <div class="mt-10 flex items-center justify-between">
+            <div class="">
+              <span class="text-20 text-amber-500">{{ user.integral || 0 }}</span>
+              <span class="pl-8 text-12">积分</span>
+            </div>
+
+            <span class="text-12" @click="toIntegralRecord">
+              查看积分明细 >
+            </span>
           </div>
         </div>
       </div>
     </div>
 
-    <base-cell-head title="我的任务">
-      <base-button plain type="primary" size="normal" @click="toTaskList">
-        待完成
-      </base-button>
-      <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList">
-        已完成
-      </base-button>
-    </base-cell-head>
-    <base-cell-head v-if="parentTypeFlag" title="我的孩子">
-      <base-button v-for="item in userChildren" :key="item.id" plain type="primary" size="normal" @click="toChildrenTaskList(item.id)">
-        {{ item.nickname }}
-      </base-button>
-    </base-cell-head>
-    <base-cell-head v-if="parentTypeFlag" title="我的工具">
-      <base-button plain type="primary" size="normal" @click="toCustomTask">
-        定制任务
-      </base-button>
-      <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomGift">
-        定制礼物
-      </base-button>
-    </base-cell-head>
+    <div v-if="!parentTypeFlag">
+      <base-cell-head title="我的任务">
+        <base-button plain type="primary" size="normal" @click="toTaskList(TaskStatus.INIT)">
+          待完成
+        </base-button>
+        <base-button v-if="!parentTypeFlag" class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.WATIT_VERIFY)">
+          待审核
+        </base-button>
+        <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.COMPLETE)">
+          已完成
+        </base-button>
+      </base-cell-head>
+    </div>
+
+    <div v-if="parentTypeFlag">
+      <base-cell-head title="我的孩子">
+        <base-button v-for="item in userChildren" :key="item.id" plain type="primary" size="normal" @click="toChildrenTaskList(item.id)">
+          {{ item.nickname }}
+        </base-button>
+      </base-cell-head>
+      <base-cell-head title="我的工具">
+        <base-button plain type="primary" size="normal" @click="toCustomTask">
+          定制任务
+        </base-button>
+        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomGift">
+          定制礼物
+        </base-button>
+      </base-cell-head>
+    </div>
   </base-container>
 </template>
