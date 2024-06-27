@@ -5,6 +5,8 @@ import { showNotify, showToast } from 'vant'
 import { type ResponseBody, ResponseCode } from '@/api/typing'
 import useUserStore from '@/stores/modules/user'
 
+import router from '@/router'
+
 // 这里是用于设定请求后端时，所用的 Token KEY
 // 可以根据自己的需要修改，常见的如 Access-Token，Authorization
 // 需要注意的是，请尽量保证使用中横线`-` 来作为分隔符，
@@ -44,6 +46,7 @@ function errorHandler(error: RequestError): Promise<any> {
       // 如果你需要直接跳转登录页面
       // location.replace(loginRoutePath)
     }
+    showToast('系统异常')
   }
   return Promise.reject(error)
 }
@@ -72,7 +75,10 @@ function responseHandler(response: { data: ResponseBody }) {
     // 请求成功
     return data.data
   } else {
-    showToast(data.message)
+    if (data.code === ResponseCode.LOGIN_STATE_INVALID) {
+      router.push('/login')
+    }
+    showToast(data.msg)
     throw new Error('服务异常')
   }
 }

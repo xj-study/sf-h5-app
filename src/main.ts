@@ -3,7 +3,7 @@ import { createHead } from '@unhead/vue'
 import App from '@/App.vue'
 import router from '@/router'
 import pinia from '@/stores'
-import 'virtual:uno.css'
+
 import '@/styles/app.less'
 import { i18n } from '@/utils/i18n'
 
@@ -20,6 +20,8 @@ import 'vant/es/toast/style'
 import 'vant/es/dialog/style'
 import 'vant/es/notify/style'
 import 'vant/es/image-preview/style'
+
+import 'virtual:uno.css'
 
 const app = createApp(App)
 const head = createHead()

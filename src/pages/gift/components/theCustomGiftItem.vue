@@ -24,10 +24,10 @@ function onOffShelf() {
       {{ item.content }}
     </div>
     <div class="mt-20 flex">
-      <base-button size="small" plain type="primary" btn-cls="min-w-100" @click="onEdit">
+      <base-button size="small" plain type="primary" class="min-w-100" @click="onEdit">
         修改
       </base-button>
-      <base-button size="small" plain type="warning" class="ml-10" btn-cls="min-w-100" @click="onOffShelf">
+      <base-button size="small" plain type="warning" class="ml-10 min-w-100" @click="onOffShelf">
         下架
       </base-button>
     </div>

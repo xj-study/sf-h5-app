@@ -1,12 +1,14 @@
 export enum ResponseCode {
   SUCCESS = 0,
+  LOGIN_STATE_INVALID = 30007, // token 失效
 }
 
 export interface ResponseBody<T = any> {
-  message?: string
   code?: number
+  level?: number
+  msg?: string
   data?: T
-  success: boolean
+  ok: boolean
 }
 
 /** 统一返回结构体 */

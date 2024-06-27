@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { login } from '@/api/user'
+import { login } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 
 definePage({

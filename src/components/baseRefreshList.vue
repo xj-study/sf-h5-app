@@ -23,9 +23,9 @@ const loading = ref(false)
 const finished = ref(false)
 
 const finishedTextStr = computed(() => {
-  // if (finished.value && !list.value.length) {
-  //   return ''
-  // }
+  if (finished.value && !list.value.length) {
+    return ''
+  }
   return props.finishedText || '没有更多了'
 })
 
@@ -56,7 +56,15 @@ function onRefresh(refresh = true) {
   getData(false)
 }
 
-async function getData(showLoading = true) {
+async function getData(showLoading: boolean = true) {
+  await _getData(showLoading).catch(() => {
+    loading.value = false
+    refreshLoading.value = false
+    finished.value = true
+  })
+}
+
+async function _getData(showLoading = true) {
   showLoading && (loading.value = true)
   if (props.getList) {
     const { records = [], size = 10 } = (await props.getList({ pageNum: pageNum.value, pageSize: props.pageSize })) || {}
@@ -83,7 +91,13 @@ onMounted(() => {
   }
 })
 
+function update(item, equals) {
+  const index = list.value.findIndex(equals)
+  list.value.splice(index, 1, item)
+}
+
 defineExpose({
+  update,
   onRefresh,
 })
 </script>

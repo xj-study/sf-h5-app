@@ -34,7 +34,7 @@ function delay(duration: number) {
       {{ item.content }}
     </div>
     <Transition name="fade-item">
-      <base-button size="small" plain type="primary" class="mt-20" btn-cls="min-w-100" :loading="verifyLoadingFlag" @click="onVerify">
+      <base-button size="small" plain type="primary" class="mt-20 min-w-100" :loading="verifyLoadingFlag" @click="onVerify">
         兑换
       </base-button>
     </Transition>

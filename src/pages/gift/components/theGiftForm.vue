@@ -55,7 +55,7 @@ function onSubmit() {
       />
     </van-cell-group>
     <div class="m-16">
-      <base-button :inline="false" btn-cls="w-full" type="primary" native-type="submit">
+      <base-button :inline="false" class="w-full" type="primary" native-type="submit">
         确认
       </base-button>
     </div>

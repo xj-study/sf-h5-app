@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TheTaskItem from './components/theTaskItem.vue'
+import { recordQuery } from '@/api/taskApi'
 
 definePage({
   name: 'task',
@@ -17,40 +18,25 @@ const taskTabs = computed<TaskTab[]>(() => {
     { title: '全部', value: 0 },
     { title: '未完成', value: 1 },
     { title: '已完成', value: 2 },
-    { title: '待审核', value: 3 },
+    // { title: '待审核', value: 3 },
   ]
   return result
 })
 
 const listRef = ref(null)
 async function getList() {
-  const task = {
-    title: '任务标题1',
-    content: '任务内容1',
-    status: 100,
-    index: 0,
-  }
-  const records = []
-  for (let i = 0; i < 10; i++) {
-    records.push({ ...task, index: i })
-  }
-  await delay(1000)
+  const records = await recordQuery()
+
   return {
     records,
-    size: 10,
+    size: records.length + 1,
   }
 }
 
-function delay(timeout) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, timeout)
+function onItemComplete(data) {
+  listRef.value.update(data, (item) => {
+    return item.taskId === data.taskId
   })
-}
-
-function onItemVerify() {
-
 }
 </script>
 
@@ -63,7 +49,7 @@ function onItemVerify() {
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheTaskItem v-for="data, index in list" :key="index" :item="data" @verify="onItemVerify" />
+        <TheTaskItem v-for="data, index in list" :key="index" :item="data" @complete="onItemComplete" />
       </template>
     </base-refresh-list>
   </base-container>

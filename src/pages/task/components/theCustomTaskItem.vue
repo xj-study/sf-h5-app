@@ -19,7 +19,7 @@ async function onEdit() {
     </div>
 
     <div class="mt-20">
-      <base-button size="small" plain type="primary" btn-cls="min-w-100" @click="onEdit">
+      <base-button size="small" plain type="primary" class="min-w-100" @click="onEdit">
         修改
       </base-button>
     </div>

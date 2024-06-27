@@ -1,44 +1,35 @@
 <script setup lang="ts">
-import type { TagType } from 'vant'
-import { isCompleteStatus, isInitStatus, isWaitVerifyStatus } from '../utils/taskStatusUtils'
+import useTaskTag from '../utils/useTaskTag'
+import useLoading from '@/hooks/useLoading'
+import { recordComplete, recordCompleteByTaskId } from '@/api/taskApi'
 
 const props = defineProps({
   item: { type: Object, default: () => ({}) },
 })
-const emits = defineEmits(['verify'])
-const statusCompleteFlag = computed(() => isCompleteStatus(props.item.status))
-const statusInitFlag = computed(() => isInitStatus(props.item.status))
-const statusWaitVerifyFlag = computed(() => isWaitVerifyStatus(props.item.status))
-const tagData = computed<{ text: string, type: TagType }>(() => {
-  if (statusInitFlag.value) {
-    return { text: '未完成', type: 'warning' }
-  }
-  if (statusWaitVerifyFlag.value) {
-    return { text: '待审核', type: 'primary' }
-  }
-  if (statusCompleteFlag.value) {
-    return { text: '已完成', type: 'success' }
-  }
-  return { text: '', type: 'default' }
-})
-const btnFlag = computed(() => statusWaitVerifyFlag.value)
+const emits = defineEmits(['complete'])
 
-const verifyLoadingFlag = ref(false)
-async function onVerify() {
-  // 审核
-  verifyLoadingFlag.value = true
-  await delay(1000)
-  emits('verify', props.item)
-  await delay(100)
-  verifyLoadingFlag.value = false
-}
-function delay(duration: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, duration)
-  })
-}
+const { tagData, statusInitFlag } = useTaskTag(props)
+
+const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
+  let status: number = 0
+  if (props.item.id)
+    status = await recordComplete(props.item.id)
+  else
+    status = await recordCompleteByTaskId(props.item.taskId)
+  emits('complete', { ...props.item, status })
+})
+
+// const verifyLoadingFlag = ref(false)
+// async function toComplete() {
+//   // 审核
+//   verifyLoadingFlag.value = true
+//   await delay(1000)
+//   emits('verify', props.item)
+//   await delay(100)
+//   verifyLoadingFlag.value = false
+// }
+
+const btnFlag = computed(() => statusInitFlag.value)
 </script>
 
 <template>
@@ -53,8 +44,8 @@ function delay(duration: number) {
       {{ item.content }}
     </div>
     <Transition name="fade-item">
-      <base-button v-if="btnFlag" class="mt-20" btn-cls="min-w-100" size="small" plain type="primary" :loading="verifyLoadingFlag" @click="onVerify">
-        通过
+      <base-button v-if="btnFlag" class="mt-20 min-w-100" size="small" plain type="primary" :loading="completeLoadingFlag" @click="onComplete">
+        完成
       </base-button>
     </Transition>
   </div>

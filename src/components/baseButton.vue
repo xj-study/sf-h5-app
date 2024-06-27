@@ -1,21 +1,12 @@
 <script setup lang="ts">
-import { buttonProps } from 'vant'
-
-const props = defineProps({
-  ...buttonProps,
+defineProps({
   inline: { type: Boolean, default: true },
-  btnCls: { type: String, default: '' },
 })
-const btnProps = computed(() => {
-  const { inline, btnCls, ...rest } = props
-  return rest
-})
+const attrsData = useAttrs()
 </script>
 
 <template>
-  <div :class="{ 'inline-block': inline }">
-    <van-button v-bind="btnProps" :class="btnCls">
-      <slot />
-    </van-button>
-  </div>
+  <van-button v-bind="attrsData">
+    <slot />
+  </van-button>
 </template>

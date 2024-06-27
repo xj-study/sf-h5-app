@@ -11,6 +11,7 @@ specifiers:
   '@unhead/vue': ^1.9.13
   '@unocss/eslint-plugin': 0.61.0
   '@unocss/preset-rem-to-px': 0.61.0
+  '@unocss/transformer-compile-class': ^0.61.0
   '@vant/touch-emulator': ^1.4.0
   '@vant/use': ^1.6.0
   '@vitejs/plugin-legacy': ^5.4.1
@@ -85,6 +86,7 @@ devDependencies:
   '@types/store': 2.0.5
   '@unocss/eslint-plugin': 0.61.0_7s3ir3bwhp7qwq4k7kuwdknawi
   '@unocss/preset-rem-to-px': 0.61.0
+  '@unocss/transformer-compile-class': 0.61.0
   '@vitejs/plugin-legacy': 5.4.1_terser@5.31.1+vite@5.3.1
   '@vitejs/plugin-vue': 5.0.5_vite@5.3.1+vue@3.4.29
   autoprefixer: 10.4.19
