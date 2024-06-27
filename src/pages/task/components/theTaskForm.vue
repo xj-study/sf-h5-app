@@ -46,6 +46,11 @@ function onSubmit() {
         clearable
         :rules="[{ required: true, message: '请填写任务内容' }]"
       />
+      <van-field name="switch" label="是否审批">
+        <template #input>
+          <van-switch v-model="form.verifyFlag" />
+        </template>
+      </van-field>
     </van-cell-group>
     <div class="m-16">
       <base-button :inline="false" :loading="confirmLoading" class="w-full" type="primary" native-type="submit">
