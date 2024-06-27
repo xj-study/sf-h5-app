@@ -1,8 +1,4 @@
-enum TaskStatus {
-  INIT = 0,
-  WATIT_VERIFY = 100,
-  COMPLETE = 200,
-}
+import { TaskStatus } from '../types'
 
 export function isCompleteStatus(status: number) {
   return TaskStatus.COMPLETE === status

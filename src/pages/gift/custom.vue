@@ -64,7 +64,7 @@ async function onConfirm() {
 
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheCustomGiftItem v-for="data, index in list" :key="index" :item="data" @edit="toEdit" @off-shelf="toOffShelf" />
+        <TheCustomGiftItem v-for="data in list" :key="data.id" :item="data" @edit="toEdit" @off-shelf="toOffShelf" />
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag" title="编辑礼物">

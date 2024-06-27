@@ -61,7 +61,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
 
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheCustomTaskItem v-for="data in list" :key="data.taskId" :item="data" @edit="toEdit" />
+        <TheCustomTaskItem v-for="data in list" :key="data.id" :item="data" @edit="toEdit" />
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag" title="编辑任务">

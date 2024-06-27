@@ -5,6 +5,7 @@ export enum ResponseCode {
 
 export interface TaskRecordQuery {
   id?: number | string
+  status?: number | string
 }
 
 export interface ResponseBody<T = any> {
