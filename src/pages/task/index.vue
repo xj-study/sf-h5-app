@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import TheTaskItem from './components/theTaskItem.vue'
+import { TaskListType } from './types'
+import type { TaskRecordQuery } from '@/api/typing'
 import { recordQuery } from '@/api/taskApi'
 
 definePage({
@@ -23,17 +25,21 @@ const taskTabs = computed<TaskTab[]>(() => {
   return result
 })
 
+const route = useRoute()
+const routeQuery = computed<TaskRecordQuery>(() => {
+  return route.query
+})
+const taskListType = computed(() => {
+  return routeQuery.value.id ? TaskListType.MANAGER : TaskListType.USER
+})
+
 const listRef = ref(null)
 async function getList() {
-  const records = await recordQuery()
-
-  return {
-    records,
-    size: records.length + 1,
-  }
+  const records = await recordQuery(routeQuery.value)
+  return records
 }
 
-function onItemComplete(data) {
+function onItemUpdate(data) {
   listRef.value.update(data, (item) => {
     return item.taskId === data.taskId
   })
@@ -49,7 +55,7 @@ function onItemComplete(data) {
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheTaskItem v-for="data, index in list" :key="index" :item="data" @complete="onItemComplete" />
+        <TheTaskItem v-for="data, index in list" :key="index" :type="taskListType" :item="data" @update="onItemUpdate" />
       </template>
     </base-refresh-list>
   </base-container>

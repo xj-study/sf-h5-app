@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import useTaskTag from '../utils/useTaskTag'
+import { TaskListType } from '../types'
 import useLoading from '@/hooks/useLoading'
 import { recordComplete, recordCompleteByTaskId } from '@/api/taskApi'
 
 const props = defineProps({
+  type: { type: Number, default: TaskListType.USER },
   item: { type: Object, default: () => ({}) },
 })
-const emits = defineEmits(['complete'])
+const emits = defineEmits(['update'])
 
-const { tagData, statusInitFlag } = useTaskTag(props)
+const { tagData, statusInitFlag, statusWaitVerifyFlag } = useTaskTag(props)
 
 const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
   let status: number = 0
@@ -16,20 +18,18 @@ const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(asy
     status = await recordComplete(props.item.id)
   else
     status = await recordCompleteByTaskId(props.item.taskId)
-  emits('complete', { ...props.item, status })
+  emits('update', { ...props.item, status })
 })
 
-// const verifyLoadingFlag = ref(false)
-// async function toComplete() {
-//   // 审核
-//   verifyLoadingFlag.value = true
-//   await delay(1000)
-//   emits('verify', props.item)
-//   await delay(100)
-//   verifyLoadingFlag.value = false
-// }
+const { loadingFlag: verifyLoadingFlag, loading: onVerify } = useLoading(async () => {
+  const status = await recordComplete(props.item.id)
+  emits('update', { ...props.item, status })
+})
 
-const btnFlag = computed(() => statusInitFlag.value)
+const managerTypeFlag = computed(() => props.type === TaskListType.MANAGER)
+
+const btnCompleteFlag = computed(() => !managerTypeFlag.value && statusInitFlag.value)
+const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFlag.value)
 </script>
 
 <template>
@@ -44,9 +44,14 @@ const btnFlag = computed(() => statusInitFlag.value)
       {{ item.content }}
     </div>
     <Transition name="fade-item">
-      <base-button v-if="btnFlag" class="mt-20 min-w-100" size="small" plain type="primary" :loading="completeLoadingFlag" @click="onComplete">
+      <base-button v-if="btnCompleteFlag" class="mt-20 min-w-100" size="small" plain type="primary" :loading="completeLoadingFlag" @click="onComplete">
         完成
       </base-button>
+      <div v-else-if="btnVerifyFlag">
+        <base-button class="mt-20 min-w-100" size="small" plain type="primary" :loading="verifyLoadingFlag" @click="onVerify">
+          审核通过
+        </base-button>
+      </div>
     </Transition>
   </div>
 </template>

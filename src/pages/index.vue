@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import useToken from '@/hooks/useToken'
-
 definePage({
   name: 'home',
   meta: {
@@ -12,9 +10,7 @@ definePage({
 
 const router = useRouter()
 function onStart() {
-  useToken(() => {
-    router.push('/task/custom')
-  })
+  router.push('/profile')
 }
 </script>
 
@@ -27,7 +23,7 @@ function onStart() {
       家长通过定制任务及礼物，然后孩子通过完成定制的任务获取积分，通过积分兑换礼物，达到激励孩子完成任务的目标。
     </div>
     <van-button type="primary" @click="onStart">
-      开始定制任务吧
+      让我们开始吧
     </van-button>
   </base-container>
 </template>

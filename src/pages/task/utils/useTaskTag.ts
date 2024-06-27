@@ -17,5 +17,5 @@ export default function useTaskTag(props) {
     }
     return { text: '', type: 'default' }
   })
-  return { tagData, statusInitFlag }
+  return { tagData, statusInitFlag, statusWaitVerifyFlag }
 }

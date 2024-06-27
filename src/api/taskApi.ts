@@ -1,12 +1,12 @@
+import type { TaskRecordQuery } from './typing'
+import type { TaskForm } from '@/pages/task/types'
 import request from '@/utils/request'
 
-export async function recordQuery(): Promise<any> {
+export async function recordQuery(data: TaskRecordQuery): Promise<any> {
   return request({
-    method: 'get',
+    method: 'post',
     url: '/task/record/query',
-    data: {
-
-    },
+    data,
   })
 }
 export async function recordComplete(id: number): Promise<any> {
@@ -23,5 +23,27 @@ export async function recordCompleteByTaskId(taskId: number): Promise<any> {
     data: {
       taskId,
     },
+  })
+}
+
+export async function taskQuery(): Promise<any> {
+  return request({
+    method: 'get',
+    url: '/task/query',
+  })
+}
+
+export async function taskAdd(data: TaskForm): Promise<any> {
+  return request({
+    method: 'post',
+    url: '/task/add',
+    data,
+  })
+}
+export async function taskUpdate(data: TaskForm): Promise<any> {
+  return request({
+    method: 'post',
+    url: '/task/update',
+    data,
   })
 }

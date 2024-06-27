@@ -3,6 +3,10 @@ export enum ResponseCode {
   LOGIN_STATE_INVALID = 30007, // token 失效
 }
 
+export interface TaskRecordQuery {
+  id?: number | string
+}
+
 export interface ResponseBody<T = any> {
   code?: number
   level?: number

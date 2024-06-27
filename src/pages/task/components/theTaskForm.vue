@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { TaskForm } from '../types'
+
 const props = defineProps({
+  confirmLoading: { type: Boolean, default: false },
   itemData: { type: Object },
 })
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<{ title: string, content: string }>({ title: '', content: '' })
+const form = reactive<TaskForm>(new TaskForm())
 
 watchEffect(() => {
   for (const key in form) {
@@ -45,7 +48,7 @@ function onSubmit() {
       />
     </van-cell-group>
     <div class="m-16">
-      <base-button :inline="false" class="w-full" type="primary" native-type="submit">
+      <base-button :inline="false" :loading="confirmLoading" class="w-full" type="primary" native-type="submit">
         确认
       </base-button>
     </div>

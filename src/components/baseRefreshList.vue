@@ -67,7 +67,13 @@ async function getData(showLoading: boolean = true) {
 async function _getData(showLoading = true) {
   showLoading && (loading.value = true)
   if (props.getList) {
-    const { records = [], size = 10 } = (await props.getList({ pageNum: pageNum.value, pageSize: props.pageSize })) || {}
+    let result = await props.getList({ pageNum: pageNum.value, pageSize: props.pageSize })
+    if (Array.isArray(result)) {
+      result = { records: result, size: result.length + 1 }
+    } else if (result == null) {
+      result = {}
+    }
+    const { records, size } = result
     loading.value = false
     refreshLoading.value = false
     finished.value = records.length < size
@@ -93,7 +99,11 @@ onMounted(() => {
 
 function update(item, equals) {
   const index = list.value.findIndex(equals)
-  list.value.splice(index, 1, item)
+  if (index < 0) {
+    list.value.splice(list.value.length, 0, item)
+  } else {
+    list.value.splice(index, 1, item)
+  }
 }
 
 defineExpose({

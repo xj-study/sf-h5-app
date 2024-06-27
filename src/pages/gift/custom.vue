@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
+
 import TheCustomGiftItem from './components/theCustomGiftItem.vue'
 import TheGiftForm from './components/theGiftForm.vue'
 
@@ -46,8 +47,9 @@ function toAdd() {
   editShowFlag.value = true
 }
 
-function onConfirm() {
+async function onConfirm() {
   editShowFlag.value = false
+
   showToast('操作成功')
 }
 </script>

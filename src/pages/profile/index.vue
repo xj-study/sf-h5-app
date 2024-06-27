@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { queryUserChildren } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 
 definePage({
@@ -10,10 +11,20 @@ definePage({
   },
 })
 
-const { parentTypeFlag, user } = useUserStore()
-
+const { parentTypeFlag, user, loginOut } = useUserStore()
 const router = useRouter()
-function toTaskList(id: number) {
+const userChildren = ref([])
+onMounted(async () => {
+  if (parentTypeFlag) {
+    const list = await queryUserChildren()
+    userChildren.value = list
+  }
+})
+
+function toTaskList() {
+  router.push(`/task`)
+}
+function toChildrenTaskList(id: number) {
   router.push(`/task?id=${id}`)
 }
 function toCustomTask() {
@@ -21,6 +32,10 @@ function toCustomTask() {
 }
 function toCustomGift() {
   router.push('/gift/custom')
+}
+// 退出登录
+function toLoginOut() {
+  loginOut()
 }
 </script>
 
@@ -37,7 +52,7 @@ function toCustomGift() {
         <div class="ml-10 flex-1 text-20">
           <div class="flex items-center justify-between">
             <span> {{ user.userName }}</span>
-            <span class="text-12">
+            <span class="text-12" @click="toLoginOut">
               退出登录 >
             </span>
           </div>
@@ -49,16 +64,16 @@ function toCustomGift() {
     </div>
 
     <base-cell-head title="我的任务">
-      <base-button plain type="primary" size="normal" @click="toTaskList(1)">
+      <base-button plain type="primary" size="normal" @click="toTaskList">
         待完成
       </base-button>
-      <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList(1)">
+      <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList">
         已完成
       </base-button>
     </base-cell-head>
     <base-cell-head v-if="parentTypeFlag" title="我的孩子">
-      <base-button plain type="primary" size="normal" @click="toTaskList(1)">
-        璇璇
+      <base-button v-for="item in userChildren" :key="item.id" plain type="primary" size="normal" @click="toChildrenTaskList(item.id)">
+        {{ item.nickname }}
       </base-button>
     </base-cell-head>
     <base-cell-head v-if="parentTypeFlag" title="我的工具">

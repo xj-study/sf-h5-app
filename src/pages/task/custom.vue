@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { showToast } from 'vant'
 import TheCustomTaskItem from './components/theCustomTaskItem.vue'
 import TheTaskForm from './components/theTaskForm.vue'
+import type { TaskForm } from './types'
+import useLoading from '@/hooks/useLoading'
+import { taskAdd, taskQuery, taskUpdate } from '@/api/taskApi'
 
 definePage({
   name: 'taskCustom',
@@ -11,21 +15,9 @@ definePage({
 })
 
 const listRef = ref(null)
-function getList() {
-  const task = {
-    title: '任务标题1',
-    content: '任务内容1',
-    status: 100,
-    index: 0,
-  }
-  const records = []
-  for (let i = 0; i < 18; i++) {
-    records.push({ ...task, index: i })
-  }
-  return {
-    records,
-    size: 20,
-  }
+async function getList() {
+  const records = await taskQuery()
+  return records
 }
 
 const editShowFlag = ref(false)
@@ -41,9 +33,22 @@ function toAdd() {
   editShowFlag.value = true
 }
 
-function onConfirm() {
+const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) => {
+  if (item.taskId) {
+    // update
+    await taskUpdate(item)
+    showToast('更新成功')
+    listRef.value.update(item, (ele) => {
+      return item.taskId === ele.taskId
+    })
+  } else {
+    // add
+    await taskAdd(item)
+    showToast('添加成功')
+    listRef.value.update(item, () => false)
+  }
   editShowFlag.value = false
-}
+})
 </script>
 
 <template>
@@ -56,11 +61,11 @@ function onConfirm() {
 
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheCustomTaskItem v-for="data, index in list" :key="index" :item="data" @edit="toEdit" />
+        <TheCustomTaskItem v-for="data in list" :key="data.taskId" :item="data" @edit="toEdit" />
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag" title="编辑任务">
-      <TheTaskForm :item-data="formData" @confirm="onConfirm" />
+      <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
     </base-popup>
   </base-container>
 </template>
