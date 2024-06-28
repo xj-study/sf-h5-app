@@ -10,6 +10,6 @@ const { user } = useUserStore()
 
 <template>
   <div>
-    {{ price * user.exchangeRatio }} {{ postfix }}
+    {{ price * user.exchangeRatio }} <span class="text-12 color-gray">{{ postfix }}</span>
   </div>
 </template>

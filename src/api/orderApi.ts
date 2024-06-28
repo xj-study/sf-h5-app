@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export async function orderBuy(id: number, type: number): Promise<any> {
+export async function orderBuy(data): Promise<any> {
   return request({
     method: 'post',
-    url: '/order/buy',
-    data: { id, type },
+    url: '/order/gift/buy',
+    data,
   })
 }

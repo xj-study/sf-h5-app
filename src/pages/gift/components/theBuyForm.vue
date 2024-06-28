@@ -1,0 +1,77 @@
+<script setup lang="ts">
+import { OrderGiftForm } from '../typing'
+import TheGiftPrice from './theGiftPrice.vue'
+import useUserStore from '@/stores/modules/user'
+
+const props = defineProps({
+  confirmLoading: { type: Boolean, default: false },
+  itemData: { type: Object },
+})
+
+const emits = defineEmits(['confirm'])
+
+const form = reactive<OrderGiftForm>(new OrderGiftForm())
+const { user } = useUserStore()
+const totalPrice = computed(() => {
+  const num = form.num || 1
+  return num * form.price
+})
+const confirmDisable = computed(() => {
+  return totalPrice.value * user.exchangeRatio > user.integral
+})
+
+watchEffect(() => {
+  for (const key in form) {
+    if (props.itemData) {
+      form[key] = props.itemData[key]
+    } else {
+      form[key] = ''
+    }
+  }
+})
+
+function onSubmit() {
+  emits('confirm', form)
+}
+</script>
+
+<template>
+  <van-form @submit="onSubmit">
+    <div class="m-x-20 mb-20 border-b-0.5 border-b-gray border-b-solid pb-10">
+      <TheGiftPrice :price="form.price" class="text-20 text-emerald-600" />
+      <div class="m-y-8 text-16">
+        {{ form.name }}
+      </div>
+      <div class="text-14">
+        {{ form.content }}
+      </div>
+    </div>
+    <van-cell-group inset>
+      <van-field label="数量">
+        <template #input>
+          <van-stepper v-model="form.num" />
+        </template>
+      </van-field>
+      <van-field
+        v-model="form.mark"
+        type="textarea"
+        rows="2"
+
+        label="备注"
+        placeholder="请填写备注"
+        clearable
+      />
+    </van-cell-group>
+    <div class="m-16 flex justify-between">
+      <div class="mb-10 flex flex-shrink-1 items-end">
+        <span class="text-12 color-gray">花费：</span>
+        <TheGiftPrice :price="totalPrice" class="text-20 text-emerald-600" />
+      </div>
+
+      <base-button :inline="false" :disabled="confirmDisable" :loading="confirmLoading" class="min-w-200" type="primary" native-type="submit">
+        <span>立即兑换</span>
+        <span v-show="confirmDisable" class="text-12">(积分不足)</span>
+      </base-button>
+    </div>
+  </van-form>
+</template>

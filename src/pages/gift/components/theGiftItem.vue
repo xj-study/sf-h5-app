@@ -1,24 +1,14 @@
 <script setup lang="ts">
-import { showToast } from 'vant'
 import TheGiftPrice from './theGiftPrice.vue'
-import useLoading from '@/hooks/useLoading'
 import useUserStore from '@/stores/modules/user'
-
-import { orderBuy } from '@/api/orderApi'
-import { OrderType } from '@/typing'
 
 const props = defineProps({
   item: { type: Object, default: () => ({}) },
 })
+defineEmits(['buy'])
 const { user } = useUserStore()
-const { loadingFlag, loading: toExchange } = useLoading(async () => {
-  if (user.integral < props.item.price * user.exchangeRatio) {
-    showToast('积分不足！')
-  } else {
-    // 开始兑换
-    await orderBuy(props.item.giftId, OrderType.GIFT)
-    showToast('兑换成功！')
-  }
+const btnDisabled = computed(() => {
+  return props.item.price * user.exchangeRatio > user.integral
 })
 </script>
 
@@ -31,10 +21,11 @@ const { loadingFlag, loading: toExchange } = useLoading(async () => {
     <div class="mt-8 text-14">
       {{ item.content }}
     </div>
-    <Transition name="fade-item">
-      <base-button size="small" plain type="primary" class="mt-20 min-w-100" :loading="loadingFlag" @click="toExchange">
+    <div class="mt-20 flex items-center">
+      <base-button size="small" :disabled="btnDisabled" plain type="primary" class="min-w-100" @click="$emit('buy', item)">
         兑换
       </base-button>
-    </Transition>
+      <span v-if="btnDisabled" class="ml-10 text-12 color-red">积分不足</span>
+    </div>
   </div>
 </template>
