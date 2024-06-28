@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { login } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 
 definePage({
@@ -17,12 +16,11 @@ const userStore = useUserStore()
 
 const router = useRouter()
 async function onSubmit() {
-  const result = await login({
+  await userStore.toLogin({
     userName: userName.value,
     password: password.value,
   })
 
-  userStore.user = result
   showToast('登录成功')
   router.back()
 }

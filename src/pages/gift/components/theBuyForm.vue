@@ -31,6 +31,8 @@ watchEffect(() => {
 })
 
 function onSubmit() {
+  if (!form.num)
+    form.num = 1
   emits('confirm', form)
 }
 </script>
