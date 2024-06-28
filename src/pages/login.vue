@@ -27,7 +27,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <base-container :padding-x="0">
+  <base-container :padding-x="0" class="pt-50">
     <van-form @submit="onSubmit">
       <van-cell-group inset class="pt-16">
         <van-field

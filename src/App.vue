@@ -44,7 +44,7 @@ onMounted(() => {
 
 <template>
   <van-config-provider :theme="mode">
-    <base-nav-bar />
+    <!-- <base-nav-bar /> -->
     <router-view v-slot="{ Component, route }">
       <transition :name="routeTransitionName">
         <keep-alive :include="keepAliveRouteNames">

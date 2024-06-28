@@ -15,7 +15,7 @@ function onStart() {
 </script>
 
 <template>
-  <base-container :padding-x="20" class="pb-50">
+  <base-container :padding-x="20" class="pt-50">
     <div class="text-22">
       SF - 代号007
     </div>
