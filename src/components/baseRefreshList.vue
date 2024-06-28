@@ -97,8 +97,11 @@ onMounted(() => {
   }
 })
 
-function update(item, equals) {
-  const index = list.value.findIndex(equals)
+function update<T>(item: T, equals: (item: T) => boolean | null) {
+  let index = -1
+  if (equals) {
+    index = list.value.findIndex(equals)
+  }
   if (index < 0) {
     list.value.splice(list.value.length, 0, { ...item })
   } else {

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import TheGiftItem from './components/theGiftItem.vue'
+import useUserStore from '@/stores/modules/user'
+import { giftQuery } from '@/api/giftApi'
 
 definePage({
   name: 'gift',
@@ -8,32 +10,15 @@ definePage({
     title: '礼物中心',
   },
 })
-
+const { user, updateIntegral } = useUserStore()
 const listRef = ref(null)
 async function getList() {
-  const task = {
-    title: '贴贴纸',
-    content: '非常好看的贴贴纸',
-    price: 100,
-  }
-  const records = []
-  for (let i = 0; i < 10; i++) {
-    records.push(task)
-  }
-  await delay(1000)
-  return {
-    records,
-    size: 10,
-  }
+  const records = await giftQuery()
+  return records
 }
-
-function delay(timeout) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, timeout)
-  })
-}
+onMounted(() => {
+  updateIntegral()
+})
 
 function onItemVerify() {
 
@@ -42,6 +27,12 @@ function onItemVerify() {
 
 <template>
   <base-container :padding-x="0">
+    <base-head-tool>
+      <div>
+        <span>积分余额：</span>
+        <span class="text-amber-500">{{ user.integral }}</span>
+      </div>
+    </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
         <TheGiftItem v-for="data, index in list" :key="index" :item="data" @verify="onItemVerify" />

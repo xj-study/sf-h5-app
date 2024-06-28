@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import TheGiftPrice from './theGiftPrice.vue'
+
 const props = defineProps({
   item: { type: Object, default: () => ({}) },
 })
@@ -15,10 +17,8 @@ function onOffShelf() {
 <template>
   <div class="m-10 bg-white p-10">
     <div class="flex justify-between text-16">
-      <div> {{ item.title }} </div>
-      <div class="text-emerald-600">
-        {{ item.price * 100 }} 积分
-      </div>
+      <div> {{ item.name }} </div>
+      <TheGiftPrice :price="item.price" class="text-emerald-600" />
     </div>
     <div class="mt-8 text-14">
       {{ item.content }}

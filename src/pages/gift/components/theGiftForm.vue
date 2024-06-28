@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { GiftForm } from '../domain/gift'
+import { GiftForm } from '../typing'
 
 const props = defineProps({
+  confirmLoading: { type: Boolean, default: false },
   itemData: { type: Object },
 })
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<GiftForm>({ title: '', content: '', price: 0 })
+const form = reactive<GiftForm>(new GiftForm())
 
 watchEffect(() => {
   for (const key in form) {
@@ -28,34 +29,34 @@ function onSubmit() {
   <van-form @submit="onSubmit">
     <van-cell-group inset>
       <van-field
-        v-model="form.title"
-        name="礼物标题"
-        label="礼物标题"
-        placeholder="礼物标题"
+        v-model="form.name"
+
+        label="标题"
+        placeholder="标题"
         clearable
-        :rules="[{ required: true, message: '请填写礼物标题' }]"
+        :rules="[{ required: true, message: '请填写标题' }]"
       />
       <van-field
         v-model="form.price"
-        name="礼物价格"
-        label="礼物价格"
-        placeholder="礼物价格"
+
+        label="价格"
+        placeholder="价格"
         clearable
-        :rules="[{ required: true, message: '请填写礼物价格' }]"
+        :rules="[{ required: true, message: '请填写价格' }]"
       />
       <van-field
         v-model="form.content"
         type="textarea"
         rows="2"
-        name="礼物内容"
-        label="礼物内容"
-        placeholder="礼物内容"
+
+        label="内容"
+        placeholder="内容"
         clearable
-        :rules="[{ required: true, message: '请填写礼物内容' }]"
+        :rules="[{ required: true, message: '请填写内容' }]"
       />
     </van-cell-group>
     <div class="m-16">
-      <base-button :inline="false" class="w-full" type="primary" native-type="submit">
+      <base-button :inline="false" :loading="confirmLoading" class="w-full" type="primary" native-type="submit">
         确认
       </base-button>
     </div>

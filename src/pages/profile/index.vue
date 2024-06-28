@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TaskStatus } from '../task/types'
-import { queryIntegral, queryUserChildren } from '@/api/userApi'
+import { queryUserChildren } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 
 definePage({
@@ -12,13 +12,13 @@ definePage({
   },
 })
 
-const { parentTypeFlag, user, loginOut } = useUserStore()
+const { parentTypeFlag, user, loginOut, updateIntegral } = useUserStore()
 const router = useRouter()
 const userChildren = ref([])
 
 onMounted(() => {
   queryChildren()
-  queryUserIntegral()
+  updateIntegral()
 })
 
 async function queryChildren() {
@@ -26,11 +26,6 @@ async function queryChildren() {
     const list = await queryUserChildren()
     userChildren.value = list
   }
-}
-
-async function queryUserIntegral() {
-  const integral = await queryIntegral()
-  user.integral = integral
 }
 
 function toTaskList(tab) {
@@ -51,6 +46,9 @@ function toLoginOut() {
 }
 function toIntegralRecord() {
   router.push('/record/integral')
+}
+function toGift() {
+  router.push('/gift')
 }
 </script>
 
@@ -96,6 +94,12 @@ function toIntegralRecord() {
         </base-button>
         <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.COMPLETE)">
           已完成
+        </base-button>
+      </base-cell-head>
+
+      <base-cell-head title="开心一刻">
+        <base-button plain type="primary" size="normal" @click="toGift">
+          礼物中心
         </base-button>
       </base-cell-head>
     </div>

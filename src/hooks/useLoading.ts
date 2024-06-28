@@ -2,9 +2,13 @@ export default function useLoading(callback: (...any) => Promise<any>) {
   const loadingFlag = ref(false)
   async function loading(...params: any) {
     loadingFlag.value = true
-    const result = await callback(...params)
-    loadingFlag.value = false
-    return result
+    try {
+      const result = await callback(...params)
+      loadingFlag.value = false
+      return result
+    } catch (error) {
+      loadingFlag.value = false
+    }
   }
   return { loadingFlag, loading }
 }

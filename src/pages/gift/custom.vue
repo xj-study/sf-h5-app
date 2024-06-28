@@ -3,6 +3,9 @@ import { showToast } from 'vant'
 
 import TheCustomGiftItem from './components/theCustomGiftItem.vue'
 import TheGiftForm from './components/theGiftForm.vue'
+import type { GiftForm } from './typing'
+import { giftAdd, giftQuery, giftUpdate } from '@/api/giftApi'
+import useLoading from '@/hooks/useLoading'
 
 definePage({
   name: 'giftCustom',
@@ -13,20 +16,9 @@ definePage({
 })
 
 const listRef = ref(null)
-function getList() {
-  const task = {
-    title: '贴贴纸',
-    content: '非常好看的贴贴纸',
-    price: 100,
-  }
-  const records = []
-  for (let i = 0; i < 18; i++) {
-    records.push(task)
-  }
-  return {
-    records,
-    size: 20,
-  }
+async function getList() {
+  const records = await giftQuery()
+  return records
 }
 
 const editShowFlag = ref(false)
@@ -47,11 +39,28 @@ function toAdd() {
   editShowFlag.value = true
 }
 
-async function onConfirm() {
+function resetPopup() {
+  formData.value = null
   editShowFlag.value = false
-
-  showToast('操作成功')
 }
+
+const { loadingFlag, loading: onConfirm } = useLoading(async (item: GiftForm) => {
+  if (item.giftId) {
+    // update
+    await giftUpdate(item)
+    showToast('更新成功')
+    listRef.value.update(item, (ele) => {
+      return item.giftId === ele.giftId
+    })
+    resetPopup()
+  } else {
+    // add
+    await giftAdd(item)
+    showToast('添加成功')
+    listRef.value.update(item)
+    resetPopup()
+  }
+})
 </script>
 
 <template>
@@ -68,7 +77,7 @@ async function onConfirm() {
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag" title="编辑礼物">
-      <TheGiftForm :item-data="formData" @confirm="onConfirm" />
+      <TheGiftForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
     </base-popup>
   </base-container>
 </template>

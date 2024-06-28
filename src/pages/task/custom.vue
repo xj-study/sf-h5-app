@@ -48,7 +48,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
     // add
     await taskAdd(item)
     showToast('添加成功')
-    listRef.value.update(item, () => false)
+    listRef.value.update(item)
   }
   editShowFlag.value = false
 })

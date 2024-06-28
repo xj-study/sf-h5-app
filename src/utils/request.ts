@@ -46,7 +46,8 @@ function errorHandler(error: RequestError): Promise<any> {
       // 如果你需要直接跳转登录页面
       // location.replace(loginRoutePath)
     }
-    showToast('系统异常')
+
+    showToast(data?.message || statusText)
   }
   return Promise.reject(error)
 }
@@ -79,7 +80,7 @@ function responseHandler(response: { data: ResponseBody }) {
       router.push('/login')
     }
     showToast(data.msg)
-    throw new Error('服务异常')
+    return Promise.reject(data)
   }
 }
 
