@@ -25,6 +25,11 @@ onMounted(() => {
   updateIntegral()
 })
 
+const router = useRouter()
+function toOrderGiftList() {
+  router.push('/order/gift')
+}
+
 const editShowFlag = ref(false)
 const formData = ref(null)
 
@@ -44,9 +49,14 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: OrderGiftFor
 <template>
   <base-container :padding-x="0">
     <base-head-tool>
-      <div>
-        <span>积分余额：</span>
-        <span class="text-amber-500">{{ user.integral }}</span>
+      <div class="flex justify-between">
+        <div>
+          <span>积分余额：</span>
+          <span class="text-amber-500">{{ user.integral }}</span>
+        </div>
+        <base-text-link @click="toOrderGiftList">
+          查看兑换记录
+        </base-text-link>
       </div>
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">

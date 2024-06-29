@@ -7,3 +7,10 @@ export async function orderBuy(data): Promise<any> {
     data,
   })
 }
+export async function orderQuery(data): Promise<any> {
+  return request({
+    method: 'post',
+    url: '/order/gift/query',
+    data,
+  })
+}

@@ -3,6 +3,7 @@ import TheTaskItem from './components/theTaskItem.vue'
 import { TaskListType, TaskStatus } from './types'
 import type { TaskRecordQuery } from '@/api/typing'
 import { recordQuery } from '@/api/taskApi'
+import type { TabItem } from '@/components/typing'
 
 definePage({
   name: 'task',
@@ -11,11 +12,7 @@ definePage({
     title: '任务列表',
   },
 })
-interface TaskTab {
-  title: string
-  value: number
-}
-const taskTabs = computed<TaskTab[]>(() => {
+const taskTabs = computed<TabItem[]>(() => {
   const result = [
     { title: '全部', value: -1 },
     { title: '未完成', value: TaskStatus.INIT },
@@ -56,11 +53,9 @@ function onItemUpdate(data) {
 <template>
   <base-container :padding-x="0">
     <base-head-tool>
-      <van-tabs v-model:active="currentTabs" title="" @change="onChange">
-        <van-tab v-for="data in taskTabs" :key="data.value" :title="data.title" :name="data.value" />
-      </van-tabs>
+      <base-tabs v-model="currentTabs" :list="taskTabs" @change="onChange" />
     </base-head-tool>
-    <base-refresh-list ref="listRef" class="min-h-80vh" :get-list="getList">
+    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
         <TheTaskItem v-for="data in list" :key="data.id" :type="taskListType" :item="data" @update="onItemUpdate" />
       </template>

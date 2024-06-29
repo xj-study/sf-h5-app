@@ -17,11 +17,16 @@ const message = computed(() => {
   }
   return ''
 })
-const prefix = computed(() => {
-  return '获取'
-})
 const integral = computed(() => {
   return props.item.integralChange || 0
+})
+
+const prefix = computed(() => {
+  return integral.value < 0 ? '消耗' : '获得'
+})
+const integralText = computed(() => Math.abs(integral.value))
+const integralCls = computed(() => {
+  return integral.value < 0 ? 'text-red' : 'text-amber-500'
 })
 </script>
 
@@ -30,7 +35,7 @@ const integral = computed(() => {
     <div class="text-16">
       <div>
         <span class="pr-8 text-14">{{ prefix }}</span>
-        <span class="text-20 text-amber-500">{{ integral }}</span>
+        <span class="text-20" :class="integralCls">{{ integralText }}</span>
         <span class="pl-8 text-12">积分</span>
       </div>
       <div class="mt-8 text-12">

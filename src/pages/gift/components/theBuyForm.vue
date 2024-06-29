@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { OrderGiftForm } from '../typing'
-import TheGiftPrice from './theGiftPrice.vue'
 import useUserStore from '@/stores/modules/user'
 
 const props = defineProps({
@@ -40,7 +39,7 @@ function onSubmit() {
 <template>
   <van-form @submit="onSubmit">
     <div class="m-x-20 mb-20 border-b-0.5 border-b-gray border-b-solid pb-10">
-      <TheGiftPrice :price="form.price" class="text-20 text-emerald-600" />
+      <base-gift-price :price="form.price" class="text-20 text-emerald-600" />
       <div class="m-y-8 text-16">
         {{ form.name }}
       </div>

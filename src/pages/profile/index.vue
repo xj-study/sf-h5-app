@@ -32,7 +32,7 @@ function toTaskList(tab) {
   router.push(`/task?tab=${tab}`)
 }
 function toChildrenTaskList(id: number) {
-  router.push(`/task?id=${id}`)
+  router.push(`/profile/child?id=${id}`)
 }
 function toCustomTask() {
   router.push('/task/custom')
@@ -50,6 +50,9 @@ function toIntegralRecord() {
 function toGift() {
   router.push('/gift')
 }
+function toGame() {
+  router.push('/game')
+}
 </script>
 
 <template>
@@ -65,9 +68,9 @@ function toGift() {
         <div class="ml-10 flex-1 text-20">
           <div class="flex items-center justify-between">
             <span> {{ user.userName }}</span>
-            <span class="text-12" @click="toLoginOut">
-              退出登录 >
-            </span>
+            <base-text-link @click="toLoginOut">
+              退出登录
+            </base-text-link>
           </div>
 
           <div class="mt-10 flex items-center justify-between">
@@ -75,10 +78,9 @@ function toGift() {
               <span class="text-20 text-amber-500">{{ user.integral || 0 }}</span>
               <span class="pl-8 text-12">积分</span>
             </div>
-
-            <span class="text-12" @click="toIntegralRecord">
-              查看积分明细 >
-            </span>
+            <base-text-link @click="toIntegralRecord">
+              查看积分明细
+            </base-text-link>
           </div>
         </div>
       </div>
@@ -100,6 +102,9 @@ function toGift() {
       <base-cell-head title="开心一刻">
         <base-button plain type="primary" size="normal" @click="toGift">
           礼物中心
+        </base-button>
+        <base-button class="ml-10" plain type="primary" size="normal" @click="toGame">
+          益智小游戏
         </base-button>
       </base-cell-head>
     </div>
