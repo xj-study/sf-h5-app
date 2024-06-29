@@ -18,11 +18,13 @@ function toGiftOrderList() {
 
 <template>
   <base-container :padding-x="0">
-    <base-button plain type="primary" size="normal" @click="toTaskList">
-      查看任务情况
-    </base-button>
-    <base-button plain type="primary" size="normal" @click="toGiftOrderList">
-      礼物兑换情况
-    </base-button>
+    <base-cell-head title="近况">
+      <base-button plain type="primary" size="normal" @click="toTaskList">
+        任务情况
+      </base-button>
+      <base-button class="ml-10" plain type="primary" size="normal" @click="toGiftOrderList">
+        礼物兑换情况
+      </base-button>
+    </base-cell-head>
   </base-container>
 </template>
