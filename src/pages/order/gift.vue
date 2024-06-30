@@ -21,6 +21,7 @@ const tabs = computed<TabItem[]>(() => {
   return result
 })
 
+const route = useRoute()
 const currentTabs = ref(-1)
 const listRef = ref(null)
 function onChange() {
@@ -28,9 +29,14 @@ function onChange() {
 }
 
 async function getList() {
-  const params: { status?: number | undefined } = { status: undefined }
+  const params: { status?: number, userId?: string } = { }
   if (currentTabs.value > -1)
     params.status = currentTabs.value
+
+  const id: string = route.query.id as string
+  if (id)
+    params.userId = id
+
   const records = await orderQuery(params)
   return records
 }

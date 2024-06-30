@@ -13,6 +13,7 @@ function toTaskList() {
 }
 function toGiftOrderList() {
   //
+  router.push(`/order/gift?id=${route.query.id}`)
 }
 </script>
 
