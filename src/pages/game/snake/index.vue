@@ -35,13 +35,13 @@ watch(isAlive, () => {
   isGameOver.value = !isAlive.value
 })
 const isStop = ref(false)
-const resetText = computed(() => {
-  if (!isAlive.value) {
-    return '重置'
-  }
-  return isStop.value ? '开始' : '暂停'
-})
-const resetVisible = computed(() => direction.value !== Direction.INIT)
+// const resetText = computed(() => {
+//   if (!isAlive.value) {
+//     return '重置'
+//   }
+//   return isStop.value ? '开始' : '暂停'
+// })
+// const resetVisible = computed(() => direction.value !== Direction.INIT)
 
 function changeDirection(value: Direction) {
   if (isStop.value)
@@ -53,10 +53,11 @@ function changeDirection(value: Direction) {
   direction.value = value
 }
 
-const scorePanel = reactive(new ScorePanel())
+const scorePanel = new ScorePanel()
 
 const currentSpeed = computed(() => {
   const speed = SPEED_INIT - (scorePanel.level - 1) * SPEED_LEVEL_CHANGE
+
   return speed
 })
 function startGame() {
@@ -126,17 +127,22 @@ function resetGame() {
   direction.value = Direction.INIT
 
   isAlive.value = true
-  startGame()
 }
 </script>
 
 <template>
   <div class="h-screen bg-[#90b4b8] pt-10">
-    <van-popup v-model:show="isGameOver" class="bg-transparent">
-      <div class="rounded-[10px] bg-[rgba(255,255,255,0.5)] p-20 color-white">
-        GAME OVER
+    <van-popup v-model:show="isGameOver" class="bg-transparent" :close-on-click-overlay="false">
+      <div class="text-center">
+        <div class="rounded-[10px] bg-[rgba(255,255,255,0.5)] p-20 color-white">
+          GAME OVER
+        </div>
+        <base-button plain class="m-x-auto mt-10" size="small bg-transparent text-white" @click="resetGame">
+          再来一次
+        </base-button>
       </div>
     </van-popup>
+
     <!-- 主盘 -->
     <div :style="mainPanelStyle" class="relative m-auto m-y-10 box-content border-1 border-[#333] border-solid">
       <!-- 蛇 -->
@@ -165,10 +171,7 @@ function resetGame() {
         <div :class="ctrlBtnCls" class="inline-block flex-1" @click="changeDirection(Direction.LEFT)">
           左
         </div>
-        <div class="m-x-10 inline-block" :class="[ctrlBtnCls, { 'opacity-0': !resetVisible }]" @click="resetGame">
-          {{ resetText }}
-        </div>
-        <div :class="ctrlBtnCls" class="inline-block flex-1" @click="changeDirection(Direction.RIGHT)">
+        <div :class="ctrlBtnCls" class="ml-10 inline-block flex-1" @click="changeDirection(Direction.RIGHT)">
           右
         </div>
       </div>

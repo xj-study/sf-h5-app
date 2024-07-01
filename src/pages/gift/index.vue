@@ -15,12 +15,14 @@ definePage({
     title: '礼物中心',
   },
 })
+
 const { user, updateIntegral } = useUserStore()
 const listRef = ref(null)
 async function getList() {
   const records = await giftQuery()
   return records
 }
+
 onMounted(() => {
   updateIntegral()
 })

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import TheTaskItem from './components/theTaskItem.vue'
-import { TaskListType, TaskStatus } from './types'
+import { TaskStatus } from './types'
 import type { TaskRecordQuery } from '@/api/typing'
 import { recordQuery } from '@/api/taskApi'
 import type { TabItem } from '@/components/typing'
+import { ListType } from '@/typing'
 
 definePage({
   name: 'task',
@@ -34,7 +35,7 @@ function onChange() {
 }
 
 const taskListType = computed(() => {
-  return routeQuery.value.id ? TaskListType.MANAGER : TaskListType.USER
+  return routeQuery.value.id ? ListType.MANAGER : ListType.USER
 })
 
 async function getList() {

@@ -1,8 +1,8 @@
-import { LEVEL_UP_SCORE } from './config'
+import { LEVEL_MAX, LEVEL_UP_SCORE } from './config'
 
 export default class ScorePanel {
   private _score: number
-  private _level: number
+  private _level: Ref<number> = ref(1)
   constructor(score: number = 0, level: number = 1) {
     this.score = score
     this.level = level
@@ -19,11 +19,15 @@ export default class ScorePanel {
   }
 
   get level() {
-    return this._level
+    return this._level.value
   }
 
   set level(value) {
-    this._level = value
+    if (this.level === value)
+      return
+    if (value > LEVEL_MAX)
+      value = LEVEL_MAX
+    this._level.value = value
   }
 
   reset() {

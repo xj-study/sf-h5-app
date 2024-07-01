@@ -9,6 +9,8 @@ export const SPEED_INIT = 300
 // 每级变化的速度
 export const SPEED_LEVEL_CHANGE = 30
 // 升级的分数
-export const LEVEL_UP_SCORE = 2
+export const LEVEL_UP_SCORE = 10
+// 最高等级
+export const LEVEL_MAX = 10
 // 蛇的初始长度
 export const SNAKE_INIT_SIZE = 4

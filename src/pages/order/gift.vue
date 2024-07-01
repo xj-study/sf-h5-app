@@ -3,6 +3,7 @@ import { OrderStatus } from './typing'
 import TheGiftItem from './components/theGiftItem.vue'
 import { orderQuery } from '@/api/orderApi'
 import type { TabItem } from '@/components/typing'
+import { ListType } from '@/typing'
 
 definePage({
   name: 'orderGift',
@@ -41,6 +42,10 @@ async function getList() {
   return records
 }
 
+const listType = computed(() => {
+  return route.query.id ? ListType.MANAGER : ListType.USER
+})
+
 function onItemUpdate() {}
 </script>
 
@@ -51,7 +56,7 @@ function onItemUpdate() {}
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-80vh" :get-list="getList">
       <template #default="{ list }">
-        <TheGiftItem v-for="data in list" :key="data.id" :item="data" @update="onItemUpdate" />
+        <TheGiftItem v-for="data in list" :key="data.id" :type="listType" :item="data" @update="onItemUpdate" />
       </template>
     </base-refresh-list>
   </base-container>

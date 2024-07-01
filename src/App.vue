@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import useAppStore from '@/stores/modules/app'
 import useRouteCache from '@/stores/modules/routeCache'
-import useRouteTransitionNameStore from '@/stores/modules/routeTransitionName'
+// import useRouteTransitionNameStore from '@/stores/modules/routeTransitionName'
 import useAutoThemeSwitcher from '@/hooks/useAutoThemeSwitcher'
 
 useHead({
@@ -29,8 +29,8 @@ useHead({
 const appStore = useAppStore()
 const { mode } = storeToRefs(appStore)
 
-const routeTransitionNameStore = useRouteTransitionNameStore()
-const { routeTransitionName } = storeToRefs(routeTransitionNameStore)
+// const routeTransitionNameStore = useRouteTransitionNameStore()
+// const { routeTransitionName } = storeToRefs(routeTransitionNameStore)
 const { initializeThemeSwitcher } = useAutoThemeSwitcher(appStore)
 
 const keepAliveRouteNames = computed(() => {
@@ -46,11 +46,11 @@ onMounted(() => {
   <van-config-provider :theme="mode">
     <base-nav-bar />
     <router-view v-slot="{ Component, route }">
-      <transition :name="routeTransitionName">
-        <keep-alive :include="keepAliveRouteNames">
-          <component :is="Component" :key="route.name" />
-        </keep-alive>
-      </transition>
+      <!-- <transition :name="routeTransitionName"> -->
+      <keep-alive :include="keepAliveRouteNames">
+        <component :is="Component" :key="route.name" />
+      </keep-alive>
+      <!-- </transition> -->
     </router-view>
     <base-tab-bar />
   </van-config-provider>

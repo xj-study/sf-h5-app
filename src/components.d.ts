@@ -18,6 +18,7 @@ declare module 'vue' {
     BaseRefreshList: typeof import('./components/baseRefreshList.vue')['default']
     BaseTabBar: typeof import('./components/baseTabBar.vue')['default']
     BaseTabs: typeof import('./components/baseTabs.vue')['default']
+    BaseTag: typeof import('./components/baseTag.vue')['default']
     BaseTextLink: typeof import('./components/baseTextLink.vue')['default']
     BaseTitle: typeof import('./components/baseTitle.vue')['default']
     copy: typeof import('./components/baseHead copy.vue')['default']

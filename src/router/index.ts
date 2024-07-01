@@ -5,7 +5,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import type { EnhancedRouteLocation } from './types'
-import useRouteTransitionNameStore from '@/stores/modules/routeTransitionName'
+// import useRouteTransitionNameStore from '@/stores/modules/routeTransitionName'
 import useRouteCacheStore from '@/stores/modules/routeCache'
 import useUserStore from '@/stores/modules/user'
 
@@ -28,19 +28,19 @@ router.beforeEach((to: EnhancedRouteLocation, from, next) => {
   }
 
   const routeCacheStore = useRouteCacheStore()
-  const routeTransitionNameStore = useRouteTransitionNameStore()
+  // const routeTransitionNameStore = useRouteTransitionNameStore()
 
   // Route cache
   routeCacheStore.addRoute(to)
 
-  if (to.meta.level > from.meta.level)
-    routeTransitionNameStore.setName('slide-fadein-left')
+  // if (to.meta.level > from.meta.level)
+  //   routeTransitionNameStore.setName('slide-fadein-left')
 
-  else if (to.meta.level < from.meta.level)
-    routeTransitionNameStore.setName('slide-fadein-right')
+  // else if (to.meta.level < from.meta.level)
+  //   routeTransitionNameStore.setName('slide-fadein-right')
 
-  else
-    routeTransitionNameStore.setName('')
+  // else
+  //   routeTransitionNameStore.setName('')
 
   next()
 })

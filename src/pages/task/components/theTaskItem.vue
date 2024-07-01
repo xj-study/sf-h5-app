@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import useTaskTag from '../utils/useTaskTag'
-import { TaskListType } from '../types'
+
 import useLoading from '@/hooks/useLoading'
 import { recordComplete, recordCompleteByTaskId } from '@/api/taskApi'
+import { ListType } from '@/typing'
 
 const props = defineProps({
-  type: { type: Number, default: TaskListType.USER },
+  type: { type: Number, default: ListType.USER },
   item: { type: Object, default: () => ({}) },
 })
 const emits = defineEmits(['update'])
@@ -26,7 +27,7 @@ const { loadingFlag: verifyLoadingFlag, loading: onVerify } = useLoading(async (
   emits('update', { ...props.item, status })
 })
 
-const managerTypeFlag = computed(() => props.type === TaskListType.MANAGER)
+const managerTypeFlag = computed(() => props.type === ListType.MANAGER)
 
 const btnCompleteFlag = computed(() => !managerTypeFlag.value && statusInitFlag.value)
 const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFlag.value)
@@ -35,10 +36,8 @@ const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFl
 <template>
   <div class="m-10 bg-white p-10">
     <div class="flex justify-between text-16">
-      <div class="flex">
-        <van-tag v-if="tagData.text" plain :type="tagData.type" class="mr-10">
-          {{ tagData.text }}
-        </van-tag>
+      <div class="flex items-center">
+        <base-tag v-if="tagData.tag" v-bind="tagData" class="mr-10" />
         <span> {{ item.title }} </span>
       </div>
       <div>

@@ -2,6 +2,7 @@
 import useUserStore from '@/stores/modules/user'
 
 const props = defineProps({
+
   item: { type: Object, default: () => ({}) },
 })
 defineEmits(['buy'])
