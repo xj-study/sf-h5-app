@@ -46,7 +46,11 @@ const listType = computed(() => {
   return route.query.id ? ListType.MANAGER : ListType.USER
 })
 
-function onItemUpdate() {}
+function onItemUpdate(data) {
+  listRef.value.update(data, (item) => {
+    return item.orderId === data.orderId
+  })
+}
 </script>
 
 <template>

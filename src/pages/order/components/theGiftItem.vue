@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import useOrderTag from '../utils/useOrderTag'
+import { OrderStatus } from '../typing'
+import { orderUpdateStatus } from '@/api/orderApi'
+import useLoading from '@/hooks/useLoading'
 import { ListType } from '@/typing'
 
 const props = defineProps({
@@ -7,11 +10,16 @@ const props = defineProps({
   type: { type: Number, default: ListType.USER },
 })
 
-defineEmits(['shipped'])
+const emits = defineEmits(['update'])
 
-const { tagData } = useOrderTag(props)
+const { tagData, unshippedFlag } = useOrderTag(props)
 
 const managerTypeFlag = computed(() => props.type === ListType.MANAGER)
+
+const { loadingFlag: shippedLoadingFlag, loading: toShipped } = useLoading(async () => {
+  await orderUpdateStatus(props.item.orderId, OrderStatus.SHIPPED)
+  emits('update', { ...props.item, status: OrderStatus.SHIPPED })
+})
 </script>
 
 <template>
@@ -21,14 +29,25 @@ const managerTypeFlag = computed(() => props.type === ListType.MANAGER)
         <base-tag v-if="tagData.tag" v-bind="tagData" class="mr-10" />
         {{ item.name }}
       </div>
-      <base-gift-price :price="item.price" close-ratio class="text-emerald-600" />
     </div>
+
     <div class="mt-8 text-14">
       {{ item.content }}
     </div>
 
-    <div v-if="managerTypeFlag" class="mt-20">
-      <base-button size="small" plain type="primary" class="min-w-100" @click="$emit('shipped', item)">
+    <div class="m-y-8 flex justify-between text-14">
+      <div>
+        <span class="color-gray">数量：</span>
+        <span>{{ item.num }}</span>
+      </div>
+      <div class="flex items-center">
+        <span class="color-gray">花费：</span>
+        <base-gift-price :price="item.totalPrice" close-ratio class="text-emerald-600" />
+      </div>
+    </div>
+
+    <div v-if="managerTypeFlag && unshippedFlag" class="mt-20">
+      <base-button size="small" :loading="shippedLoadingFlag" plain type="primary" class="min-w-100" @click="toShipped">
         确认发货
       </base-button>
     </div>

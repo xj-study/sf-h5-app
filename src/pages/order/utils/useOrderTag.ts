@@ -3,6 +3,7 @@ import type { TagItem } from '@/components/typing'
 import { TagType } from '@/components/typing'
 
 export default function useOrderTag(props) {
+  const unshippedFlag = computed(() => props.item.status === OrderStatus.UNSHIPPED)
   const tagData = computed<TagItem>(() => {
     switch (props.item.status) {
       case OrderStatus.CLOSED:
@@ -17,5 +18,5 @@ export default function useOrderTag(props) {
         return { tag: '', type: TagType.GRAY }
     }
   })
-  return { tagData }
+  return { tagData, unshippedFlag }
 }
