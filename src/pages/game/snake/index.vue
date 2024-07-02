@@ -27,7 +27,7 @@ const foodSubNodeStyle = computed(() => {
 
 const snake = new Snake()
 
-const ctrlBtnCls = 'bg-gray rounded-3xl p-20 text-amber '
+const ctrlBtnCls = 'bg-[rgba(0,0,0,.3)] rounded-3xl p-20 text-white '
 const direction = ref(Direction.INIT)
 const isAlive = ref(true)
 const isGameOver = ref(false)

@@ -16,7 +16,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to: EnhancedRouteLocation, from, next) => {
+router.beforeEach((to: EnhancedRouteLocation) => {
   NProgress.start()
 
   if (!to.meta.common) {
@@ -42,7 +42,7 @@ router.beforeEach((to: EnhancedRouteLocation, from, next) => {
   // else
   //   routeTransitionNameStore.setName('')
 
-  next()
+  // next()
 })
 
 router.afterEach(() => {

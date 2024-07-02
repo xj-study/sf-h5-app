@@ -11,7 +11,6 @@ declare module 'vue' {
     BaseCellHead: typeof import('./components/baseCellHead.vue')['default']
     BaseContainer: typeof import('./components/baseContainer.vue')['default']
     BaseGiftPrice: typeof import('./components/baseGiftPrice.vue')['default']
-    BaseHead: typeof import('./components/baseHead.vue')['default']
     BaseHeadTool: typeof import('./components/baseHeadTool.vue')['default']
     BaseNavBar: typeof import('./components/baseNavBar.vue')['default']
     BasePopup: typeof import('./components/basePopup.vue')['default']
@@ -21,7 +20,6 @@ declare module 'vue' {
     BaseTag: typeof import('./components/baseTag.vue')['default']
     BaseTextLink: typeof import('./components/baseTextLink.vue')['default']
     BaseTitle: typeof import('./components/baseTitle.vue')['default']
-    copy: typeof import('./components/baseHead copy.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']
@@ -42,6 +40,5 @@ declare module 'vue' {
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VanTabs: typeof import('vant/es')['Tabs']
-    VanTag: typeof import('vant/es')['Tag']
   }
 }
