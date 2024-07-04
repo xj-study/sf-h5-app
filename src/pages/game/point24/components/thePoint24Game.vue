@@ -36,15 +36,16 @@ const config = computed<Config>(() => {
   let { count, task, practice } = props
   practice = !task && practice
 
-  let btnTip, btnNext, progress
+  let btnTip = true
+  let btnNext = true
+  let progress = true
   if (task) {
     btnTip = false
     btnNext = false
-    progress = true
   } else if (practice) {
-    btnTip = true
-    btnNext = true
     progress = false
+  } else {
+    btnNext = false
   }
   return {
     task,

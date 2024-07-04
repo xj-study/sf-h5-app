@@ -8,8 +8,14 @@ definePage({
   },
 })
 const startFlag = ref(false)
+const practiceFlag = ref(false)
 function toStart() {
   startFlag.value = true
+  practiceFlag.value = false
+}
+function toPractice() {
+  startFlag.value = true
+  practiceFlag.value = true
 }
 </script>
 
@@ -29,7 +35,10 @@ function toStart() {
       <base-button type="primary" @click="toStart">
         开始游戏
       </base-button>
+      <base-button class="ml10" @click="toPractice">
+        练习一下
+      </base-button>
     </div>
-    <TheGame v-model="startFlag" />
+    <TheGame v-model="startFlag" :practice="practiceFlag" />
   </base-container>
 </template>
