@@ -70,5 +70,5 @@ function onGamePoint24() {
       </template>
     </base-refresh-list>
   </base-container>
-  <ThePoint24Game v-model="gamePoint24Flag" practice />
+  <ThePoint24Game v-model="gamePoint24Flag" task />
 </template>

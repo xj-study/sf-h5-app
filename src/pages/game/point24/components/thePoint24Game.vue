@@ -8,6 +8,7 @@ import TheExpression from './theExpression.vue'
 
 interface Config {
   task: boolean
+  practice: boolean
   // 当前数量
   count: number
   btnNext: boolean
@@ -56,7 +57,8 @@ const config = computed<Config>(() => {
 })
 
 const currentProgress = ref(1)
-const btnNextDisabled = computed(() => {
+// 是否为最后一题
+const isLastQuestion = computed(() => {
   return config.value.progress && currentProgress.value >= config.value.count
 })
 
@@ -72,7 +74,15 @@ const finallyResult = ref<NumData | null>(null)
 const answerPassFlag = computed(() => finallyResult.value?.num === RESULT)
 const resultData = computed(() => {
   if (answerPassFlag.value) {
-    return { text: '你真棒！获得 1 积分', cls: 'text-green' }
+    if (config.value.task) {
+      if (isLastQuestion.value) {
+        return { text: '你真棒！恭喜你完成任务', cls: 'text-green' }
+      }
+      return { text: '你真棒！再接再厉哟！', cls: 'text-green' }
+    } else if (config.value.practice) {
+      return { text: '你真棒！', cls: 'text-green' }
+    }
+    return { text: '你真棒！恭喜你通过关卡', cls: 'text-green' }
   } else {
     return { text: '没算对哟，清空再尝试一下！', cls: 'text-amber' }
   }
@@ -189,11 +199,13 @@ function toTip() {
 function autoToNext() {
   if (config.value.progress) {
     if (currentProgress.value >= config.value.count) {
-      showToast('已经到最后了！')
+      // showToast('已经到最后了！')
       return
     }
     currentProgress.value++
   }
+  if (config.value.practice)
+    return
   setTimeout(() => {
     toNext()
   }, 3000)
@@ -248,7 +260,7 @@ function toExit() {
           <span v-if="tipExpression" class="absolute left-[-20%] top-[-50%] text-nowrap text-color-amber font-bold">{{ tipExpression }}</span>
           提示
         </base-button>
-        <base-button v-if="config.btnNext" :disabled="btnNextDisabled" plain class="ml20 bg-transparent text-white" @click="toNext">
+        <base-button v-if="config.btnNext" :disabled="isLastQuestion" plain class="ml20 bg-transparent text-white" @click="toNext">
           换一个
         </base-button>
       </div>
