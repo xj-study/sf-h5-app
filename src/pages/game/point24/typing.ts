@@ -6,6 +6,13 @@ export enum OpeType {
   DIV = '÷',
 }
 
+export const OpeTypeValue = {
+  [OpeType.ADD]: 1,
+  [OpeType.SUB]: 1,
+  [OpeType.MUL]: 10,
+  [OpeType.DIV]: 10,
+}
+
 export const RESULT = 24
 
 export class Fraction {

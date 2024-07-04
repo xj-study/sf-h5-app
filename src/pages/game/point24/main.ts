@@ -1,11 +1,4 @@
-import { OpeType, RESULT } from './typing'
-
-const OpeTypeValue = {
-  [OpeType.ADD]: 1,
-  [OpeType.SUB]: 1,
-  [OpeType.MUL]: 10,
-  [OpeType.DIV]: 10,
-}
+import { OpeType, OpeTypeValue, RESULT } from './typing'
 
 interface Exp {
   str: string
