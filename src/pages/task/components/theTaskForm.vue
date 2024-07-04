@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TaskForm } from '../types'
+import { TaskForm, TaskTypeOptions } from '../types'
 
 const props = defineProps({
   confirmLoading: { type: Boolean, default: false },
@@ -9,6 +9,7 @@ const props = defineProps({
 const emits = defineEmits(['confirm'])
 
 const form = reactive<TaskForm>(new TaskForm())
+const taskTypeOptions = TaskTypeOptions
 
 watchEffect(() => {
   for (const key in form) {
@@ -53,7 +54,17 @@ function onSubmit() {
         clearable
         :rules="[{ required: true, message: '请填写奖励积分' }]"
       />
-      <van-field name="switch" label="是否审批">
+      <van-field label="类型">
+        <template #input>
+          <van-radio-group v-model="form.taskType">
+            <van-radio v-for="item in taskTypeOptions" :key="item.name" class="mt-10" :name="item.name">
+              {{ item.label }}
+            </van-radio>
+          </van-radio-group>
+        </template>
+      </van-field>
+
+      <van-field label="是否审批">
         <template #input>
           <van-switch v-model="form.verifyFlag" />
         </template>

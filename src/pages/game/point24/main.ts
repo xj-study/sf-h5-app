@@ -72,12 +72,13 @@ export default class Point24Main {
         let newValue = OpeTypeValue[opeType]
         if (flag) {
           if (exp.value < newValue) {
+            newValue = exp.value
             newStr = `(${exp.str}) ${opeType} ${num2}`
           } else {
             newStr = `${exp.str} ${opeType} ${num2}`
           }
         } else {
-          if (exp.value < newValue) {
+          if (exp.value < newValue || (opeType === OpeType.SUB && exp.value === newValue)) {
             newValue = exp.value
             newStr = `${num1} ${opeType} (${exp.str})`
           } else {
@@ -134,6 +135,7 @@ export default class Point24Main {
       map.set(result[i].exp, result)
     }
     const answers: string[] = [...map.keys()].map(exp => exp.str)
+
     return answers
   }
 }

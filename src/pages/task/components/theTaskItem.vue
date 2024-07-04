@@ -1,19 +1,37 @@
 <script setup lang="ts">
 import useTaskTag from '../utils/useTaskTag'
 
+import { type TaskForm, TaskType } from '../types'
 import useLoading from '@/hooks/useLoading'
 import { recordComplete, recordCompleteByTaskId } from '@/api/taskApi'
 import { ListType } from '@/typing'
 
-const props = defineProps({
-  type: { type: Number, default: ListType.USER },
-  item: { type: Object, default: () => ({}) },
+interface Props {
+  type: ListType
+  item: TaskForm
+}
+const props = defineProps<Props>()
+const emits = defineEmits(['update', 'gamePoint24'])
+
+const toOrOnCompleteText = computed(() => {
+  const taskType = props.item.taskType
+  if (TaskType.COMMON === taskType) {
+    return '完成'
+  } else {
+    return '去完成'
+  }
 })
-const emits = defineEmits(['update'])
 
 const { tagData, statusInitFlag, statusWaitVerifyFlag } = useTaskTag(props)
 
 const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
+  const taskType = props.item.taskType
+  if (TaskType.GAME_POINT24 === taskType) {
+    // 24 点游戏
+    emits('gamePoint24', props.item)
+    return
+  }
+
   let status: number = 0
   if (props.item.id)
     status = await recordComplete(props.item.id)
@@ -51,7 +69,7 @@ const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFl
     </div>
     <Transition name="fade-item">
       <base-button v-if="btnCompleteFlag" class="mt-20 min-w-100" size="small" plain type="primary" :loading="completeLoadingFlag" @click="onComplete">
-        完成
+        {{ toOrOnCompleteText }}
       </base-button>
       <div v-else-if="btnVerifyFlag">
         <base-button class="mt-20 min-w-100" size="small" plain type="primary" :loading="verifyLoadingFlag" @click="onVerify">

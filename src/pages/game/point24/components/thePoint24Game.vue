@@ -6,10 +6,59 @@ import TheNumItem from './theNumItem.vue'
 import TheOperationItem from './theOperationItem.vue'
 import TheExpression from './theExpression.vue'
 
-defineProps({
-  modelValue: { type: Boolean, default: false },
+interface Config {
+  task: boolean
+  // 当前数量
+  count: number
+  btnNext: boolean
+  btnTip: boolean
+  progress: boolean
+}
+// task / practice 只能选1 若都选了，优先级以这个为准
+interface Props {
+  modelValue: boolean
+  // 是否为任务
+  task?: boolean
+  // 是否为练习
+  practice?: boolean
+  // 当前数量
+  count?: number
+}
+const props = withDefaults(defineProps<Props>(), {
+  task: false,
+  practice: false,
+  count: 5,
 })
 const emits = defineEmits(['update:modelValue'])
+
+const config = computed<Config>(() => {
+  let { count, task, practice } = props
+  practice = !task && practice
+
+  let btnTip, btnNext, progress
+  if (task) {
+    btnTip = false
+    btnNext = false
+    progress = true
+  } else if (practice) {
+    btnTip = true
+    btnNext = true
+    progress = false
+  }
+  return {
+    task,
+    practice,
+    count,
+    btnTip,
+    btnNext,
+    progress,
+  }
+})
+
+const currentProgress = ref(1)
+const btnNextDisabled = computed(() => {
+  return config.value.progress && currentProgress.value >= config.value.count
+})
 
 const NUM_SELECT_MAX = 2
 
@@ -20,15 +69,13 @@ const nums = ref<INumData[]>([])
 const calcNums = ref<INumData[]>([])
 
 const finallyResult = ref<NumData | null>(null)
+const answerPassFlag = computed(() => finallyResult.value?.num === RESULT)
 const resultData = computed(() => {
-  if (finallyResult.value) {
-    if (finallyResult.value.num === RESULT) {
-      return { text: '你真棒！获得 1 积分', cls: 'text-green' }
-    } else {
-      return { text: '没算对哟，清空再尝试一下！', cls: 'text-amber' }
-    }
+  if (answerPassFlag.value) {
+    return { text: '你真棒！获得 1 积分', cls: 'text-green' }
+  } else {
+    return { text: '没算对哟，清空再尝试一下！', cls: 'text-amber' }
   }
-  return null
 })
 
 const expresss = ref([])
@@ -86,6 +133,11 @@ function checkNeedCalc() {
 
     if (calcNums.value.length === 2) {
       finallyResult.value = result
+
+      // 若回答正确，则进入下一关
+      if (answerPassFlag.value) {
+        autoToNext()
+      }
     } else {
       calcNums.value.push(result)
     }
@@ -123,12 +175,28 @@ function confirmOnAnswer() {
     showToast('回答的不对哟')
   } else {
     showToast('回答正确，进入下一题')
-    toNext()
+
+    setTimeout(() => {
+      toNext()
+    }, 1000)
   }
 }
 function toTip() {
   // 提示一下
   tipExpression.value = main.randomAnswers
+}
+// 回答正确会进入自动进入下一题，
+function autoToNext() {
+  if (config.value.progress) {
+    if (currentProgress.value >= config.value.count) {
+      showToast('已经到最后了！')
+      return
+    }
+    currentProgress.value++
+  }
+  setTimeout(() => {
+    toNext()
+  }, 3000)
 }
 function toNext() {
   resetData()
@@ -137,12 +205,13 @@ function toNext() {
 }
 function toExit() {
   resetData()
+  currentProgress.value = 1
   emits('update:modelValue', false)
 }
 </script>
 
 <template>
-  <div v-show="modelValue" class="fixed top-0 h-screen w-screen bg-[rgba(0,0,0,0.8)] text-white">
+  <div v-show="modelValue" class="fixed top-0 z-100 h-screen w-screen bg-[rgba(0,0,0,0.8)] text-white">
     <div class="absolute bottom-8vh w-full">
       <div v-if="finallyResult">
         <div class="mb10 text-center font-bold" :class="resultData?.cls">
@@ -163,25 +232,29 @@ function toExit() {
         <span>运算表达式：</span>
         <TheExpression :expresss="expresss" />
       </div>
-      <div class="mt-20 text-center">
+      <div class="m-y-20 text-center">
         <base-button plain type="warning" class="bg-transparent text-white" @click="confirmOnAnswer">
           无解
         </base-button>
         <base-button plain type="warning" class="ml20 bg-transparent text-white" @click="toClear">
           清空
         </base-button>
-        <base-button plain type="warning" class="relative ml20 bg-transparent text-white" @click="toTip">
+        <base-button plain class="ml20 bg-transparent text-white" @click="toExit">
+          退出
+        </base-button>
+      </div>
+      <div v-if="config.btnTip || config.btnNext" class="mb20 mt30 text-center">
+        <base-button v-if="config.btnTip" plain type="warning" class="relative bg-transparent text-white" @click="toTip">
           <span v-if="tipExpression" class="absolute left-[-20%] top-[-50%] text-nowrap text-color-amber font-bold">{{ tipExpression }}</span>
           提示
         </base-button>
+        <base-button v-if="config.btnNext" :disabled="btnNextDisabled" plain class="ml20 bg-transparent text-white" @click="toNext">
+          换一个
+        </base-button>
       </div>
-      <div class="mt-20 text-center">
-        <base-button plain class="bg-transparent text-white" @click="toNext">
-          下一个
-        </base-button>
-        <base-button plain type="warning" class="ml20 bg-transparent text-white" @click="toExit">
-          退出
-        </base-button>
+
+      <div v-if="config.progress" class="absolute w-full text-center">
+        <span>当前进度： </span><span class="text-24">{{ currentProgress }} / {{ config.count }}</span>
       </div>
     </div>
   </div>

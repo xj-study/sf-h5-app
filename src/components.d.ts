@@ -33,6 +33,8 @@ declare module 'vue' {
     VanNavBar: typeof import('vant/es')['NavBar']
     VanPopup: typeof import('vant/es')['Popup']
     VanPullRefresh: typeof import('vant/es')['PullRefresh']
+    VanRadio: typeof import('vant/es')['Radio']
+    VanRadioGroup: typeof import('vant/es')['RadioGroup']
     VanStepper: typeof import('vant/es')['Stepper']
     VanSticky: typeof import('vant/es')['Sticky']
     VanSwitch: typeof import('vant/es')['Switch']

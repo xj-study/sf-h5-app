@@ -6,6 +6,8 @@ import { recordQuery } from '@/api/taskApi'
 import type { TabItem } from '@/components/typing'
 import { ListType } from '@/typing'
 
+import ThePoint24Game from '@/pages/game/point24/components/thePoint24Game.vue'
+
 definePage({
   name: 'task',
   meta: {
@@ -49,6 +51,12 @@ function onItemUpdate(data) {
     return item.taskId === data.taskId
   })
 }
+
+const gamePoint24Flag = ref(false)
+// 开始游戏 24 点
+function onGamePoint24() {
+  gamePoint24Flag.value = true
+}
 </script>
 
 <template>
@@ -58,8 +66,9 @@ function onItemUpdate(data) {
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
       <template #default="{ list }">
-        <TheTaskItem v-for="data in list" :key="data.id" :type="taskListType" :item="data" @update="onItemUpdate" />
+        <TheTaskItem v-for="data in list" :key="data.id" :type="taskListType" :item="data" @game-point24="onGamePoint24" @update="onItemUpdate" />
       </template>
     </base-refresh-list>
   </base-container>
+  <ThePoint24Game v-model="gamePoint24Flag" practice />
 </template>
