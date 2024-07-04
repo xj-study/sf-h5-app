@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheGame from './components/theGame.vue'
+import TheGame from './components/thePoint24Game.vue'
 
 definePage({
   name: 'gamePoint24',
