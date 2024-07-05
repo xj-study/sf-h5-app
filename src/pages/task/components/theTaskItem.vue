@@ -24,20 +24,24 @@ const toOrOnCompleteText = computed(() => {
 
 const { tagData, statusInitFlag, statusWaitVerifyFlag } = useTaskTag(props)
 
-const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
-  const taskType = props.item.taskType
-  if (TaskType.GAME_POINT24 === taskType) {
-    // 24 点游戏
-    emits('gamePoint24', props.item)
-    return
-  }
-
+async function updateRecoredComplete() {
   let status: number = 0
   if (props.item.id)
     status = await recordComplete(props.item.id)
   else
     status = await recordCompleteByTaskId(props.item.taskId)
   emits('update', { ...props.item, status })
+}
+
+const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
+  const taskType = props.item.taskType
+  if (TaskType.GAME_POINT24 === taskType) {
+    // 24 点游戏
+    emits('gamePoint24', updateRecoredComplete)
+    return
+  }
+
+  updateRecoredComplete()
 })
 
 const { loadingFlag: verifyLoadingFlag, loading: onVerify } = useLoading(async () => {

@@ -4,7 +4,7 @@ import TheGame from './components/thePoint24Game.vue'
 definePage({
   name: 'gamePoint24',
   meta: {
-    common: true,
+    title: '24点',
   },
 })
 const startFlag = ref(false)

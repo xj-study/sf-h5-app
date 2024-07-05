@@ -53,9 +53,14 @@ function onItemUpdate(data) {
 }
 
 const gamePoint24Flag = ref(false)
+let gameTaskCompleteFn = null
 // 开始游戏 24 点
-function onGamePoint24() {
+function onGamePoint24(fn) {
+  gameTaskCompleteFn = fn
   gamePoint24Flag.value = true
+}
+async function onComplete() {
+  await gameTaskCompleteFn()
 }
 </script>
 
@@ -70,5 +75,5 @@ function onGamePoint24() {
       </template>
     </base-refresh-list>
   </base-container>
-  <ThePoint24Game v-model="gamePoint24Flag" task />
+  <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
 </template>

@@ -28,9 +28,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   task: false,
   practice: false,
-  count: 5,
+  count: 2,
 })
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'complete'])
 
 const config = computed<Config>(() => {
   let { count, task, practice } = props
@@ -58,6 +58,8 @@ const config = computed<Config>(() => {
 })
 
 const currentProgress = ref(1)
+// 是否通关
+const isPass = ref(false)
 // 是否为最后一题
 const isLastQuestion = computed(() => {
   return config.value.progress && currentProgress.value >= config.value.count
@@ -76,7 +78,7 @@ const answerPassFlag = computed(() => finallyResult.value?.num === RESULT)
 const resultData = computed(() => {
   if (answerPassFlag.value) {
     if (config.value.task) {
-      if (isLastQuestion.value) {
+      if (isPass.value) {
         return { text: '你真棒！恭喜你完成任务', cls: 'text-green' }
       }
       return { text: '你真棒！再接再厉哟！', cls: 'text-green' }
@@ -187,9 +189,7 @@ function confirmOnAnswer() {
   } else {
     showToast('回答正确，进入下一题')
 
-    setTimeout(() => {
-      toNext()
-    }, 1000)
+    autoToNext()
   }
 }
 function toTip() {
@@ -200,7 +200,11 @@ function toTip() {
 function autoToNext() {
   if (config.value.progress) {
     if (currentProgress.value >= config.value.count) {
-      // showToast('已经到最后了！')
+      isPass.value = true
+      emits('complete')
+      setTimeout(() => {
+        toExit()
+      }, 4000)
       return
     }
     currentProgress.value++
