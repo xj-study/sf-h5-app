@@ -17,7 +17,7 @@ definePage({
 })
 
 const { user, updateIntegral } = useUserStore()
-const listRef = ref(null)
+
 async function getList() {
   const records = await giftQuery()
   return records
@@ -49,8 +49,8 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: OrderGiftFor
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <base-head-tool>
+  <base-main-page :get-list="getList">
+    <template #head-tool>
       <div class="flex justify-between">
         <div>
           <span>积分余额：</span>
@@ -60,14 +60,14 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: OrderGiftFor
           查看兑换记录
         </base-text-link>
       </div>
-    </base-head-tool>
-    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ itemData }">
-        <TheGiftItem key="index" :item="itemData" @buy="toBuy" />
-      </template>
-    </base-refresh-list>
-    <base-popup v-model:show="editShowFlag">
-      <TheBuyForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
-    </base-popup>
-  </base-container>
+    </template>
+    <template #default="{ itemData }">
+      <TheGiftItem :key="itemData.giftId" :item="itemData" @buy="toBuy" />
+    </template>
+    <template #popup>
+      <base-popup v-model:show="editShowFlag">
+        <TheBuyForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
+      </base-popup>
+    </template>
+  </base-main-page>
 </template>

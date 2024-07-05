@@ -7,6 +7,7 @@ import type { TabItem } from '@/components/typing'
 import { ListType } from '@/typing'
 
 import ThePoint24Game from '@/pages/game/point24/components/thePoint24Game.vue'
+import useMainPage from '@/hooks/useMainPage'
 
 definePage({
   name: 'task',
@@ -31,9 +32,10 @@ const routeQuery = computed<TaskRecordQuery>(() => {
 const tab = routeQuery.value.tab
 const currentTabs = ref(tab === null ? -1 : +tab)
 
-const listRef = ref(null)
+const { mainPageRef, onRefresh, listUpdate } = useMainPage()
+
 function onChange() {
-  listRef.value.onRefresh()
+  onRefresh()
 }
 
 const taskListType = computed(() => {
@@ -47,7 +49,7 @@ async function getList() {
 }
 
 function onItemUpdate(data) {
-  listRef.value.update(data, (item) => {
+  listUpdate(data, (item) => {
     return item.taskId === data.taskId
   })
 }
@@ -65,15 +67,15 @@ async function onComplete() {
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <base-head-tool>
+  <base-main-page ref="mainPageRef" :get-list="getList">
+    <template #head-tool>
       <base-tabs v-model="currentTabs" :list="taskTabs" @change="onChange" />
-    </base-head-tool>
-    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ itemData }">
-        <TheTaskItem :key="itemData.id" :type="taskListType" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
-      </template>
-    </base-refresh-list>
-  </base-container>
-  <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
+    </template>
+    <template #default="{ itemData }">
+      <TheTaskItem :key="itemData.id" :type="taskListType" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
+    </template>
+    <template #popup>
+      <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
+    </template>
+  </base-main-page>
 </template>
