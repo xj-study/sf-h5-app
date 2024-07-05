@@ -20,8 +20,8 @@ async function getList() {
 <template>
   <base-container :padding-x="0">
     <base-refresh-list ref="listRef" class="min-h-80vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheRecordItem v-for="data in list" :key="data.id" :item="data" />
+      <template #default="{ itemData }">
+        <TheRecordItem :key="itemData.id" :item="itemData" />
       </template>
     </base-refresh-list>
   </base-container>

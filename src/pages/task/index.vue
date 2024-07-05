@@ -70,8 +70,8 @@ async function onComplete() {
       <base-tabs v-model="currentTabs" :list="taskTabs" @change="onChange" />
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheTaskItem v-for="data in list" :key="data.id" :type="taskListType" :item="data" @game-point24="onGamePoint24" @update="onItemUpdate" />
+      <template #default="{ itemData }">
+        <TheTaskItem :key="itemData.id" :type="taskListType" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
       </template>
     </base-refresh-list>
   </base-container>

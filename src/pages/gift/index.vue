@@ -62,8 +62,8 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: OrderGiftFor
       </div>
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheGiftItem v-for="data, index in list" :key="index" :item="data" @buy="toBuy" />
+      <template #default="{ itemData }">
+        <TheGiftItem key="index" :item="itemData" @buy="toBuy" />
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag">

@@ -59,8 +59,8 @@ function onItemUpdate(data) {
       <base-tabs v-model="currentTabs" :list="tabs" @change="onChange" />
     </base-head-tool>
     <base-refresh-list ref="listRef" class="min-h-80vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheGiftItem v-for="data in list" :key="data.id" :type="listType" :item="data" @update="onItemUpdate" />
+      <template #default="{ itemData }">
+        <TheGiftItem :key="itemData.id" :type="listType" :item="itemData" @update="onItemUpdate" />
       </template>
     </base-refresh-list>
   </base-container>

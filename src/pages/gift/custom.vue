@@ -72,8 +72,8 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: GiftForm) =>
     </base-head-tool>
 
     <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheCustomGiftItem v-for="data in list" :key="data.id" :item="data" @edit="toEdit" @off-shelf="toOffShelf" />
+      <template #default="{ itemData }">
+        <TheCustomGiftItem :key="itemData.id" :item="itemData" @edit="toEdit" @off-shelf="toOffShelf" />
       </template>
     </base-refresh-list>
     <base-popup v-model:show="editShowFlag" title="编辑礼物">

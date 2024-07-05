@@ -40,6 +40,12 @@ function toCustomTask() {
 function toCustomGift() {
   router.push('/gift/custom')
 }
+function toCustomStory() {
+
+}
+function toCustomWords() {
+
+}
 // 退出登录
 function toLoginOut() {
   loginOut()
@@ -121,6 +127,12 @@ function toGame() {
         </base-button>
         <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomGift">
           定制礼物
+        </base-button>
+        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomStory">
+          定制故事
+        </base-button>
+        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomWords">
+          词库
         </base-button>
       </base-cell-head>
     </div>
