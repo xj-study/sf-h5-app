@@ -33,7 +33,7 @@ export async function taskQuery(): Promise<any> {
   })
 }
 
-export async function taskAdd(data: TaskForm): Promise<any> {
+export async function taskAdd(data: TaskForm): Promise<number> {
   return request({
     method: 'post',
     url: '/task/add',

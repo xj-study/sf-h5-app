@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TheTaskItem from './components/theTaskItem.vue'
-import { TaskStatus } from './types'
+import { TaskDateType, TaskStatus } from './types'
 import type { TaskRecordQuery } from '@/api/typing'
 import { recordQuery } from '@/api/taskApi'
 import type { TabItem } from '@/components/typing'
@@ -16,6 +16,14 @@ definePage({
     title: '任务列表',
   },
 })
+
+//
+const taskDateTabs = [
+  { title: '今天', value: TaskDateType.TODAY },
+  { title: '昨天', value: TaskDateType.YESTODAY },
+
+]
+
 const taskTabs = computed<TabItem[]>(() => {
   const result = [
     { title: '全部', value: -1 },
@@ -29,6 +37,8 @@ const route = useRoute()
 const routeQuery = computed<TaskRecordQuery>(() => {
   return route.query
 })
+
+const currentDateTabs = ref(TaskDateType.TODAY)
 const tab = routeQuery.value.tab
 const currentTabs = ref(tab === null ? -1 : +tab)
 
@@ -43,6 +53,7 @@ const taskListType = computed(() => {
 })
 
 async function getList() {
+  routeQuery.value.date = currentDateTabs.value
   routeQuery.value.status = currentTabs.value === -1 ? undefined : currentTabs.value
   const records = await recordQuery(routeQuery.value)
   return records
@@ -69,7 +80,10 @@ async function onComplete() {
 <template>
   <base-main-page ref="mainPageRef" :get-list="getList">
     <template #head-tool>
-      <base-tabs v-model="currentTabs" :list="taskTabs" @change="onChange" />
+      <div>
+        <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />
+        <base-tabs v-model="currentTabs" type="card" line-height="2" :border="true" :list="taskTabs" @change="onChange" />
+      </div>
     </template>
     <template #default="{ itemData }">
       <TheTaskItem :key="itemData.id" :type="taskListType" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />

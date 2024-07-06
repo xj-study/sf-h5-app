@@ -48,7 +48,8 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
     })
   } else {
     // add
-    await taskAdd(item)
+    const taskId = await taskAdd(item)
+    item.taskId = taskId
     showToast('添加成功')
     listUpdate(item)
   }

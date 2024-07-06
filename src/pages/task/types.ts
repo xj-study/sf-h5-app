@@ -4,6 +4,14 @@ export enum TaskStatus {
   COMPLETE = 200,
 }
 
+//
+export enum TaskDateType {
+  // 今天
+  TODAY = 1,
+  // 昨天
+  YESTODAY = 2,
+}
+
 export enum TaskType {
   // 普通
   COMMON = 0,
