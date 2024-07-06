@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { EXCHANGE_RATIO, LoginUser, UserType } from './types'
-import { login, queryIntegral } from '@/api/userApi'
+import { login, queryIntegral, queryUserInfo } from '@/api/userApi'
 
 const useUserStore = defineStore('user', () => {
   const user = ref(new LoginUser())
@@ -19,6 +19,11 @@ const useUserStore = defineStore('user', () => {
     user.value.integral = integral
   }
 
+  async function updateUserInfo() {
+    const result = await queryUserInfo()
+    user.value.userName = result.userName
+  }
+
   async function toLogin(data) {
     const result = await login(data)
     if (!result.exchangeRatio) {
@@ -33,6 +38,7 @@ const useUserStore = defineStore('user', () => {
     parentTypeFlag,
     loginOut,
     updateIntegral,
+    updateUserInfo,
     toLogin,
   }
 }, {
