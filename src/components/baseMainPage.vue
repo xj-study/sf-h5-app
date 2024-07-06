@@ -3,7 +3,9 @@ interface Props {
   getList: () => Promise<any>
   paddingX?: number
 }
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  paddingX: 0,
+})
 
 const listRef = ref()
 
