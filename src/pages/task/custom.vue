@@ -5,6 +5,7 @@ import TheTaskForm from './components/theTaskForm.vue'
 import type { TaskForm } from './types'
 import useLoading from '@/hooks/useLoading'
 import { taskAdd, taskQuery, taskUpdate } from '@/api/taskApi'
+import useMainPage from '@/hooks/useMainPage'
 
 definePage({
   name: 'taskCustom',
@@ -14,7 +15,8 @@ definePage({
   },
 })
 
-const listRef = ref(null)
+const { mainPageRef, listUpdate } = useMainPage()
+
 async function getList() {
   const records = await taskQuery()
   return records
@@ -41,34 +43,35 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
     // update
     await taskUpdate(item)
     showToast('更新成功')
-    listRef.value.update(item, (ele) => {
+    listUpdate(item, (ele) => {
       return item.taskId === ele.taskId
     })
   } else {
     // add
-    await taskAdd(item)
+    const taskId = await taskAdd(item)
+    item.taskId = taskId
     showToast('添加成功')
-    listRef.value.update(item)
+    listUpdate(item)
   }
   editShowFlag.value = false
 })
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <base-head-tool>
+  <base-main-page ref="mainPageRef" :get-list="getList">
+    <template #head-tool>
       <base-button icon="add" @click="toAdd">
         新增任务
       </base-button>
-    </base-head-tool>
+    </template>
 
-    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheCustomTaskItem v-for="data in list" :key="data.id" :item="data" @edit="toEdit" />
-      </template>
-    </base-refresh-list>
-    <base-popup v-model:show="editShowFlag" :title="taskFormTitle">
-      <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
-    </base-popup>
-  </base-container>
+    <template #default="{ itemData }">
+      <TheCustomTaskItem :key="itemData.id" :item="itemData" @edit="toEdit" />
+    </template>
+    <template #popup>
+      <base-popup v-model:show="editShowFlag" :title="taskFormTitle">
+        <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
+      </base-popup>
+    </template>
+  </base-main-page>
 </template>

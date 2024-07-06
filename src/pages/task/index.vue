@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import TheTaskItem from './components/theTaskItem.vue'
-import { TaskStatus } from './types'
+import { TaskDateType, TaskStatus } from './types'
 import type { TaskRecordQuery } from '@/api/typing'
 import { recordQuery } from '@/api/taskApi'
 import type { TabItem } from '@/components/typing'
 import { ListType } from '@/typing'
 
 import ThePoint24Game from '@/pages/game/point24/components/thePoint24Game.vue'
+import useMainPage from '@/hooks/useMainPage'
 
 definePage({
   name: 'task',
@@ -15,6 +16,14 @@ definePage({
     title: '任务列表',
   },
 })
+
+//
+const taskDateTabs = [
+  { title: '今天', value: TaskDateType.TODAY },
+  { title: '昨天', value: TaskDateType.YESTODAY },
+
+]
+
 const taskTabs = computed<TabItem[]>(() => {
   const result = [
     { title: '全部', value: -1 },
@@ -28,12 +37,15 @@ const route = useRoute()
 const routeQuery = computed<TaskRecordQuery>(() => {
   return route.query
 })
+
+const currentDateTabs = ref(TaskDateType.TODAY)
 const tab = routeQuery.value.tab
 const currentTabs = ref(tab === null ? -1 : +tab)
 
-const listRef = ref(null)
+const { mainPageRef, onRefresh, listUpdate } = useMainPage()
+
 function onChange() {
-  listRef.value.onRefresh()
+  onRefresh()
 }
 
 const taskListType = computed(() => {
@@ -41,13 +53,14 @@ const taskListType = computed(() => {
 })
 
 async function getList() {
+  routeQuery.value.date = currentDateTabs.value
   routeQuery.value.status = currentTabs.value === -1 ? undefined : currentTabs.value
   const records = await recordQuery(routeQuery.value)
   return records
 }
 
 function onItemUpdate(data) {
-  listRef.value.update(data, (item) => {
+  listUpdate(data, (item) => {
     return item.taskId === data.taskId
   })
 }
@@ -65,15 +78,18 @@ async function onComplete() {
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <base-head-tool>
-      <base-tabs v-model="currentTabs" :list="taskTabs" @change="onChange" />
-    </base-head-tool>
-    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheTaskItem v-for="data in list" :key="data.id" :type="taskListType" :item="data" @game-point24="onGamePoint24" @update="onItemUpdate" />
-      </template>
-    </base-refresh-list>
-  </base-container>
-  <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
+  <base-main-page ref="mainPageRef" :get-list="getList">
+    <template #head-tool>
+      <div>
+        <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />
+        <base-tabs v-model="currentTabs" type="card" line-height="2" :border="true" :list="taskTabs" @change="onChange" />
+      </div>
+    </template>
+    <template #default="{ itemData }">
+      <TheTaskItem :key="itemData.id" :type="taskListType" :date="currentDateTabs" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
+    </template>
+    <template #popup>
+      <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
+    </template>
+  </base-main-page>
 </template>

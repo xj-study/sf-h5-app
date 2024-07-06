@@ -30,7 +30,9 @@ declare module 'vue-router/auto-routes' {
     'profile': RouteRecordInfo<'profile', '/profile', Record<never, never>, Record<never, never>>,
     'profile/child': RouteRecordInfo<'profile/child', '/profile/child', Record<never, never>, Record<never, never>>,
     'recordIntegral': RouteRecordInfo<'recordIntegral', '/record/integral', Record<never, never>, Record<never, never>>,
+    'story': RouteRecordInfo<'story', '/story', Record<never, never>, Record<never, never>>,
     'task': RouteRecordInfo<'task', '/task', Record<never, never>, Record<never, never>>,
     'taskCustom': RouteRecordInfo<'taskCustom', '/task/custom', Record<never, never>, Record<never, never>>,
+    'words': RouteRecordInfo<'words', '/words', Record<never, never>, Record<never, never>>,
   }
 }

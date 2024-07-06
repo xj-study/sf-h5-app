@@ -66,7 +66,7 @@ function onSubmit() {
     <div class="m-16 flex justify-between">
       <div class="mb-10 flex flex-shrink-1 items-end">
         <span class="text-12 color-gray">花费：</span>
-        <TheGiftPrice :price="totalPrice" class="text-20 text-emerald-600" />
+        <base-gift-price :price="totalPrice" class="text-20 text-emerald-600" />
       </div>
 
       <base-button :inline="false" :disabled="confirmDisable" :loading="confirmLoading" class="min-w-200" type="primary" native-type="submit">

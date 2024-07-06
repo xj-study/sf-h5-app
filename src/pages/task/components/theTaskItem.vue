@@ -9,6 +9,7 @@ import { ListType } from '@/typing'
 interface Props {
   type: ListType
   item: TaskForm
+  date: number
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['update', 'gamePoint24'])
@@ -29,7 +30,7 @@ async function updateRecoredComplete() {
   if (props.item.id)
     status = await recordComplete(props.item.id)
   else
-    status = await recordCompleteByTaskId(props.item.taskId)
+    status = await recordCompleteByTaskId(props.item.taskId, props.date)
   emits('update', { ...props.item, status })
 }
 

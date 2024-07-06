@@ -4,6 +4,7 @@ import TheGiftItem from './components/theGiftItem.vue'
 import { orderQuery } from '@/api/orderApi'
 import type { TabItem } from '@/components/typing'
 import { ListType } from '@/typing'
+import useMainPage from '@/hooks/useMainPage'
 
 definePage({
   name: 'orderGift',
@@ -24,9 +25,11 @@ const tabs = computed<TabItem[]>(() => {
 
 const route = useRoute()
 const currentTabs = ref(-1)
-const listRef = ref(null)
+
+const { mainPageRef, onRefresh, listUpdate } = useMainPage()
+
 function onChange() {
-  listRef.value.onRefresh()
+  onRefresh()
 }
 
 async function getList() {
@@ -47,21 +50,19 @@ const listType = computed(() => {
 })
 
 function onItemUpdate(data) {
-  listRef.value.update(data, (item) => {
+  listUpdate(data, (item) => {
     return item.orderId === data.orderId
   })
 }
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <base-head-tool>
+  <base-main-page ref="mainPageRef" :get-list="getList">
+    <template #head-tool>
       <base-tabs v-model="currentTabs" :list="tabs" @change="onChange" />
-    </base-head-tool>
-    <base-refresh-list ref="listRef" class="min-h-80vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheGiftItem v-for="data in list" :key="data.id" :type="listType" :item="data" @update="onItemUpdate" />
-      </template>
-    </base-refresh-list>
-  </base-container>
+    </template>
+    <template #default="{ itemData }">
+      <TheGiftItem :key="itemData.id" :type="listType" :item="itemData" @update="onItemUpdate" />
+    </template>
+  </base-main-page>
 </template>

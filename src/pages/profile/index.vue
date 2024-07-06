@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { showToast } from 'vant'
 import { TaskStatus } from '../task/types'
-import { queryUserChildren } from '@/api/userApi'
+import TheUserInfoForm from './components/theUserInfoForm.vue'
+import type { UserInfo } from './typing'
+import { queryUserChildren, updateUser } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
+import useLoading from '@/hooks/useLoading'
 
 definePage({
   name: 'profile',
@@ -12,7 +16,7 @@ definePage({
   },
 })
 
-const { parentTypeFlag, user, loginOut, updateIntegral } = useUserStore()
+const { parentTypeFlag, user, loginOut, updateIntegral, updateUserInfo } = useUserStore()
 const router = useRouter()
 const userChildren = ref([])
 
@@ -28,6 +32,17 @@ async function queryChildren() {
   }
 }
 
+const userInfoShow = ref(false)
+function toChangeUserInfo() {
+  userInfoShow.value = true
+}
+
+const { loadingFlag, loading: onConfirm } = useLoading(async (item: UserInfo) => {
+  await updateUser(item)
+  await updateUserInfo()
+  userInfoShow.value = false
+})
+
 function toTaskList(tab) {
   router.push(`/task?tab=${tab}`)
 }
@@ -39,6 +54,12 @@ function toCustomTask() {
 }
 function toCustomGift() {
   router.push('/gift/custom')
+}
+function toCustomStory() {
+  showToast('功能正在开发中，敬请期待')
+}
+function toCustomWords() {
+  showToast('功能正在开发中，敬请期待')
 }
 // 退出登录
 function toLoginOut() {
@@ -68,12 +89,12 @@ function toGame() {
         <div class="ml-10 flex-1 text-20">
           <div class="flex items-center justify-between">
             <span> {{ user.userName }}</span>
-            <base-text-link @click="toLoginOut">
-              退出登录
+            <base-text-link @click="toChangeUserInfo">
+              修改个人信息
             </base-text-link>
           </div>
 
-          <div class="mt-10 flex items-center justify-between">
+          <div v-if="!parentTypeFlag" class="mt-10 flex items-center justify-between">
             <div class="">
               <span class="text-20 text-amber-500">{{ user.integral || 0 }}</span>
               <span class="pl-8 text-12">积分</span>
@@ -116,13 +137,30 @@ function toGame() {
         </base-button>
       </base-cell-head>
       <base-cell-head title="我的工具">
-        <base-button plain type="primary" size="normal" @click="toCustomTask">
-          定制任务
-        </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomGift">
-          定制礼物
-        </base-button>
+        <div class="flex flex-wrap *:m-4">
+          <base-button plain type="primary" size="normal" @click="toCustomTask">
+            定制任务
+          </base-button>
+          <base-button plain type="primary" size="normal" @click="toCustomGift">
+            定制礼物
+          </base-button>
+          <base-button plain type="primary" size="normal" @click="toCustomStory">
+            定制故事
+          </base-button>
+          <base-button plain type="primary" size="normal" @click="toCustomWords">
+            词库
+          </base-button>
+        </div>
       </base-cell-head>
     </div>
+    <div class="m-x-10 mt50">
+      <base-button block @click="toLoginOut">
+        退出登录
+      </base-button>
+    </div>
+
+    <base-popup v-model:show="userInfoShow">
+      <TheUserInfoForm :confirm-loading="loadingFlag" @confirm="onConfirm" />
+    </base-popup>
   </base-container>
 </template>

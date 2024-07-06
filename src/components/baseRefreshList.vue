@@ -127,7 +127,7 @@ defineExpose({
       @load="onLoad"
     >
       <div v-if="list.length > 0">
-        <slot :list="list" />
+        <slot v-for="data in list" :item-data="data" />
       </div>
       <template v-else-if="!loading">
         <slot v-if="$slots.empty" name="empty" />

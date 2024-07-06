@@ -16,12 +16,13 @@ export async function recordComplete(id: number): Promise<any> {
   })
 }
 
-export async function recordCompleteByTaskId(taskId: number): Promise<any> {
+export async function recordCompleteByTaskId(taskId: number, date: number): Promise<any> {
   return request({
     method: 'post',
     url: `/task/record/complete`,
     data: {
       taskId,
+      date,
     },
   })
 }
@@ -33,7 +34,7 @@ export async function taskQuery(): Promise<any> {
   })
 }
 
-export async function taskAdd(data: TaskForm): Promise<any> {
+export async function taskAdd(data: TaskForm): Promise<number> {
   return request({
     method: 'post',
     url: '/task/add',

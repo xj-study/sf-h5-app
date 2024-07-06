@@ -6,6 +6,7 @@ import TheGiftForm from './components/theGiftForm.vue'
 import type { GiftForm } from './typing'
 import { giftAdd, giftQuery, giftUpdate } from '@/api/giftApi'
 import useLoading from '@/hooks/useLoading'
+import useMainPage from '@/hooks/useMainPage'
 
 definePage({
   name: 'giftCustom',
@@ -14,8 +15,8 @@ definePage({
     title: '礼物管理',
   },
 })
+const { mainPageRef, listUpdate } = useMainPage()
 
-const listRef = ref(null)
 async function getList() {
   const records = await giftQuery()
   return records
@@ -49,7 +50,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: GiftForm) =>
     // update
     await giftUpdate(item)
     showToast('更新成功')
-    listRef.value.update(item, (ele) => {
+    listUpdate(item, (ele) => {
       return item.giftId === ele.giftId
     })
     resetPopup()
@@ -57,27 +58,28 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: GiftForm) =>
     // add
     await giftAdd(item)
     showToast('添加成功')
-    listRef.value.update(item)
+    listUpdate(item)
     resetPopup()
   }
 })
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <base-head-tool>
+  <base-main-page ref="mainPageRef" :get-list="getList">
+    <template #head-tool>
       <base-button icon="add" @click="toAdd">
         新增礼物
       </base-button>
-    </base-head-tool>
+    </template>
 
-    <base-refresh-list ref="listRef" class="min-h-70vh" :get-list="getList">
-      <template #default="{ list }">
-        <TheCustomGiftItem v-for="data in list" :key="data.id" :item="data" @edit="toEdit" @off-shelf="toOffShelf" />
-      </template>
-    </base-refresh-list>
-    <base-popup v-model:show="editShowFlag" title="编辑礼物">
-      <TheGiftForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
-    </base-popup>
-  </base-container>
+    <template #default="{ itemData }">
+      <TheCustomGiftItem :key="itemData.id" :item="itemData" @edit="toEdit" @off-shelf="toOffShelf" />
+    </template>
+
+    <template #popup>
+      <base-popup v-model:show="editShowFlag" title="编辑礼物">
+        <TheGiftForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
+      </base-popup>
+    </template>
+  </base-main-page>
 </template>

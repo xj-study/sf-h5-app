@@ -60,7 +60,7 @@ export default class Point24Main {
 
       const result: Item[] = []
       for (let i = 0; i < list.length; i++) {
-        const sublist = list.filter((val, idx) => idx !== i)
+        const sublist = list.filter((_, idx) => idx !== i)
         result.push({ num: list[i], children: compose(sublist) })
       }
       return result
