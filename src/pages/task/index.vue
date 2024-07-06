@@ -86,7 +86,7 @@ async function onComplete() {
       </div>
     </template>
     <template #default="{ itemData }">
-      <TheTaskItem :key="itemData.id" :type="taskListType" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
+      <TheTaskItem :key="itemData.id" :type="taskListType" :date="currentDateTabs" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
     </template>
     <template #popup>
       <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />

@@ -137,18 +137,20 @@ function toGame() {
         </base-button>
       </base-cell-head>
       <base-cell-head title="我的工具">
-        <base-button plain type="primary" size="normal" @click="toCustomTask">
-          定制任务
-        </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomGift">
-          定制礼物
-        </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomStory">
-          定制故事
-        </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomWords">
-          词库
-        </base-button>
+        <div class="flex flex-wrap *:m-4">
+          <base-button plain type="primary" size="normal" @click="toCustomTask">
+            定制任务
+          </base-button>
+          <base-button plain type="primary" size="normal" @click="toCustomGift">
+            定制礼物
+          </base-button>
+          <base-button plain type="primary" size="normal" @click="toCustomStory">
+            定制故事
+          </base-button>
+          <base-button plain type="primary" size="normal" @click="toCustomWords">
+            词库
+          </base-button>
+        </div>
       </base-cell-head>
     </div>
     <div class="m-x-10 mt50">
