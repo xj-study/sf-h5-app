@@ -10,7 +10,11 @@ const message = computed(() => {
   const content = JSON.parse(props.item.content)
   if (refType === RecordType.TASK) {
     const { title, taskDate } = content
-    return `完成任务【${title}(${taskDate.join('-')})】`
+    if (typeof taskDate === 'string') {
+      return `完成任务【${title}(${taskDate})】`
+    } else {
+      return `完成任务【${title}(${taskDate.join('-')})】`
+    }
   } else if (refType === RecordType.ORDER_GIFT) {
     const { name } = content
     return `兑换礼物【${name}】`
