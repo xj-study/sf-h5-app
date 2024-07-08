@@ -97,15 +97,24 @@ onMounted(() => {
   }
 })
 
-function update<T>(item: T, equals: (item: T) => boolean | null) {
+function update<T>(item: T, equals: (item: T) => boolean | null | string, options: { remove: boolean } = { remove: false }) {
   let index = -1
-  if (equals) {
+  if (typeof equals === 'function') {
     index = list.value.findIndex(equals)
+  } else if (typeof equals === 'string') {
+    index = list.value.findIndex((ele) => {
+      return ele[equals] === item[equals]
+    })
   }
+
   if (index < 0) {
     list.value.splice(list.value.length, 0, { ...item })
   } else {
-    list.value.splice(index, 1, { ...item })
+    if (options.remove) {
+      list.value.splice(index, 1)
+    } else {
+      list.value.splice(index, 1, { ...item })
+    }
   }
 }
 

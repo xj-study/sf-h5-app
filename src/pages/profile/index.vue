@@ -56,7 +56,7 @@ function toCustomGift() {
   router.push('/gift/custom')
 }
 function toCustomStory() {
-  showToast('功能正在开发中，敬请期待')
+  router.push('/story/custom')
 }
 function toCustomWords() {
   showToast('功能正在开发中，敬请期待')
