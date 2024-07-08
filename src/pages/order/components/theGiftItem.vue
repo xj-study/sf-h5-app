@@ -17,7 +17,7 @@ const { tagData, unshippedFlag } = useOrderTag(props)
 const managerTypeFlag = computed(() => props.type === ListType.MANAGER)
 
 const { loadingFlag: shippedLoadingFlag, loading: toShipped } = useLoading(async () => {
-  await orderUpdateStatus(props.item.orderId, OrderStatus.SHIPPED)
+  await orderUpdateStatus(props.item.id, OrderStatus.SHIPPED)
   emits('update', { ...props.item, status: OrderStatus.SHIPPED })
 })
 </script>

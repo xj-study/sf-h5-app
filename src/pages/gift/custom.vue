@@ -50,9 +50,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: GiftForm) =>
     // update
     await giftUpdate(item)
     showToast('更新成功')
-    listUpdate(item, (ele) => {
-      return item.giftId === ele.giftId
-    })
+    listUpdate(item, 'giftId')
     resetPopup()
   } else {
     // add

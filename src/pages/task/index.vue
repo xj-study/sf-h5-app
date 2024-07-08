@@ -60,9 +60,7 @@ async function getList() {
 }
 
 function onItemUpdate(data) {
-  listUpdate(data, (item) => {
-    return item.taskId === data.taskId
-  })
+  listUpdate(data, 'taskId')
 }
 
 const gamePoint24Flag = ref(false)

@@ -50,9 +50,7 @@ const listType = computed(() => {
 })
 
 function onItemUpdate(data) {
-  listUpdate(data, (item) => {
-    return item.orderId === data.orderId
-  })
+  listUpdate(data, 'id')
 }
 </script>
 
