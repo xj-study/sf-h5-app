@@ -23,12 +23,12 @@ interface Props {
   // 是否为练习
   practice?: boolean
   // 当前数量
-  count?: number
+  count?: number | string
 }
 const props = withDefaults(defineProps<Props>(), {
   task: false,
   practice: false,
-  count: 2,
+  count: 4,
 })
 const emits = defineEmits(['update:modelValue', 'complete'])
 
@@ -50,7 +50,7 @@ const config = computed<Config>(() => {
   return {
     task,
     practice,
-    count,
+    count: +count,
     btnTip,
     btnNext,
     progress,

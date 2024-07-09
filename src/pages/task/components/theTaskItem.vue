@@ -38,7 +38,7 @@ const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(asy
   const taskType = props.item.taskType
   if (TaskType.GAME_POINT24 === taskType) {
     // 24 点游戏
-    emits('gamePoint24', updateRecoredComplete)
+    emits('gamePoint24', props.item, updateRecoredComplete)
     return
   }
 

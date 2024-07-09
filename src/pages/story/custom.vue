@@ -5,7 +5,7 @@ import type { StoryItem } from './typing'
 
 import TheCustomStoryItem from './components/theCustomStoryItem.vue'
 import useLoading from '@/hooks/useLoading'
-import { storyAdd, storyQueryList, storyUpdate } from '@/api/storyApi'
+import { storyAdd, storyDisableQueryList, storyQueryList, storyUpdate } from '@/api/storyApi'
 import useMainPage from '@/hooks/useMainPage'
 
 definePage({
@@ -15,10 +15,26 @@ definePage({
   },
 })
 
-const { mainPageRef, listUpdate } = useMainPage()
+const { mainPageRef, listUpdate, onRefresh } = useMainPage()
+
+const tabs = [
+  { title: '有效', value: 0 },
+  { title: '下架', value: 1 },
+]
+
+const currentTabs = ref(0)
+
+function onChange() {
+  onRefresh()
+}
 
 async function getList() {
-  const records = await storyQueryList({})
+  let records = []
+  if (currentTabs.value === 1) {
+    records = await storyDisableQueryList()
+  } else {
+    records = await storyQueryList({})
+  }
   return records
 }
 
@@ -64,6 +80,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryItem) =
       <base-button icon="add" @click="toAdd">
         添加故事
       </base-button>
+      <base-tabs v-model="currentTabs" :list="tabs" @change="onChange" />
     </template>
     <template #default="{ itemData }">
       <TheCustomStoryItem :key="itemData.id" :item="itemData" @remove="toRemove" @edit="toEdit" />

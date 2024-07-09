@@ -46,11 +46,11 @@ function resetPopup() {
 }
 
 const { loadingFlag, loading: onConfirm } = useLoading(async (item: GiftForm) => {
-  if (item.giftId) {
+  if (item.id) {
     // update
     await giftUpdate(item)
     showToast('更新成功')
-    listUpdate(item, 'giftId')
+    listUpdate(item, 'id')
     resetPopup()
   } else {
     // add

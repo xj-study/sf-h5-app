@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { TaskForm, TaskTypeOptions } from '../types'
+import { TaskForm, TaskType, TaskTypeOptions } from '../types'
+import TheTaskTypePoint24Form from './theTaskTypePoint24Form.vue'
 
 const props = defineProps({
   confirmLoading: { type: Boolean, default: false },
@@ -12,14 +13,17 @@ const form = reactive<TaskForm>(new TaskForm())
 const taskTypeOptions = TaskTypeOptions
 
 watchEffect(() => {
+  const defaultTaskData = new TaskForm()
   for (const key in form) {
     if (props.itemData) {
       form[key] = props.itemData[key]
     } else {
-      form[key] = ''
+      form[key] = defaultTaskData[key]
     }
   }
 })
+
+const isTaskPoint24 = computed(() => form.taskType === TaskType.GAME_POINT24)
 
 function onSubmit() {
   emits('confirm', form)
@@ -63,6 +67,8 @@ function onSubmit() {
           </van-radio-group>
         </template>
       </van-field>
+
+      <TheTaskTypePoint24Form v-if="isTaskPoint24" v-model="form.rules" />
 
       <van-field label="是否审批">
         <template #input>

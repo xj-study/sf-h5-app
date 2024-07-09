@@ -8,6 +8,13 @@ export async function storyQueryList(storyQuery?: StoryQuery): Promise<any> {
     data: storyQuery,
   })
 }
+export async function storyDisableQueryList(): Promise<any> {
+  return request({
+    method: 'get',
+    url: `/story/disabled/query`,
+
+  })
+}
 
 export async function storyQuery(storyId: number): Promise<any> {
   return request({
@@ -42,10 +49,10 @@ export async function storyUpdateDisable(storyId: number): Promise<any> {
 
 // story level
 
-export async function storyLevelQueryList(storyId: number, disableFlag: boolean): Promise<any> {
+export async function storyLevelQueryList(storyId: number): Promise<any> {
   return request({
     method: 'get',
-    url: `/story/${storyId}/level/query?disableFlag=${disableFlag}`,
+    url: `/story/${storyId}/level/query`,
 
   })
 }

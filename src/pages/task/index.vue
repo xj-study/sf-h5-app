@@ -63,11 +63,13 @@ function onItemUpdate(data) {
   listUpdate(data, 'taskId')
 }
 
+const currentRules = ref(null)
 const gamePoint24Flag = ref(false)
 let gameTaskCompleteFn = null
 // 开始游戏 24 点
-function onGamePoint24(fn) {
+function onGamePoint24(itemData, fn) {
   gameTaskCompleteFn = fn
+  currentRules.value = JSON.parse(itemData.rules || {})
   gamePoint24Flag.value = true
 }
 async function onComplete() {
@@ -87,7 +89,7 @@ async function onComplete() {
       <TheTaskItem :key="itemData.id" :type="taskListType" :date="currentDateTabs" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
     </template>
     <template #popup>
-      <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
+      <ThePoint24Game v-model="gamePoint24Flag" v-bind="currentRules" task @complete="onComplete" />
     </template>
   </base-main-page>
 </template>

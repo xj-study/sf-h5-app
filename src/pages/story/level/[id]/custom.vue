@@ -17,7 +17,7 @@ const { mainPageRef, listUpdate } = useMainPage()
 const route = useRoute()
 const storyId = (route.params as { id: number }).id
 async function getList() {
-  const records = await storyLevelQueryList(storyId, false)
+  const records = await storyLevelQueryList(storyId)
   return records
 }
 
