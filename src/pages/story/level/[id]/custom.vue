@@ -2,9 +2,10 @@
 import type { StoryLevelItem } from '../../typing'
 
 import TheCustomStoryLevelItem from '../components/theCustomStoryLevelItem.vue'
-
+import TheStoryLevelForm from '../components/theStoryLevelForm.vue'
 import useMainPage from '@/hooks/useMainPage'
 import { storyLevelQueryList } from '@/api/storyApi'
+import useLoading from '@/hooks/useLoading'
 
 definePage({
   name: 'storyLevelCustom',
@@ -27,13 +28,13 @@ const popupTitle = ref('')
 
 function toAdd() {
   selectStoryItem.value = null
-  popupTitle.value = '新增故事'
+  popupTitle.value = '新增关卡'
   editShowFlag.value = true
 }
 
 function toEdit(item: StoryLevelItem) {
   selectStoryItem.value = item
-  popupTitle.value = '编辑故事'
+  popupTitle.value = '编辑关卡'
   editShowFlag.value = true
 }
 
@@ -41,7 +42,7 @@ function toRemove(item: StoryLevelItem) {
   listUpdate(item, 'id', { remove: true })
 }
 
-// const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelItem) => {
+const { loadingFlag, loading: onConfirm } = useLoading(async () => {
 // if (!item.id) {
 //   const storyId = await storyAdd(item)
 //   item.id = storyId
@@ -53,8 +54,8 @@ function toRemove(item: StoryLevelItem) {
 //   listUpdate(item, 'id')
 // }
 
-// editShowFlag.value = false
-// })
+  editShowFlag.value = false
+})
 </script>
 
 <template>
@@ -67,10 +68,10 @@ function toRemove(item: StoryLevelItem) {
     <template #default="{ itemData }">
       <TheCustomStoryLevelItem :key="itemData.id" :item="itemData" @remove="toRemove" @edit="toEdit" />
     </template>
-    <!-- <template #popup>
+    <template #popup>
       <base-popup v-model:show="editShowFlag" :title="popupTitle">
-        <TheStoryForm :confirm-loading="loadingFlag" :item-data="selectStoryItem" @confirm="onConfirm" />
+        <TheStoryLevelForm :confirm-loading="loadingFlag" :item-data="selectStoryItem" @confirm="onConfirm" />
       </base-popup>
-    </template> -->
+    </template>
   </base-main-page>
 </template>

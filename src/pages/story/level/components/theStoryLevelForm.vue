@@ -10,7 +10,7 @@ const props = defineProps<Props>()
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<StoryLevelItem>({ id: 0, title: '', content: '' })
+const form = reactive<StoryLevelItem>({ id: 0, title: '', content: '', prize: 0 })
 
 watchEffect(() => {
   for (const key in form) {
@@ -50,11 +50,21 @@ function onSubmit() {
         :rules="[{ required: true, message: '请填写内容' }]"
       />
       <van-field
-        v-model="form.costAmount"
-        label="门票积分"
-        placeholder="门票积分"
+        v-model="form.prize"
+        label="奖励积分"
+        placeholder="奖励积分"
         clearable
       />
+
+      <van-field label="类型">
+        <template #input>
+          <van-radio-group v-model="form.taskType">
+            <van-radio v-for="item in taskTypeOptions" :key="item.name" class="mt-10" :name="item.name">
+              {{ item.label }}
+            </van-radio>
+          </van-radio-group>
+        </template>
+      </van-field>
     </van-cell-group>
     <div class="m-16">
       <base-button :inline="false" :loading="confirmLoading" class="w-full" type="primary" native-type="submit">

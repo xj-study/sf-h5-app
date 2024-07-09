@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { StoryItem } from '../typing'
-import { storyUpdateDisable } from '@/api/storyApi'
+import useStoryStatus from '../utils/useStoryStatus'
+import { storyOffShelf, storyPublish } from '@/api/storyApi'
 import useLoading from '@/hooks/useLoading'
 
 interface Props {
@@ -8,6 +9,8 @@ interface Props {
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['edit', 'remove'])
+const { isStatusNotPublish, isStatusOffShelf, isStatusPublished } = useStoryStatus(props.item)
+
 function onEdit() {
   emits('edit', props.item)
 }
@@ -17,8 +20,13 @@ function onLevelManager() {
   router.push(`/story/level/${props.item.id}/custom`)
 }
 
-const { loadingFlag, loading: onRemove } = useLoading(async () => {
-  await storyUpdateDisable(props.item.id)
+const { loadingFlag: publishLoading, loading: toPublish } = useLoading(async () => {
+  await storyPublish(props.item.id)
+  emits('remove', props.item)
+})
+
+const { loadingFlag: offShelfLoading, loading: toOffShelf } = useLoading(async () => {
+  await storyOffShelf(props.item.id)
   emits('remove', props.item)
 })
 </script>
@@ -40,17 +48,29 @@ const { loadingFlag, loading: onRemove } = useLoading(async () => {
       {{ item.content }}
     </div>
 
-    <div class="mt-20">
-      <base-button :loading="loadingFlag" size="small" plain type="primary" class="min-w-80" @click.stop="onEdit">
+    <div v-if="isStatusNotPublish" class="mt-20">
+      <base-button size="small" plain class="min-w-80" @click.stop="onEdit">
         修改
       </base-button>
-
-      <base-button :loading="loadingFlag" size="small" plain type="primary" class="ml10 min-w-80" @click.stop="onLevelManager">
+      <base-button size="small" plain class="ml10 min-w-80" @click.stop="onLevelManager">
         关卡管理
       </base-button>
 
-      <base-button :loading="loadingFlag" size="small" plain type="warning" class="ml10 min-w-80" @click.stop="onRemove">
+      <base-button :loading="publishLoading" size="small" plain type="primary" class="ml10 min-w-80" @click.stop="toPublish">
+        发布
+      </base-button>
+    </div>
+    <div v-else-if="isStatusPublished" class="mt20">
+      <base-button size="small" plain class="ml10 min-w-80" @click.stop="onLevelManager">
+        关卡管理
+      </base-button>
+      <base-button :loading="offShelfLoading" size="small" plain type="warning" class="ml10 min-w-80" @click.stop="toOffShelf">
         下架
+      </base-button>
+    </div>
+    <div v-else-if="isStatusOffShelf" class="mt20">
+      <base-button :loading="publishLoading" size="small" plain type="primary" class="ml10 min-w-80" @click.stop="toPublish">
+        发布
       </base-button>
     </div>
   </div>

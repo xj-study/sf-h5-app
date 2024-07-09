@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
 import TheStoryForm from './components/theStoryForm.vue'
-import type { StoryItem } from './typing'
+import { type StoryItem, StoryStatusType } from './typing'
 
 import TheCustomStoryItem from './components/theCustomStoryItem.vue'
 import useLoading from '@/hooks/useLoading'
-import { storyAdd, storyDisableQueryList, storyQueryList, storyUpdate } from '@/api/storyApi'
+import { storyAdd, storyQueryList, storyUpdate } from '@/api/storyApi'
 import useMainPage from '@/hooks/useMainPage'
 
 definePage({
@@ -18,8 +18,9 @@ definePage({
 const { mainPageRef, listUpdate, onRefresh } = useMainPage()
 
 const tabs = [
-  { title: '有效', value: 0 },
-  { title: '下架', value: 1 },
+  { title: '未发布', value: StoryStatusType.NOT_PUBLISH },
+  { title: '已发布', value: StoryStatusType.PUBLISHED },
+  { title: '下架', value: StoryStatusType.OFF_SHELF },
 ]
 
 const currentTabs = ref(0)
@@ -29,12 +30,8 @@ function onChange() {
 }
 
 async function getList() {
-  let records = []
-  if (currentTabs.value === 1) {
-    records = await storyDisableQueryList()
-  } else {
-    records = await storyQueryList({})
-  }
+  const records = await storyQueryList({ status: currentTabs.value })
+
   return records
 }
 

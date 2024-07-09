@@ -1,18 +1,11 @@
 import type { StoryItem, StoryLevelItem, StoryQuery } from '@/pages/story/typing'
 import request from '@/utils/request'
 
-export async function storyQueryList(storyQuery?: StoryQuery): Promise<any> {
+export async function storyQueryList(storyQuery: StoryQuery): Promise<any> {
   return request({
     method: 'post',
     url: `/story/query`,
     data: storyQuery,
-  })
-}
-export async function storyDisableQueryList(): Promise<any> {
-  return request({
-    method: 'get',
-    url: `/story/disabled/query`,
-
   })
 }
 
@@ -31,19 +24,25 @@ export async function storyUpdate(data: StoryItem): Promise<any> {
   })
 }
 
+export async function storyPublish(storyId: number): Promise<any> {
+  return request({
+    method: 'post',
+    url: `/story/${storyId}/publish`,
+  })
+}
+
+export async function storyOffShelf(storyId: number): Promise<any> {
+  return request({
+    method: 'post',
+    url: `/story/${storyId}/offshelf`,
+  })
+}
+
 export async function storyAdd(data: StoryItem): Promise<any> {
   return request({
     method: 'post',
     url: '/story/add',
     data,
-  })
-}
-
-export async function storyUpdateDisable(storyId: number): Promise<any> {
-  return request({
-    method: 'get',
-    url: `/story/${storyId}/update/disable`,
-
   })
 }
 
