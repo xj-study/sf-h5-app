@@ -2,8 +2,9 @@
 import { showToast } from 'vant'
 import { TaskStatus } from '../task/types'
 import TheUserInfoForm from './components/theUserInfoForm.vue'
+import TheAddChildForm from './components/theAddChildForm.vue'
 import type { UserInfo } from './typing'
-import { queryUserChildren, updateUser } from '@/api/userApi'
+import { addChild, queryUserChildren, updateUser } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 import useLoading from '@/hooks/useLoading'
 
@@ -41,6 +42,18 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: UserInfo) =>
   await updateUser(item)
   await updateUserInfo()
   userInfoShow.value = false
+})
+
+const addChildShow = ref(false)
+function toAddChild() {
+  addChildShow.value = true
+}
+
+const { loadingFlag: addChildLoading, loading: onAddChildConfirm } = useLoading(async (item: UserInfo) => {
+  const result = await addChild(item)
+  userChildren.value.push(result)
+  showToast('添加成功')
+  addChildShow.value = false
 })
 
 function toTaskList(tab) {
@@ -132,8 +145,11 @@ function toGame() {
 
     <div v-if="parentTypeFlag">
       <base-cell-head title="我的孩子">
-        <base-button v-for="item in userChildren" :key="item.id" plain type="primary" size="normal" @click="toChildrenTaskList(item.id)">
+        <base-button v-for="item in userChildren" :key="item.id" plain type="primary" class="mr10" size="normal" @click="toChildrenTaskList(item.id)">
           {{ item.nickname }}
+        </base-button>
+        <base-button v-if="userChildren.length === 0" icon="plus" plain type="primary" size="normal" @click="toAddChild">
+          添加孩子
         </base-button>
       </base-cell-head>
       <base-cell-head title="我的工具">
@@ -161,6 +177,9 @@ function toGame() {
 
     <base-popup v-model:show="userInfoShow">
       <TheUserInfoForm :confirm-loading="loadingFlag" @confirm="onConfirm" />
+    </base-popup>
+    <base-popup v-model:show="addChildShow">
+      <TheAddChildForm :confirm-loading="addChildLoading" @confirm="onAddChildConfirm" />
     </base-popup>
   </base-container>
 </template>

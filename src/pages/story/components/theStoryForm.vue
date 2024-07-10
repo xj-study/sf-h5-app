@@ -10,7 +10,7 @@ const props = defineProps<Props>()
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<StoryItem>({ id: 0, title: '', content: '', costAmount: 0 })
+const form = reactive<StoryItem>({ id: 0, title: '', content: '', costAmount: 0, status: 0 })
 
 watchEffect(() => {
   for (const key in form) {

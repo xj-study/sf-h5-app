@@ -56,7 +56,7 @@ function onSubmit() {
         clearable
       />
 
-      <van-field label="类型">
+      <!-- <van-field label="类型">
         <template #input>
           <van-radio-group v-model="form.taskType">
             <van-radio v-for="item in taskTypeOptions" :key="item.name" class="mt-10" :name="item.name">
@@ -64,7 +64,7 @@ function onSubmit() {
             </van-radio>
           </van-radio-group>
         </template>
-      </van-field>
+      </van-field> -->
     </van-cell-group>
     <div class="m-16">
       <base-button :inline="false" :loading="confirmLoading" class="w-full" type="primary" native-type="submit">
