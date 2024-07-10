@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-  <van-sticky :offset-top="46">
+  <van-sticky>
     <div class="bg-white p-x-10" :class="{ 'p-y-10': padding }">
       <slot />
     </div>

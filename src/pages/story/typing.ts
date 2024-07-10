@@ -19,16 +19,31 @@ export interface StoryQuery {
   status?: number
 }
 
-export interface StoryLevelItem {
-  id?: number
-  title: string
-  content: string
-  prize: number
-}
-
 /**
  * 关卡类型
  */
 export enum StoryLevelType {
+  // 普通
+  COMMON = 0,
+  // 游戏 - 24点
+  GAME_POINT24 = 100,
+  // 学习 - 单词打卡
+  LEARN_ENG_WORD = 200,
+}
 
+export const StoryLevelTypeOptions = [
+  { name: StoryLevelType.COMMON, label: '通用' },
+  { name: StoryLevelType.GAME_POINT24, label: '游戏-24点' },
+  { name: StoryLevelType.LEARN_ENG_WORD, label: '学习-单词打卡' },
+]
+
+export class StoryLevelItem {
+  id?: number
+  levelOrder: number = 0
+  title: string = ''
+  content: string = ''
+  prize: number = 0
+  refType: number = StoryLevelType.COMMON
+  refRules?: string = ''
+  storyId?: number
 }

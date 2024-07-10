@@ -16,6 +16,8 @@ const router = createRouter({
   routes,
 })
 
+// const { t } = useI18n()
+
 router.beforeEach((to: EnhancedRouteLocation) => {
   NProgress.start()
 
@@ -45,7 +47,11 @@ router.beforeEach((to: EnhancedRouteLocation) => {
   // next()
 })
 
-router.afterEach(() => {
+router.afterEach((to) => {
+  if (to.meta) {
+    const result = to.meta.title || ''
+    document.title = result
+  }
   NProgress.done()
 })
 

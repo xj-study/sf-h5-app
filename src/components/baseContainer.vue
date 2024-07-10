@@ -13,7 +13,6 @@ defineProps({
 
 <template>
   <div
-    class="pt-46"
     :style="`padding-left: ${paddingX}px; padding-right: ${paddingX}px`"
   >
     <slot />

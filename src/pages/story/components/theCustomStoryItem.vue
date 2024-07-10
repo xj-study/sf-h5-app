@@ -61,7 +61,7 @@ const { loadingFlag: offShelfLoading, loading: toOffShelf } = useLoading(async (
       </base-button>
     </div>
     <div v-else-if="isStatusPublished" class="mt20">
-      <base-button size="small" plain class="ml10 min-w-80" @click.stop="onLevelManager">
+      <base-button size="small" plain class="min-w-80" @click.stop="onLevelManager">
         关卡管理
       </base-button>
       <base-button :loading="offShelfLoading" size="small" plain type="warning" class="ml10 min-w-80" @click.stop="toOffShelf">
@@ -69,6 +69,12 @@ const { loadingFlag: offShelfLoading, loading: toOffShelf } = useLoading(async (
       </base-button>
     </div>
     <div v-else-if="isStatusOffShelf" class="mt20">
+      <base-button size="small" plain class="min-w-80" @click.stop="onEdit">
+        修改
+      </base-button>
+      <base-button size="small" plain class="ml10 min-w-80" @click.stop="onLevelManager">
+        关卡管理
+      </base-button>
       <base-button :loading="publishLoading" size="small" plain type="primary" class="ml10 min-w-80" @click.stop="toPublish">
         发布
       </base-button>

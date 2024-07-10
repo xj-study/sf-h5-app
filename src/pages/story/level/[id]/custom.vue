@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { showToast } from 'vant'
 import type { StoryLevelItem } from '../../typing'
 
 import TheCustomStoryLevelItem from '../components/theCustomStoryLevelItem.vue'
 import TheStoryLevelForm from '../components/theStoryLevelForm.vue'
 import useMainPage from '@/hooks/useMainPage'
-import { storyLevelQueryList } from '@/api/storyApi'
+import { storyLevelAdd, storyLevelQueryList } from '@/api/storyApi'
 import useLoading from '@/hooks/useLoading'
 
 definePage({
@@ -42,17 +43,27 @@ function toRemove(item: StoryLevelItem) {
   listUpdate(item, 'id', { remove: true })
 }
 
-const { loadingFlag, loading: onConfirm } = useLoading(async () => {
-// if (!item.id) {
-//   const storyId = await storyAdd(item)
-//   item.id = storyId
-//   listUpdate(item)
-//   showToast('添加成功')
-// } else {
-//   await storyUpdate(item)
-//   showToast('更新成功')
-//   listUpdate(item, 'id')
-// }
+const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelItem) => {
+  if (item.id) {
+    //
+
+  } else {
+    // add
+    item.storyId = storyId
+    await storyLevelAdd(item)
+    showToast('添加成功')
+    listUpdate(item, 'id')
+  }
+  // if (!item.id) {
+  //   const storyId = await storyAdd(item)
+  //   item.id = storyId
+  //   listUpdate(item)
+  //   showToast('添加成功')
+  // } else {
+  //   await storyUpdate(item)
+  //   showToast('更新成功')
+  //   listUpdate(item, 'id')
+  // }
 
   editShowFlag.value = false
 })

@@ -1,30 +1,20 @@
 <script setup lang="ts">
-import { TaskForm, TaskType, TaskTypeOptions } from '../types'
-import TheTaskTypePoint24Form from './theTaskTypePoint24Form.vue'
+import { TaskForm } from '../types'
+import useForm, { type FormProp } from '@/hooks/useForm'
 
-const props = defineProps({
-  confirmLoading: { type: Boolean, default: false },
-  itemData: { type: Object },
-})
+import thePoint24RulesForm from '@/pages/components/rules/thePoint24RulesForm.vue'
+import { RulesConf, RulesTypeOptions } from '@/pages/components/rules/typing'
+import useRulesType from '@/pages/components/rules/useRulesType'
+
+const props = defineProps<FormProp<TaskForm>>()
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<TaskForm>(new TaskForm())
-const taskTypeOptions = TaskTypeOptions
-
-watchEffect(() => {
-  const defaultTaskData = new TaskForm()
-  for (const key in form) {
-    if (props.itemData) {
-      form[key] = props.itemData[key]
-    } else {
-      form[key] = defaultTaskData[key]
-    }
-  }
+const { form } = useForm<TaskForm>({
+  init: () => new TaskForm(),
+  getItemData: () => props.itemData,
 })
-
-const isTaskPoint24 = computed(() => form.taskType === TaskType.GAME_POINT24)
-
+const { isTypePoint24 } = useRulesType(form, new RulesConf('taskType'))
 function onSubmit() {
   emits('confirm', form)
 }
@@ -61,14 +51,14 @@ function onSubmit() {
       <van-field label="类型">
         <template #input>
           <van-radio-group v-model="form.taskType">
-            <van-radio v-for="item in taskTypeOptions" :key="item.name" class="mt-10" :name="item.name">
+            <van-radio v-for="item in RulesTypeOptions" :key="item.name" class="mt-10" :name="item.name">
               {{ item.label }}
             </van-radio>
           </van-radio-group>
         </template>
       </van-field>
 
-      <TheTaskTypePoint24Form v-if="isTaskPoint24" v-model="form.rules" />
+      <thePoint24RulesForm v-if="isTypePoint24" v-model="form.rules" />
 
       <van-field label="是否审批">
         <template #input>
