@@ -1,4 +1,4 @@
-import type { StoryItem, StoryLevelItem, StoryQuery } from '@/pages/story/typing'
+import type { StoryItem, StoryLevelItem, StoryQuery, StoryRecordItem, StoryRecordQuery } from '@/pages/story/typing'
 import request from '@/utils/request'
 
 export async function storyQueryList(storyQuery: StoryQuery): Promise<any> {
@@ -71,7 +71,7 @@ export async function storyLevelUpdate(data: StoryLevelItem): Promise<any> {
   })
 }
 
-export async function storyLevelAdd(data: StoryItem): Promise<any> {
+export async function storyLevelAdd(data: StoryLevelItem): Promise<any> {
   return request({
     method: 'post',
     url: '/story/level/add',
@@ -84,5 +84,31 @@ export async function storyLevelUpdateDisable(storyLevelId: number): Promise<any
     method: 'get',
     url: `/story/level/${storyLevelId}/update/disable`,
 
+  })
+}
+
+// story record
+
+// 激活
+export async function storyActive(storyId: number): Promise<any> {
+  return request({
+    method: 'post',
+    url: `/story/record/active/${storyId}`,
+
+  })
+}
+
+export async function storyRecordQueryList(storyRecordQuery: StoryRecordQuery): Promise<any> {
+  return request({
+    method: 'post',
+    url: `/story/record/query`,
+    data: storyRecordQuery,
+  })
+}
+
+export async function storyRecordQuery(storyId: number): Promise<StoryRecordItem> {
+  return request({
+    method: 'get',
+    url: `/story/record/query/${storyId}`,
   })
 }

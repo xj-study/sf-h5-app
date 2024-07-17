@@ -2,9 +2,11 @@
 interface Props {
   getList: () => Promise<any>
   paddingX?: number
+  headToolPadding?: boolean
 }
 withDefaults(defineProps<Props>(), {
   paddingX: 0,
+  headToolPadding: true,
 })
 
 const listRef = ref()
@@ -16,7 +18,7 @@ defineExpose({
 
 <template>
   <base-container :padding-x="paddingX">
-    <base-head-tool>
+    <base-head-tool :padding="headToolPadding">
       <slot name="head-tool" />
     </base-head-tool>
 

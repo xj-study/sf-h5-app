@@ -5,6 +5,8 @@ export type MaybeRef<T> = T | Ref<T>
 export enum RecordType {
   TASK = 100,
   ORDER_GIFT = 200,
+  STORY_ACTIVE = 300,
+  STORY_LEVEL_PASS = 301,
 }
 
 export enum ListType {

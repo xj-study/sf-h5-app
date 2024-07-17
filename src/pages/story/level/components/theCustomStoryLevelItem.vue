@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { StoryLevelItem } from '../../typing'
+import { type TagItem, TagType } from '@/components/typing'
 
 interface Props {
   item: StoryLevelItem
@@ -9,12 +10,21 @@ const emits = defineEmits(['edit', 'remove'])
 function toEdit() {
   emits('edit', props.item)
 }
+
+const tagItem = computed<TagItem>(() => {
+  let tag: number | string = props.item.levelOrder
+  if (tag <= 0) {
+    tag = '-'
+  }
+  return { type: TagType.GREEN, tag: `${tag}` }
+})
 </script>
 
 <template>
   <div class="m-10 bg-white p-10">
     <div class="flex justify-between text-16">
       <div class="flex items-center">
+        <base-tag v-bind="tagItem" class="mr10" />
         <span> {{ item.title }} </span>
       </div>
       <div v-if="item.prize">

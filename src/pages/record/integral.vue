@@ -10,8 +10,8 @@ definePage({
   },
 })
 const listRef = ref()
-async function getList() {
-  const records = await queryIntegralRecords()
+async function getList(query) {
+  const records = await queryIntegralRecords(query)
 
   return records
 }

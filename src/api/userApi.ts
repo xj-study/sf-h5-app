@@ -47,10 +47,11 @@ export async function queryIntegral(): Promise<number> {
   })
 }
 
-export async function queryIntegralRecords(): Promise<number> {
+export async function queryIntegralRecords(query): Promise<number> {
   return request({
-    method: 'get',
+    method: 'post',
     url: '/user/integral/record/query',
+    data: query,
   })
 }
 

@@ -1,54 +1,16 @@
 <script setup lang="ts">
-import type { StoryItem } from '../typing'
+import type { StoryRecordItem } from '../typing'
 
 interface Props {
 
-  item: StoryItem
+  item: StoryRecordItem
 
 }
-defineProps<Props>()
-// const emits = defineEmits(['update', 'gamePoint24'])
-
-// const toOrOnCompleteText = computed(() => {
-//   const taskType = props.item.taskType
-//   if (TaskType.COMMON === taskType) {
-//     return '完成'
-//   } else {
-//     return '去完成'
-//   }
-// })
-
-// const { tagData, statusInitFlag, statusWaitVerifyFlag } = useTaskTag(props)
-
-// async function updateRecoredComplete() {
-//   let status: number = 0
-//   if (props.item.id)
-//     status = await recordComplete(props.item.id)
-//   else
-//     status = await recordCompleteByTaskId(props.item.taskId, props.date)
-//   emits('update', { ...props.item, status })
-// }
-
-// const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
-//   const taskType = props.item.taskType
-//   if (TaskType.GAME_POINT24 === taskType) {
-//     // 24 点游戏
-//     emits('gamePoint24', updateRecoredComplete)
-//     return
-//   }
-
-//   updateRecoredComplete()
-// })
-
-// const { loadingFlag: verifyLoadingFlag, loading: onVerify } = useLoading(async () => {
-//   const status = await recordComplete(props.item.id)
-//   emits('update', { ...props.item, status })
-// })
-
-// const managerTypeFlag = computed(() => props.type === ListType.MANAGER)
-
-// const btnCompleteFlag = computed(() => !managerTypeFlag.value && statusInitFlag.value)
-// const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFlag.value)
+const props = defineProps<Props>()
+const router = useRouter()
+function toEnter() {
+  router.push(`/story/level/${props.item.storyId}`)
+}
 </script>
 
 <template>
@@ -58,6 +20,7 @@ defineProps<Props>()
         <span> {{ item.title }} </span>
       </div>
       <div>
+        <span>门票：</span>
         <span class="text-20 text-amber-500">{{ item.costAmount || 0 }}</span>
         <span class="pl-8 text-12">积分</span>
       </div>
@@ -67,15 +30,8 @@ defineProps<Props>()
       {{ item.content }}
     </div>
 
-    <!-- <Transition name="fade-item">
-      <base-button v-if="btnCompleteFlag" class="mt-20 min-w-100" size="small" plain type="primary" :loading="completeLoadingFlag" @click="onComplete">
-        {{ toOrOnCompleteText }}
-      </base-button>
-      <div v-else-if="btnVerifyFlag">
-        <base-button class="mt-20 min-w-100" size="small" plain type="primary" :loading="verifyLoadingFlag" @click="onVerify">
-          审核通过
-        </base-button>
-      </div>
-    </Transition> -->
+    <base-button class="mt-20 min-w-100" size="small" plain type="primary" @click="toEnter">
+      进入
+    </base-button>
   </div>
 </template>

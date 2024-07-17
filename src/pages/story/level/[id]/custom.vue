@@ -5,7 +5,7 @@ import type { StoryLevelItem } from '../../typing'
 import TheCustomStoryLevelItem from '../components/theCustomStoryLevelItem.vue'
 import TheStoryLevelForm from '../components/theStoryLevelForm.vue'
 import useMainPage from '@/hooks/useMainPage'
-import { storyLevelAdd, storyLevelQueryList } from '@/api/storyApi'
+import { storyLevelAdd, storyLevelQueryList, storyLevelUpdate } from '@/api/storyApi'
 import useLoading from '@/hooks/useLoading'
 
 definePage({
@@ -15,7 +15,7 @@ definePage({
   },
 })
 
-const { mainPageRef, listUpdate } = useMainPage()
+const { mainPageRef, listUpdate, onRefresh } = useMainPage()
 const route = useRoute()
 const storyId = (route.params as { id: number }).id
 async function getList() {
@@ -45,25 +45,14 @@ function toRemove(item: StoryLevelItem) {
 
 const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelItem) => {
   if (item.id) {
-    //
-
+    await storyLevelUpdate(item)
+    showToast('操作成功')
   } else {
-    // add
     item.storyId = storyId
     await storyLevelAdd(item)
     showToast('添加成功')
-    listUpdate(item, 'id')
   }
-  // if (!item.id) {
-  //   const storyId = await storyAdd(item)
-  //   item.id = storyId
-  //   listUpdate(item)
-  //   showToast('添加成功')
-  // } else {
-  //   await storyUpdate(item)
-  //   showToast('更新成功')
-  //   listUpdate(item, 'id')
-  // }
+  onRefresh()
 
   editShowFlag.value = false
 })

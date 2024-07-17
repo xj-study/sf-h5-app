@@ -1,7 +1,8 @@
 <script setup lang="ts">
-defineProps({
-  padding: { type: Boolean, default: true },
-})
+interface Prop {
+  padding?: boolean
+}
+withDefaults(defineProps<Prop>(), { padding: true })
 </script>
 
 <template>

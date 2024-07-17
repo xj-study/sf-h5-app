@@ -84,6 +84,9 @@ function toIntegralRecord() {
 function toGift() {
   router.push('/gift')
 }
+function toStory() {
+  router.push('/story')
+}
 function toGame() {
   router.push('/game')
 }
@@ -136,6 +139,9 @@ function toGame() {
       <base-cell-head title="开心一刻">
         <base-button plain type="primary" size="normal" @click="toGift">
           礼物中心
+        </base-button>
+        <base-button class="ml10" plain type="primary" size="normal" @click="toStory">
+          故事中心
         </base-button>
         <base-button class="ml-10" plain type="primary" size="normal" @click="toGame">
           益智小游戏

@@ -47,3 +47,23 @@ export class StoryLevelItem {
   refRules?: string = ''
   storyId?: number
 }
+
+export enum StoryRecordStatus {
+  NOT_ACTIVE = 0,
+  ACTIVE,
+  PASS_ALL,
+}
+export interface StoryRecordQuery {
+  recordStatus?: number
+}
+
+export interface StoryRecordItem {
+  id?: number
+  storyId?: number
+  title: string
+  content: string
+  costAmount: number
+  status: number
+  levelId: number
+  levels?: StoryLevelItem[]
+}

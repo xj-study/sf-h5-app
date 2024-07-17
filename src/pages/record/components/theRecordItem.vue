@@ -18,6 +18,12 @@ const message = computed(() => {
   } else if (refType === RecordType.ORDER_GIFT) {
     const { name } = content
     return `兑换礼物【${name}】`
+  } else if (refType === RecordType.STORY_ACTIVE) {
+    const { title } = content
+    return `激活活动【${title}】`
+  } else if (refType === RecordType.STORY_LEVEL_PASS) {
+    const { title } = content
+    return `通关【${title}】`
   }
   return ''
 })

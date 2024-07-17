@@ -33,6 +33,7 @@ declare module 'vue-router/auto-routes' {
     'recordIntegral': RouteRecordInfo<'recordIntegral', '/record/integral', Record<never, never>, Record<never, never>>,
     'story': RouteRecordInfo<'story', '/story', Record<never, never>, Record<never, never>>,
     'storyCustom': RouteRecordInfo<'storyCustom', '/story/custom', Record<never, never>, Record<never, never>>,
+    'storyLevel': RouteRecordInfo<'storyLevel', '/story/level/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'storyLevelCustom': RouteRecordInfo<'storyLevelCustom', '/story/level/:id/custom', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'task': RouteRecordInfo<'task', '/task', Record<never, never>, Record<never, never>>,
     'taskCustom': RouteRecordInfo<'taskCustom', '/task/custom', Record<never, never>, Record<never, never>>,
