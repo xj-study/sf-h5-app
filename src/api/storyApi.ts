@@ -1,4 +1,4 @@
-import type { StoryItem, StoryLevelItem, StoryQuery, StoryRecordItem, StoryRecordQuery } from '@/pages/story/typing'
+import type { StoryItem, StoryLevelItem, StoryQuery, StoryRecordItem, StoryRecordLevelPassForm, StoryRecordQuery } from '@/pages/story/typing'
 import request from '@/utils/request'
 
 export async function storyQueryList(storyQuery: StoryQuery): Promise<any> {
@@ -95,6 +95,15 @@ export async function storyActive(storyId: number): Promise<any> {
     method: 'post',
     url: `/story/record/active/${storyId}`,
 
+  })
+}
+
+// 通关
+export async function storyPass(formData: StoryRecordLevelPassForm): Promise<any> {
+  return request({
+    method: 'post',
+    url: `/story/record/level/pass`,
+    data: formData,
   })
 }
 

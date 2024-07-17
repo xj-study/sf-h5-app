@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { StoryRecordItem } from '../typing'
+import { type StoryRecordItem, StoryRecordStatus } from '../typing'
+import { TagType } from '@/components/typing'
 
 interface Props {
 
@@ -9,20 +10,17 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 function toEnter() {
-  router.push(`/story/level/${props.item.storyId}`)
+  router.push(`/story/${props.item.storyId}`)
 }
+const isPass = computed(() => props.item.status === StoryRecordStatus.PASS_ALL)
 </script>
 
 <template>
-  <div class="m-10 bg-white p-10">
-    <div class="flex justify-between text-16">
+  <div class="m-10 bg-white p-10" @click="toEnter">
+    <div class="flex justify-between text-16 font-bold">
       <div class="flex items-center">
+        <base-tag v-if="isPass" tag="已完成" :type="TagType.GOLD" class="mr10" />
         <span> {{ item.title }} </span>
-      </div>
-      <div>
-        <span>门票：</span>
-        <span class="text-20 text-amber-500">{{ item.costAmount || 0 }}</span>
-        <span class="pl-8 text-12">积分</span>
       </div>
     </div>
 
@@ -30,8 +28,10 @@ function toEnter() {
       {{ item.content }}
     </div>
 
-    <base-button class="mt-20 min-w-100" size="small" plain type="primary" @click="toEnter">
-      进入
-    </base-button>
+    <div v-if="!isPass" class="mt-20">
+      <base-button class="min-w-100" size="small" plain type="primary">
+        进入
+      </base-button>
+    </div>
   </div>
 </template>

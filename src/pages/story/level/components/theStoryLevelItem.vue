@@ -14,10 +14,11 @@ const tagItem = computed<TagItem>(() => {
   const tag: number = props.item.levelOrder
   return { type: TagType.GREEN, tag: `${tag}` }
 })
-
+const isActive = inject('isActive')
 function toStart() {
   emits('start', props.item)
 }
+const isPass = computed(() => props.item.pass)
 </script>
 
 <template>
@@ -27,7 +28,7 @@ function toStart() {
         <base-tag v-bind="tagItem" class="mr10" />
         <span> {{ item.title }} </span>
       </div>
-      <div class="text-14">
+      <div v-if="!isPass" class="text-14">
         <span> 奖励：</span>
         <span class="text-20 text-amber-500">{{ item.prize || 0 }}</span>
         <span class="pl-8 text-12">积分</span>
@@ -39,7 +40,11 @@ function toStart() {
     </div>
 
     <div class="mt-20">
-      <base-button size="small" plain type="primary" class="min-w-80" @click.stop="toStart">
+      <div v-if="isPass" class="color-green-700">
+        <span>已通关</span>
+        <span v-if="item.prize">，并获得 <span class="text-amber-500">{{ item.prize }}</span> 积分</span>
+      </div>
+      <base-button v-else :disabled="!isActive" size="small" plain type="primary" class="min-w-80" @click.stop="toStart">
         挑战
       </base-button>
     </div>

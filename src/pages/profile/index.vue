@@ -141,7 +141,7 @@ function toGame() {
           礼物中心
         </base-button>
         <base-button class="ml10" plain type="primary" size="normal" @click="toStory">
-          故事中心
+          活动中心
         </base-button>
         <base-button class="ml-10" plain type="primary" size="normal" @click="toGame">
           益智小游戏
@@ -167,7 +167,7 @@ function toGame() {
             定制礼物
           </base-button>
           <base-button plain type="primary" size="normal" @click="toCustomStory">
-            定制故事
+            定制活动
           </base-button>
           <base-button plain type="primary" size="normal" @click="toCustomWords">
             词库
@@ -176,7 +176,7 @@ function toGame() {
       </base-cell-head>
     </div>
     <div class="m-x-10 mt50">
-      <base-button block @click="toLoginOut">
+      <base-button block type="primary" @click="toLoginOut">
         退出登录
       </base-button>
     </div>

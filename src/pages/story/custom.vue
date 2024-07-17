@@ -11,7 +11,7 @@ import useMainPage from '@/hooks/useMainPage'
 definePage({
   name: 'storyCustom',
   meta: {
-    title: '故事中心',
+    title: '活动中心',
   },
 })
 
@@ -41,13 +41,13 @@ const popupTitle = ref('')
 
 function toAdd() {
   selectStoryItem.value = null
-  popupTitle.value = '新增故事'
+  popupTitle.value = '新增活动'
   editShowFlag.value = true
 }
 
 function toEdit(item: StoryItem) {
   selectStoryItem.value = item
-  popupTitle.value = '编辑故事'
+  popupTitle.value = '编辑活动'
   editShowFlag.value = true
 }
 
@@ -75,7 +75,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryItem) =
   <base-main-page ref="mainPageRef" :get-list="getList">
     <template #head-tool>
       <base-button icon="add" @click="toAdd">
-        添加故事
+        添加活动
       </base-button>
       <base-tabs v-model="currentTabs" :list="tabs" @change="onChange" />
     </template>

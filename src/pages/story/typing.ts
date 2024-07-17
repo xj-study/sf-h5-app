@@ -46,6 +46,7 @@ export class StoryLevelItem {
   refType: number = StoryLevelType.COMMON
   refRules?: string = ''
   storyId?: number
+  pass?: boolean
 }
 
 export enum StoryRecordStatus {
@@ -55,6 +56,11 @@ export enum StoryRecordStatus {
 }
 export interface StoryRecordQuery {
   recordStatus?: number
+}
+
+export interface StoryRecordLevelPassForm {
+  id: number
+  levelId: number
 }
 
 export interface StoryRecordItem {

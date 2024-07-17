@@ -61,10 +61,7 @@ const { loadingFlag: offShelfLoading, loading: toOffShelf } = useLoading(async (
       </base-button>
     </div>
     <div v-else-if="isStatusPublished" class="mt20">
-      <base-button size="small" plain class="min-w-80" @click.stop="onLevelManager">
-        关卡管理
-      </base-button>
-      <base-button :loading="offShelfLoading" size="small" plain type="warning" class="ml10 min-w-80" @click.stop="toOffShelf">
+      <base-button :loading="offShelfLoading" size="small" plain type="warning" class="min-w-80" @click.stop="toOffShelf">
         下架
       </base-button>
     </div>

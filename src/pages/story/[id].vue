@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { type StoryLevelItem, type StoryRecordItem, StoryRecordStatus } from '../../typing'
-
-import theStoryLevelItem from '../components/theStoryLevelItem.vue'
-
+import theStoryLevelItem from './level/components/theStoryLevelItem.vue'
+import { type StoryLevelItem, type StoryRecordItem, StoryRecordStatus } from './typing'
 import useMainPage from '@/hooks/useMainPage'
-import { storyActive, storyRecordQuery } from '@/api/storyApi'
+import { storyActive, storyPass, storyRecordQuery } from '@/api/storyApi'
 import useLoading from '@/hooks/useLoading'
+import { TagType } from '@/components/typing'
+import router from '@/router'
 
 definePage({
-  name: 'storyLevel',
+  name: 'storyDetail',
   meta: {
     title: '故事',
   },
 })
 
-const { mainPageRef } = useMainPage()
+const { mainPageRef, onRefresh } = useMainPage()
 const route = useRoute()
 const storyId = (route.params as { id: number }).id
 const storyData = ref<StoryRecordItem>()
@@ -25,8 +25,14 @@ async function getList() {
   document.title = storyData.value.title
   return data.levels
 }
-const isActive = computed(() => storyData.value.status !== StoryRecordStatus.NOT_ACTIVE)
 
+const isPass = computed(() => storyData.value.status === StoryRecordStatus.PASS_ALL)
+const isActive = computed(() => storyData.value.status !== StoryRecordStatus.NOT_ACTIVE)
+provide('isActive', isActive)
+
+function toBack() {
+  router.back()
+}
 // 去激活
 const { loadingFlag, loading: toActive } = useLoading(async () => {
   const status = await storyActive(storyData.value.id)
@@ -35,23 +41,35 @@ const { loadingFlag, loading: toActive } = useLoading(async () => {
 })
 
 const currentItem = ref<StoryLevelItem>()
+
+const { loading: toPass } = useLoading(async () => {
+  await storyPass({ id: storyData.value.id, levelId: currentItem.value.id })
+  showToast('恭喜通关！')
+
+  onRefresh()
+})
+
 function toStart(item: StoryLevelItem) {
-  if (!isActive.value) {
-    showToast('激活后才能开始挑战！')
-  }
   currentItem.value = item
+  toPass()
 }
 </script>
 
 <template>
-  <base-main-page ref="mainPageRef" :get-list="getList">
+  <base-main-page ref="mainPageRef" :get-list="getList" reverse>
     <template #head-tool>
       <div v-if="storyData">
         <div class="font-bold">
+          <base-tag v-if="isPass" tag="已完成" :type="TagType.GOLD" class="mr10" />
           {{ storyData.title }}
         </div>
         <div class="mt8 text-14">
           {{ storyData.content }}
+        </div>
+        <div v-if="isPass" class="mt10">
+          <base-button size="small" plain type="primary" icon="arrow-left" class="min-w-60" @click="toBack">
+            返回
+          </base-button>
         </div>
         <div v-if="!isActive" class="mt10 flex items-center justify-between">
           <div class="text-16">
