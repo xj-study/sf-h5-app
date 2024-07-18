@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
+import thePoint24Game from '../game/point24/components/thePoint24Game.vue'
 import theStoryLevelItem from './level/components/theStoryLevelItem.vue'
 import { type StoryLevelItem, type StoryRecordItem, StoryRecordStatus } from './typing'
 import useMainPage from '@/hooks/useMainPage'
@@ -19,6 +20,7 @@ const { mainPageRef, onRefresh } = useMainPage()
 const route = useRoute()
 const storyId = (route.params as { id: number }).id
 const storyData = ref<StoryRecordItem>()
+
 async function getList() {
   const data = await storyRecordQuery(storyId)
   storyData.value = data
@@ -41,17 +43,32 @@ const { loadingFlag, loading: toActive } = useLoading(async () => {
 })
 
 const currentItem = ref<StoryLevelItem>()
-
-const { loading: toPass } = useLoading(async () => {
-  await storyPass({ id: storyData.value.id, levelId: currentItem.value.id })
-  showToast('恭喜通关！')
-
-  onRefresh()
+const gamePoint24Show = ref(false)
+const currentRules = computed(() => {
+  if (currentItem.value && currentItem.value.refRules) {
+    return JSON.parse(currentItem.value.refRules)
+  }
+  return null
 })
+function playGamePoint24(item: StoryLevelItem) {
+  currentItem.value = item
+  gamePoint24Show.value = true
+}
 
 function toStart(item: StoryLevelItem) {
   currentItem.value = item
-  toPass()
+  onComplete()
+}
+
+async function onComplete() {
+  await storyPass({
+    id: storyData.value.id,
+    levelId: currentItem.value.id,
+    storyTitle: storyData.value.title,
+  })
+  showToast('恭喜通关！')
+
+  onRefresh()
 }
 </script>
 
@@ -85,12 +102,11 @@ function toStart(item: StoryLevelItem) {
       </div>
     </template>
     <template #default="{ itemData }">
-      <theStoryLevelItem :key="itemData.id" :item="itemData" @start="toStart" />
+      <theStoryLevelItem :key="itemData.id" :item="itemData" @start="toStart" @start-game-point24="playGamePoint24" />
     </template>
-    <!-- <template #popup>
-      <base-popup v-model:show="editShowFlag" :title="popupTitle">
-        <TheStoryLevelForm :confirm-loading="loadingFlag" :item-data="selectStoryItem" @confirm="onConfirm" />
-      </base-popup>
-    </template> -->
+
+    <template #popup>
+      <thePoint24Game v-model="gamePoint24Show" v-bind="currentRules" task @complete="onComplete" />
+    </template>
   </base-main-page>
 </template>

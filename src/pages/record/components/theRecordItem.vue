@@ -1,32 +1,8 @@
 <script setup lang="ts">
-import { RecordType } from '@/typing'
-
 const props = defineProps({
   item: { type: Object, default: () => ({}) },
 })
 
-const message = computed(() => {
-  const { refType } = props.item
-  const content = JSON.parse(props.item.content)
-  if (refType === RecordType.TASK) {
-    const { title, taskDate } = content
-    if (typeof taskDate === 'string') {
-      return `完成任务【${title}(${taskDate})】`
-    } else {
-      return `完成任务【${title}(${taskDate.join('-')})】`
-    }
-  } else if (refType === RecordType.ORDER_GIFT) {
-    const { name } = content
-    return `兑换礼物【${name}】`
-  } else if (refType === RecordType.STORY_ACTIVE) {
-    const { title } = content
-    return `激活活动【${title}】`
-  } else if (refType === RecordType.STORY_LEVEL_PASS) {
-    const { title } = content
-    return `通关【${title}】`
-  }
-  return ''
-})
 const integral = computed(() => {
   return props.item.integralChange || 0
 })
@@ -49,7 +25,7 @@ const integralCls = computed(() => {
         <span class="pl-8 text-12">积分</span>
       </div>
       <div class="mt-8 text-12">
-        {{ message }}
+        {{ item.content }}
       </div>
     </div>
   </div>

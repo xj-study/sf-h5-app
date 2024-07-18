@@ -61,6 +61,7 @@ export interface StoryRecordQuery {
 export interface StoryRecordLevelPassForm {
   id: number
   levelId: number
+  storyTitle: string
 }
 
 export interface StoryRecordItem {
