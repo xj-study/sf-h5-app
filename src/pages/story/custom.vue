@@ -18,9 +18,9 @@ definePage({
 const { mainPageRef, listUpdate, onRefresh } = useMainPage()
 
 const tabs = [
-  { title: '未发布', value: StoryStatusType.NOT_PUBLISH },
   { title: '已发布', value: StoryStatusType.PUBLISHED },
   { title: '下架', value: StoryStatusType.OFF_SHELF },
+  { title: '未发布', value: StoryStatusType.NOT_PUBLISH },
 ]
 
 const currentTabs = ref(0)

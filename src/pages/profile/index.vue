@@ -124,7 +124,7 @@ function toGame() {
     </div>
 
     <div v-if="!parentTypeFlag">
-      <div class="m-auto mt-50 h-100 w-100 rounded-full bg-blue text-center text-white leading-100" @click="toTaskList">
+      <div class="m-auto mt-50 h-100 w-100 rounded-full bg-blue text-center text-white leading-100" @click="toTaskList(0)">
         去打卡
       </div>
 

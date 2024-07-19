@@ -6,9 +6,10 @@ import useMainPage from '@/hooks/useMainPage'
 definePage({
   name: 'story',
   meta: {
-    title: '故事中心',
+    title: '活动中心',
   },
 })
+
 const { mainPageRef } = useMainPage()
 async function getList() {
   const records = await storyRecordQueryList({})
