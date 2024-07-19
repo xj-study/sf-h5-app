@@ -26,10 +26,10 @@ const taskDateTabs = [
 
 const taskTabs = computed<TabItem[]>(() => {
   const result = [
-    { title: '全部', value: -1 },
-    { title: '未完成', value: TaskStatus.INIT },
+    { title: '未打卡', value: TaskStatus.INIT },
     { title: '待审核', value: TaskStatus.WATIT_VERIFY },
-    { title: '已完成', value: TaskStatus.COMPLETE },
+    { title: '已打卡', value: TaskStatus.COMPLETE },
+    { title: '全部', value: -1 },
   ]
   return result
 })
@@ -78,7 +78,7 @@ async function onComplete() {
 </script>
 
 <template>
-  <base-main-page ref="mainPageRef" :get-list="getList">
+  <base-main-page ref="mainPageRef" :head-tool-padding="false" :get-list="getList">
     <template #head-tool>
       <div>
         <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />

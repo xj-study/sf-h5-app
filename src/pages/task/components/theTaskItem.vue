@@ -17,9 +17,9 @@ const emits = defineEmits(['update', 'gamePoint24'])
 const toOrOnCompleteText = computed(() => {
   const taskType = props.item.taskType
   if (TaskType.COMMON === taskType) {
-    return '完成'
+    return '打卡'
   } else {
-    return '去完成'
+    return '打卡'
   }
 })
 

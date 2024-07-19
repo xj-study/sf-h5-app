@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { TaskStatus } from '../task/types'
+
 import TheUserInfoForm from './components/theUserInfoForm.vue'
 import TheAddChildForm from './components/theAddChildForm.vue'
 import type { UserInfo } from './typing'
@@ -93,8 +93,8 @@ function toGame() {
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <div class="m-10 mt-20">
+  <base-container :padding-x="0" class="min-h-screen">
+    <div class="p-20">
       <div class="flex items-center">
         <van-image
           round
@@ -124,27 +124,19 @@ function toGame() {
     </div>
 
     <div v-if="!parentTypeFlag">
-      <base-cell-head title="我的任务">
-        <base-button plain type="primary" size="normal" @click="toTaskList(TaskStatus.INIT)">
-          待完成
-        </base-button>
-        <base-button v-if="!parentTypeFlag" class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.WATIT_VERIFY)">
-          待审核
-        </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.COMPLETE)">
-          已完成
-        </base-button>
-      </base-cell-head>
+      <div class="m-auto mt-50 h-100 w-100 rounded-full bg-blue text-center text-white leading-100" @click="toTaskList">
+        去打卡
+      </div>
 
-      <base-cell-head title="开心一刻">
-        <base-button plain type="primary" size="normal" @click="toGift">
-          礼物中心
+      <base-cell-head center>
+        <base-button plain type="primary" class="w-80 p-x-10" size="normal" @click="toStory">
+          活动<br>中心
         </base-button>
-        <base-button class="ml10" plain type="primary" size="normal" @click="toStory">
-          活动中心
+        <base-button class="ml10 w-80 p-x-10" plain type="primary" size="normal" @click="toGift">
+          礼物<br>中心
         </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toGame">
-          益智小游戏
+        <base-button class="ml-10 w-80 p-x-10" plain type="primary" size="normal" @click="toGame">
+          益智<br>小游戏
         </base-button>
       </base-cell-head>
     </div>
@@ -175,7 +167,8 @@ function toGame() {
         </div>
       </base-cell-head>
     </div>
-    <div class="m-x-10 mt50">
+
+    <div class="fixed bottom-80 w-full p-x-20">
       <base-button block type="primary" @click="toLoginOut">
         退出登录
       </base-button>
