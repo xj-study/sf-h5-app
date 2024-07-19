@@ -28,5 +28,8 @@ export const TaskTypeOptions = [
 ]
 
 export class TaskForm {
-  constructor(public title: string = '', public content: string = '', public integral: number = 0, public taskType: TaskType = TaskType.COMMON, public taskId?: number, public verifyFlag?: boolean, public id?: number) {}
+  public taskId?: number
+  public id?: number
+  public rules?: string
+  constructor(public title: string = '', public content: string = '', public integral: number = 0, public taskType: TaskType = TaskType.COMMON, public verifyFlag: boolean = true) {}
 }

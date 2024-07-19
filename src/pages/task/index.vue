@@ -26,10 +26,10 @@ const taskDateTabs = [
 
 const taskTabs = computed<TabItem[]>(() => {
   const result = [
-    { title: '全部', value: -1 },
-    { title: '未完成', value: TaskStatus.INIT },
+    { title: '未打卡', value: TaskStatus.INIT },
     { title: '待审核', value: TaskStatus.WATIT_VERIFY },
-    { title: '已完成', value: TaskStatus.COMPLETE },
+    { title: '已打卡', value: TaskStatus.COMPLETE },
+    { title: '全部', value: -1 },
   ]
   return result
 })
@@ -60,16 +60,16 @@ async function getList() {
 }
 
 function onItemUpdate(data) {
-  listUpdate(data, (item) => {
-    return item.taskId === data.taskId
-  })
+  listUpdate(data, 'taskId')
 }
 
+const currentRules = ref(null)
 const gamePoint24Flag = ref(false)
 let gameTaskCompleteFn = null
 // 开始游戏 24 点
-function onGamePoint24(fn) {
+function onGamePoint24(itemData, fn) {
   gameTaskCompleteFn = fn
+  currentRules.value = JSON.parse(itemData.rules || {})
   gamePoint24Flag.value = true
 }
 async function onComplete() {
@@ -78,7 +78,7 @@ async function onComplete() {
 </script>
 
 <template>
-  <base-main-page ref="mainPageRef" :get-list="getList">
+  <base-main-page ref="mainPageRef" :head-tool-padding="false" :get-list="getList">
     <template #head-tool>
       <div>
         <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />
@@ -89,7 +89,7 @@ async function onComplete() {
       <TheTaskItem :key="itemData.id" :type="taskListType" :date="currentDateTabs" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
     </template>
     <template #popup>
-      <ThePoint24Game v-model="gamePoint24Flag" task @complete="onComplete" />
+      <ThePoint24Game v-model="gamePoint24Flag" v-bind="currentRules" task @complete="onComplete" />
     </template>
   </base-main-page>
 </template>

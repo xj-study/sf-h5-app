@@ -1,16 +1,24 @@
 <script setup lang="ts">
-const props = defineProps({
-  pageSize: { type: Number, default: 20 },
-  getList: { type: Function, default: null },
-  check: { type: Function, default: null },
-  finishedText: { type: String, default: '' },
-  //
-  emptyIcon: { type: String, default: 'no-record' },
-  emptyTitle: { type: String, default: '暂无内容' },
+interface Prop {
+  pageSize?: number
+  getList: (query: { pageNum: number, pageSize: number }) => Promise<any>
+  check?: () => boolean
+  finishedText?: string
+  emptyIcon?: string
+  emptyTitle?: string
+  closeInit?: boolean
+  reverse?: boolean
+}
 
-  // 关闭初始化
-  closeInit: { type: Boolean, default: false },
+const props = withDefaults(defineProps<Prop>(), {
+  pageSize: 20,
+  finishedText: '',
+  emptyIcon: 'no-record',
+  emptyTitle: '暂无内容',
+  closeInit: false,
+  reverse: false,
 })
+
 const pageNum = ref(1)
 const emptyIconURL = computed(
   () => `https://config.lotuscars.com.cn/sales-assistant/placeholder/${props.emptyIcon}.png`,
@@ -27,6 +35,12 @@ const finishedTextStr = computed(() => {
     return ''
   }
   return props.finishedText || '没有更多了'
+})
+
+const listShow = computed(() => {
+  if (props.reverse)
+    return list.value.slice().reverse()
+  return list.value
 })
 
 function onLoad() {
@@ -97,15 +111,24 @@ onMounted(() => {
   }
 })
 
-function update<T>(item: T, equals: (item: T) => boolean | null) {
+function update<T>(item: T, equals: (item: T) => boolean | null | string, options: { remove: boolean } = { remove: false }) {
   let index = -1
-  if (equals) {
+  if (typeof equals === 'function') {
     index = list.value.findIndex(equals)
+  } else if (typeof equals === 'string') {
+    index = list.value.findIndex((ele) => {
+      return ele[equals] === item[equals]
+    })
   }
+
   if (index < 0) {
     list.value.splice(list.value.length, 0, { ...item })
   } else {
-    list.value.splice(index, 1, { ...item })
+    if (options.remove) {
+      list.value.splice(index, 1)
+    } else {
+      list.value.splice(index, 1, { ...item })
+    }
   }
 }
 
@@ -126,8 +149,8 @@ defineExpose({
       :immediate-check="true"
       @load="onLoad"
     >
-      <div v-if="list.length > 0">
-        <slot v-for="data in list" :item-data="data" />
+      <div v-if="listShow.length > 0">
+        <slot v-for="data in listShow" :item-data="data" />
       </div>
       <template v-else-if="!loading">
         <slot v-if="$slots.empty" name="empty" />

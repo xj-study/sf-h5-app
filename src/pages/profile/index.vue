@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { TaskStatus } from '../task/types'
+
 import TheUserInfoForm from './components/theUserInfoForm.vue'
+import TheAddChildForm from './components/theAddChildForm.vue'
 import type { UserInfo } from './typing'
-import { queryUserChildren, updateUser } from '@/api/userApi'
+import { addChild, queryUserChildren, updateUser } from '@/api/userApi'
 import useUserStore from '@/stores/modules/user'
 import useLoading from '@/hooks/useLoading'
 
@@ -43,6 +44,18 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: UserInfo) =>
   userInfoShow.value = false
 })
 
+const addChildShow = ref(false)
+function toAddChild() {
+  addChildShow.value = true
+}
+
+const { loadingFlag: addChildLoading, loading: onAddChildConfirm } = useLoading(async (item: UserInfo) => {
+  const result = await addChild(item)
+  userChildren.value.push(result)
+  showToast('添加成功')
+  addChildShow.value = false
+})
+
 function toTaskList(tab) {
   router.push(`/task?tab=${tab}`)
 }
@@ -56,7 +69,7 @@ function toCustomGift() {
   router.push('/gift/custom')
 }
 function toCustomStory() {
-  showToast('功能正在开发中，敬请期待')
+  router.push('/story/custom')
 }
 function toCustomWords() {
   showToast('功能正在开发中，敬请期待')
@@ -71,14 +84,17 @@ function toIntegralRecord() {
 function toGift() {
   router.push('/gift')
 }
+function toStory() {
+  router.push('/story')
+}
 function toGame() {
   router.push('/game')
 }
 </script>
 
 <template>
-  <base-container :padding-x="0">
-    <div class="m-10 mt-20">
+  <base-container :padding-x="0" class="min-h-screen">
+    <div class="p-20">
       <div class="flex items-center">
         <van-image
           round
@@ -108,32 +124,30 @@ function toGame() {
     </div>
 
     <div v-if="!parentTypeFlag">
-      <base-cell-head title="我的任务">
-        <base-button plain type="primary" size="normal" @click="toTaskList(TaskStatus.INIT)">
-          待完成
-        </base-button>
-        <base-button v-if="!parentTypeFlag" class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.WATIT_VERIFY)">
-          待审核
-        </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toTaskList(TaskStatus.COMPLETE)">
-          已完成
-        </base-button>
-      </base-cell-head>
+      <div class="m-auto mt-50 h-100 w-100 rounded-full bg-blue text-center text-white leading-100" @click="toTaskList(0)">
+        去打卡
+      </div>
 
-      <base-cell-head title="开心一刻">
-        <base-button plain type="primary" size="normal" @click="toGift">
-          礼物中心
+      <base-cell-head center>
+        <base-button plain type="primary" class="w-80 p-x-10" size="normal" @click="toStory">
+          活动<br>中心
         </base-button>
-        <base-button class="ml-10" plain type="primary" size="normal" @click="toGame">
-          益智小游戏
+        <base-button class="ml10 w-80 p-x-10" plain type="primary" size="normal" @click="toGift">
+          礼物<br>中心
+        </base-button>
+        <base-button class="ml-10 w-80 p-x-10" plain type="primary" size="normal" @click="toGame">
+          益智<br>小游戏
         </base-button>
       </base-cell-head>
     </div>
 
     <div v-if="parentTypeFlag">
       <base-cell-head title="我的孩子">
-        <base-button v-for="item in userChildren" :key="item.id" plain type="primary" size="normal" @click="toChildrenTaskList(item.id)">
+        <base-button v-for="item in userChildren" :key="item.id" plain type="primary" class="mr10" size="normal" @click="toChildrenTaskList(item.id)">
           {{ item.nickname }}
+        </base-button>
+        <base-button v-if="userChildren.length === 0" icon="plus" plain type="primary" size="normal" @click="toAddChild">
+          添加孩子
         </base-button>
       </base-cell-head>
       <base-cell-head title="我的工具">
@@ -145,7 +159,7 @@ function toGame() {
             定制礼物
           </base-button>
           <base-button plain type="primary" size="normal" @click="toCustomStory">
-            定制故事
+            定制活动
           </base-button>
           <base-button plain type="primary" size="normal" @click="toCustomWords">
             词库
@@ -153,14 +167,18 @@ function toGame() {
         </div>
       </base-cell-head>
     </div>
-    <div class="m-x-10 mt50">
-      <base-button block @click="toLoginOut">
+
+    <div class="fixed bottom-80 w-full p-x-20">
+      <base-button block type="primary" @click="toLoginOut">
         退出登录
       </base-button>
     </div>
 
     <base-popup v-model:show="userInfoShow">
       <TheUserInfoForm :confirm-loading="loadingFlag" @confirm="onConfirm" />
+    </base-popup>
+    <base-popup v-model:show="addChildShow">
+      <TheAddChildForm :confirm-loading="addChildLoading" @confirm="onAddChildConfirm" />
     </base-popup>
   </base-container>
 </template>

@@ -20,6 +20,7 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     'home': RouteRecordInfo<'home', '/', Record<never, never>, Record<never, never>>,
     '404': RouteRecordInfo<'404', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
+    '/components/rules/thePoint24RulesForm': RouteRecordInfo<'/components/rules/thePoint24RulesForm', '/components/rules/thePoint24RulesForm', Record<never, never>, Record<never, never>>,
     'game': RouteRecordInfo<'game', '/game', Record<never, never>, Record<never, never>>,
     'gamePoint24': RouteRecordInfo<'gamePoint24', '/game/point24', Record<never, never>, Record<never, never>>,
     'gameSnake': RouteRecordInfo<'gameSnake', '/game/snake', Record<never, never>, Record<never, never>>,
@@ -31,6 +32,9 @@ declare module 'vue-router/auto-routes' {
     'profile/child': RouteRecordInfo<'profile/child', '/profile/child', Record<never, never>, Record<never, never>>,
     'recordIntegral': RouteRecordInfo<'recordIntegral', '/record/integral', Record<never, never>, Record<never, never>>,
     'story': RouteRecordInfo<'story', '/story', Record<never, never>, Record<never, never>>,
+    'storyDetail': RouteRecordInfo<'storyDetail', '/story/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    'storyCustom': RouteRecordInfo<'storyCustom', '/story/custom', Record<never, never>, Record<never, never>>,
+    'storyLevelCustom': RouteRecordInfo<'storyLevelCustom', '/story/level/:id/custom', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'task': RouteRecordInfo<'task', '/task', Record<never, never>, Record<never, never>>,
     'taskCustom': RouteRecordInfo<'taskCustom', '/task/custom', Record<never, never>, Record<never, never>>,
     'words': RouteRecordInfo<'words', '/words', Record<never, never>, Record<never, never>>,
