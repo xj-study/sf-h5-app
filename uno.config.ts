@@ -13,7 +13,9 @@ import presetRemToPx from '@unocss/preset-rem-to-px'
 
 export default defineConfig({
   presets: [
-    presetUno,
+    presetUno({
+      important: '#app',
+    }),
     presetAttributify,
     presetIcons(),
     // 为什么要用到这个插件？

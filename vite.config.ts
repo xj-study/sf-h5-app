@@ -37,6 +37,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     },
 
     css: {
+
       postcss: {
         plugins: [
           autoprefixer(),

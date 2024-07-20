@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { Word } from '../typing'
-import { TagType } from '@/components/typing'
+import { type Word, WordLevels } from '../typing'
 
 interface Props {
   item: Word
 }
 const props = defineProps<Props>()
-const tagTypes = [TagType.GRAY, TagType.GREEN, TagType.BLUE, TagType.GOLD, TagType.RED]
+
 const levelTagData = computed(() => {
-  const tag = props.item.level
-  return { tag: `${tag}`, type: tagTypes[tag - 1] }
+  return WordLevels[props.item.level]
 })
 </script>
 

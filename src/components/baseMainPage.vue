@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Page } from '@/typing'
+
 interface Props {
-  getList: () => Promise<any>
+  getList: (page?: Page) => Promise<any>
   paddingX?: number
   headToolPadding?: boolean
   reverse?: boolean

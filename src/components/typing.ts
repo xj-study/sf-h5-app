@@ -12,6 +12,7 @@ export enum TagType {
 }
 
 export interface TagItem {
-  tag: string
+  tag: string | number
   type: TagType
+  select?: boolean
 }

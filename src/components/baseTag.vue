@@ -9,23 +9,34 @@ import { type TagItem, TagType } from './typing'
   gray: { color: 'rgba(0, 0, 0, 0.5)', bgcolor: 'rgba(0, 0, 0, 0.03)' },
 */
 
-const props = defineProps<TagItem>()
+const props = withDefaults(defineProps<TagItem>(), { select: false })
 const tagClass = computed(() => {
+  let result = ''
   switch (props.type) {
     case TagType.GRAY:
-      return `text-[rgba(0,0,0,0.5)] bg-[rgba(0,0,0,0.03)]`
+      result = `text-[rgba(0,0,0,0.5)] bg-[rgba(0,0,0,0.03)]`
+      break
     case TagType.GREEN:
-      return `text-[#00CE84] bg-[rgba(0,206,132,0.05)]`
+      result = `text-[#00CE84] bg-[rgba(0,206,132,0.05)]`
+      break
     case TagType.RED:
-      return `text-[#FF4960] bg-[rgba(255,73,96,0.05)]`
+      result = `text-[#FF4960] bg-[rgba(255,73,96,0.05)]`
+      break
     case TagType.BLUE:
-      return `text-[#1998FF] bg-[rgba(25,152,255,0.05)]`
+      result = `text-[#1998FF] bg-[rgba(25,152,255,0.05)]`
+      break
     case TagType.GOLD:
-      return `text-[#DB9030] bg-[rgba(219,144,48,0.05)]`
+      result = `text-[#DB9030] bg-[rgba(219,144,48,0.05)]`
+      break
     default:
       // gray
-      return `text-[rgba(0,0,0,0.5)] bg-[rgba(0,0,0,0.03)]`
+      result = `text-[rgba(0,0,0,0.5)] bg-[rgba(0,0,0,0.03)]`
+      break
   }
+  if (props.select) {
+    result += ' border-1 border-solid'
+  }
+  return result
 })
 </script>
 
