@@ -7,6 +7,7 @@ import { wordAdd, wordQueryList, wordTranslate, wordUpdate } from '@/api/wordApi
 
 import useLoading from '@/hooks/useLoading'
 import useMainPage from '@/hooks/useMainPage'
+import type { PageResult } from '@/api/typing'
 
 definePage({
   name: 'words',
@@ -29,8 +30,32 @@ const btnSubmitText = computed(() => {
   return '快速新增'
 })
 
+async function getTranslate() {
+  if (keyword.value === '')
+    return
+  const result = await wordTranslate(keyword.value)
+  translate.value = result
+}
+
+function updateWord(word: Word) {
+  keyword.value = word.enValue
+  currentWordLevel.value = word.level
+  translate.value = word.zhValue
+  currentWord.value = word
+}
+
+function searchWord(list: Word[]) {
+  const item = list.find(item => item.enValue === keyword.value)
+  if (item) {
+    item.select = true
+    updateWord(item)
+  } else {
+    getTranslate()
+  }
+}
+
 const { loadingFlag, loading } = useLoading(async (query) => {
-  const pageResult = await wordQueryList(query)
+  const pageResult: PageResult<Word> = await wordQueryList(query)
   return pageResult
 })
 
@@ -39,14 +64,10 @@ async function getList(query) {
     return []
 
   query.keyword = keyword.value
-  const pageResult = await loading(query)
+  const pageResult: PageResult<Word> = await loading(query)
 
+  searchWord(pageResult.records)
   return pageResult
-}
-
-async function getTranslate() {
-  const result = await wordTranslate(keyword.value)
-  translate.value = result
 }
 
 function toSearch() {
@@ -54,7 +75,6 @@ function toSearch() {
   currentWordLevel.value = 0
   translate.value = ''
 
-  getTranslate()
   onRefresh()
 }
 
@@ -74,6 +94,11 @@ const { loading: toSubmit, loadingFlag: submitLoading } = useLoading(async () =>
   showToast('操作成功')
   onRefresh()
 })
+
+function toSelect(item: Word) {
+  updateWord(item)
+  onRefresh()
+}
 </script>
 
 <template>
@@ -95,7 +120,7 @@ const { loading: toSubmit, loadingFlag: submitLoading } = useLoading(async () =>
     </template>
 
     <template #default="{ itemData }">
-      <theCustomWordItem :key="itemData.id" :item="itemData" />
+      <theCustomWordItem :key="itemData.id" :item="itemData" @select="toSelect" />
     </template>
   </base-main-page>
 </template>

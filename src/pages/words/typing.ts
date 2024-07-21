@@ -5,6 +5,7 @@ export interface Word {
   level?: number
   zhValue: string
   enValue: string
+  select?: boolean
 }
 
 export const WordLevels = [
