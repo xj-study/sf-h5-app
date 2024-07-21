@@ -9,7 +9,7 @@ const src = computed(() => `https://dict.youdao.com/dictvoice?audio=${props.word
 const audioRef = ref()
 const isPlay = ref(false)
 const cls = computed(() => {
-  const result = [isPlay.value ? 'text-blue-400' : 'text-gray']
+  const result = [isPlay.value ? 'text-blue-400 border-blue-400' : 'text-gray']
   return result
 })
 function onClick() {
