@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { showToast } from 'vant'
 import theCustomWordItem from './components/theCustomWordItem.vue'
+import type { Word } from './typing'
 import { WordLevels } from './typing'
-import { wordQueryList } from '@/api/wordApi'
+import { wordAdd, wordQueryList, wordTranslate, wordUpdate } from '@/api/wordApi'
 
 import useLoading from '@/hooks/useLoading'
 import useMainPage from '@/hooks/useMainPage'
@@ -16,7 +18,16 @@ definePage({
 const { mainPageRef, onRefresh } = useMainPage()
 const keyword = ref('')
 const currentWordLevel = ref(0)
-const translate = ref('好的')
+const translate = ref('')
+const currentWord = ref<Word>()
+
+const isTypeUpdate = computed(() => currentWord.value && currentWord.value.id)
+const btnSubmitText = computed(() => {
+  if (isTypeUpdate.value) {
+    return '快速修改'
+  }
+  return '快速新增'
+})
 
 const { loadingFlag, loading } = useLoading(async (query) => {
   const pageResult = await wordQueryList(query)
@@ -33,9 +44,36 @@ async function getList(query) {
   return pageResult
 }
 
+async function getTranslate() {
+  const result = await wordTranslate(keyword.value)
+  translate.value = result
+}
+
 function toSearch() {
+  currentWord.value = null
+  currentWordLevel.value = 0
+  translate.value = ''
+
+  getTranslate()
   onRefresh()
 }
+
+const { loading: toSubmit, loadingFlag: submitLoading } = useLoading(async () => {
+  const enValue = keyword.value
+  const zhValue = translate.value
+  const level = currentWordLevel.value
+  if (isTypeUpdate.value) {
+    currentWord.value.zhValue = zhValue
+    currentWord.value.level = level
+    await wordUpdate(currentWord.value)
+  } else {
+    currentWord.value = { enValue, zhValue, level }
+    const id = await wordAdd(currentWord.value)
+    currentWord.value.id = id
+  }
+  showToast('操作成功')
+  onRefresh()
+})
 </script>
 
 <template>
@@ -50,8 +88,8 @@ function toSearch() {
           <base-tag-select v-model="currentWordLevel" :list="WordLevels" />
         </div>
         <van-field v-model="translate" :disabled="loadingFlag" :border="false" class="m-y-8 bg-[rgba(0,0,0,0.03)] p-4" label="" placeholder="" />
-        <base-button class="mt-8" type="primary" size="small" plain>
-          快速新增
+        <base-button :loading="submitLoading" class="mt-8" type="primary" size="small" plain @click="toSubmit">
+          {{ btnSubmitText }}
         </base-button>
       </div>
     </template>
