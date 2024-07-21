@@ -5,7 +5,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const src = computed(() => `https://dict.youdao.com/dictvoice?audio=${props.word}`)
+const src = computed(() => `https://dict.youdao.com/dictvoice?audio=${props.word}&type=1`)
 const audioRef = ref()
 const isPlay = ref(false)
 const cls = computed(() => {
@@ -28,7 +28,9 @@ function onEnded() {
 
 <template>
   <div :class="cls" class="h-30 w-30 flex items-center border rounded-full border-solid p-4 text-18" @click="onClick">
-    <audio ref="audioRef" :src="src" @ended="onEnded" />
+    <audio ref="audioRef" @ended="onEnded">
+      <source :src="src">
+    </audio>
     <van-icon name="volume-o" />
   </div>
 </template>
