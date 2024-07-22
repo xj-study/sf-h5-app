@@ -19,6 +19,11 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       host: true,
       port: 3000,
       proxy: {
+        '/api/trans': {
+          target: 'http://fanyi-api.baidu.com/',
+          ws: false,
+          changeOrigin: true,
+        },
         '/api': {
           target: 'http://localhost:8080',
           ws: false,
@@ -37,6 +42,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     },
 
     css: {
+
       postcss: {
         plugins: [
           autoprefixer(),

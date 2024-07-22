@@ -21,9 +21,10 @@ export interface ResponseBody<T = any> {
 /** 统一返回结构体 */
 
 export interface PageResult<T = any> {
-  data: T[]
-  current?: number
-  pageSize?: number
+  records: T[]
+  num?: number
+  size?: number
+  pages?: number
   total?: number
-  success: boolean
+
 }

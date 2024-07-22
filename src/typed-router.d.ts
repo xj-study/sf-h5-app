@@ -37,6 +37,6 @@ declare module 'vue-router/auto-routes' {
     'storyLevelCustom': RouteRecordInfo<'storyLevelCustom', '/story/level/:id/custom', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'task': RouteRecordInfo<'task', '/task', Record<never, never>, Record<never, never>>,
     'taskCustom': RouteRecordInfo<'taskCustom', '/task/custom', Record<never, never>, Record<never, never>>,
-    'words': RouteRecordInfo<'words', '/words', Record<never, never>, Record<never, never>>,
+    'words': RouteRecordInfo<'words', '/words/custom', Record<never, never>, Record<never, never>>,
   }
 }

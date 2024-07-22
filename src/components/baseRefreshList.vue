@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { Page } from '@/typing'
+
 interface Prop {
   pageSize?: number
-  getList: (query: { pageNum: number, pageSize: number }) => Promise<any>
+  getList: (page?: Page) => Promise<any>
   check?: () => boolean
   finishedText?: string
   emptyIcon?: string

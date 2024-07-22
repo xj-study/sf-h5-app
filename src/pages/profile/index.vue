@@ -72,7 +72,7 @@ function toCustomStory() {
   router.push('/story/custom')
 }
 function toCustomWords() {
-  showToast('功能正在开发中，敬请期待')
+  router.push('/words/custom')
 }
 // 退出登录
 function toLoginOut() {
@@ -137,6 +137,9 @@ function toGame() {
         </base-button>
         <base-button class="ml-10 w-80 p-x-10" plain type="primary" size="normal" @click="toGame">
           益智<br>小游戏
+        </base-button>
+        <base-button class="ml-10" plain type="primary" size="normal" @click="toCustomWords">
+          词库
         </base-button>
       </base-cell-head>
     </div>
