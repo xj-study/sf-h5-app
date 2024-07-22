@@ -17,7 +17,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
 
     server: {
       host: true,
-      port: 80,
+      port: 3000,
       proxy: {
         '/api/trans': {
           target: 'http://fanyi-api.baidu.com/',
