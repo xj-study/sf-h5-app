@@ -1,23 +1,14 @@
 <script setup lang="ts">
 import { GiftForm } from '../typing'
+import useForm, { type FormProp } from '@/hooks/useForm'
 
-const props = defineProps({
-  confirmLoading: { type: Boolean, default: false },
-  itemData: { type: Object },
-})
+const props = defineProps<FormProp<GiftForm>>()
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<GiftForm>(new GiftForm())
-
-watchEffect(() => {
-  for (const key in form) {
-    if (props.itemData) {
-      form[key] = props.itemData[key]
-    } else {
-      form[key] = ''
-    }
-  }
+const { form } = useForm({
+  init: () => new GiftForm(),
+  getItemData: () => props.itemData,
 })
 
 function onSubmit() {

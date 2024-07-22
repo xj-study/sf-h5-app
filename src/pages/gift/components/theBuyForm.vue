@@ -1,32 +1,24 @@
 <script setup lang="ts">
 import { OrderGiftForm } from '../typing'
+import useForm, { type FormProp } from '@/hooks/useForm'
 import useUserStore from '@/stores/modules/user'
 
-const props = defineProps({
-  confirmLoading: { type: Boolean, default: false },
-  itemData: { type: Object },
-})
+const props = defineProps<FormProp<OrderGiftForm>>()
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<OrderGiftForm>(new OrderGiftForm())
+const { form } = useForm({
+  init: () => new OrderGiftForm(),
+  getItemData: () => props.itemData,
+})
+
 const { user } = useUserStore()
 const totalPrice = computed(() => {
   const num = form.num || 1
-  return num * form.price
+  return num * (+form.price)
 })
 const confirmDisable = computed(() => {
   return totalPrice.value * user.exchangeRatio > user.integral
-})
-
-watchEffect(() => {
-  for (const key in form) {
-    if (props.itemData) {
-      form[key] = props.itemData[key]
-    } else {
-      form[key] = ''
-    }
-  }
 })
 
 function onSubmit() {
