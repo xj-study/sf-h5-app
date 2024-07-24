@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { type LearnEngWord, initLearnEngWord } from './typing'
+import { type RulesLearnEng, initLearnEngWord } from './typing'
 import useRulesForm from './useRulesForm'
 import theLearnEngWordItem from './theLearnEngWordItem.vue'
 
 interface Props {
-  list: LearnEngWord[]
+  list: RulesLearnEng[]
 }
 
 const rules = defineModel<string>()
+const initData = () => ({ list: [initLearnEngWord()] })
 const { formData, onUpdate } = useRulesForm<Props, string>(rules, {
-  initData: () => ({ list: [initLearnEngWord()] }),
-  parseRules: JSON.parse,
+  initData,
+  parseRules: (val) => {
+    const result = JSON.parse(val)
+    if (result.list == null) {
+      return initData()
+    }
+    return result
+  },
   getRules: JSON.stringify,
 })
 

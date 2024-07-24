@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import type { GamePoint24 } from './typing'
+import type { RulesGamePoint24 } from './typing'
 import useRulesForm from './useRulesForm'
 
 const rules = defineModel<string>()
-const { formData, onUpdate } = useRulesForm<GamePoint24, string>(rules, {
-  initData: () => ({ count: 4 }),
-  parseRules: JSON.parse,
+const initData = () => ({ count: 4 })
+const { formData, onUpdate } = useRulesForm<RulesGamePoint24, string>(rules, {
+  initData,
+  parseRules: (val) => {
+    const result = JSON.parse(val)
+    if (result.count == null)
+      return initData()
+    return result
+  },
   getRules: JSON.stringify,
 })
 </script>

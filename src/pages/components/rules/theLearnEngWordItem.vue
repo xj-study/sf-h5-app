@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { EngWordQuesFillLevels, EngWordQuesTypes, type LearnEngWord, LearnEngWordQuesType, initLearnEngWord } from './typing'
+import { EngWordQuesFillLevels, EngWordQuesTypes, type RulesLearnEng, initLearnEngWord } from './typing'
 import useRulesForm from './useRulesForm'
+import { QuesWordType } from '@/pages/ques/typing'
 import { WordLevels } from '@/pages/words/typing'
 
-const props = defineModel<LearnEngWord>()
+const props = defineModel<RulesLearnEng>()
 
-const { formData, onUpdate } = useRulesForm<LearnEngWord, LearnEngWord>(props, {
+const { formData, onUpdate } = useRulesForm<RulesLearnEng, RulesLearnEng>(props, {
   initData: initLearnEngWord,
 })
 
 const isFill = computed<boolean>(
   () => {
-    return [LearnEngWordQuesType.FILL, LearnEngWordQuesType.FILL_VIDEO].includes(formData.value.quesType)
+    return [QuesWordType.FILL, QuesWordType.FILL_VIDEO].includes(formData.value.quesType)
   },
 )
 </script>
@@ -64,7 +65,7 @@ const isFill = computed<boolean>(
       <template #input>
         <base-tag-select
           v-model="formData.fillLevel"
-          tag-cls="text-14 min-w-80 mb-4"
+          tag-cls="text-14 min-w-40 mb-4"
           :list="EngWordQuesFillLevels"
           @update:model-value="onUpdate"
         />

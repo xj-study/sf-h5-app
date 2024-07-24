@@ -12,7 +12,7 @@ interface Props {
   date: number
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['update', 'gamePoint24'])
+const emits = defineEmits(['update', 'gamePoint24', 'learnEngWord'])
 
 const toOrOnCompleteText = computed(() => {
   const taskType = props.item.taskType
@@ -39,6 +39,11 @@ const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(asy
   if (TaskType.GAME_POINT24 === taskType) {
     // 24 点游戏
     emits('gamePoint24', props.item, updateRecoredComplete)
+    return
+  }
+  if (TaskType.LEARN_ENG_WORD === taskType) {
+    // 单词打卡
+    emits('learnEngWord', props.item, updateRecoredComplete)
     return
   }
 

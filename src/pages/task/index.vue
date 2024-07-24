@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { QuesType } from '../typing'
+import TheLearnEngWord from '../ques/components/theLearnEngWord.vue'
 import TheTaskItem from './components/theTaskItem.vue'
+import type { TaskForm } from './types'
 import { TaskDateType, TaskStatus } from './types'
+import ThePoint24Game from '@/pages/game/point24/components/thePoint24Game.vue'
 import type { TaskRecordQuery } from '@/api/typing'
 import { recordQuery } from '@/api/taskApi'
 import type { TabItem } from '@/components/typing'
 import { ListType } from '@/typing'
 
-import ThePoint24Game from '@/pages/game/point24/components/thePoint24Game.vue'
 import useMainPage from '@/hooks/useMainPage'
 
 definePage({
@@ -63,17 +66,37 @@ function onItemUpdate(data) {
   listUpdate(data, 'taskId')
 }
 
-const currentRules = ref(null)
-const gamePoint24Flag = ref(false)
-let gameTaskCompleteFn = null
+const currentTaskItem = ref<TaskForm>(null)
+const rules = computed(() => {
+  if (currentTaskItem.value) {
+    return JSON.parse(currentTaskItem.value.rules || '{}')
+  }
+  return {}
+})
+const taskId = computed(() => {
+  if (currentTaskItem.value)
+    return currentTaskItem.value.taskId
+  return -1
+})
+const isGamePoint24 = ref(false)
+const isLearnEngWord = ref(false)
+let compeleteFn: () => Promise<undefined> = null
 // 开始游戏 24 点
-function onGamePoint24(itemData, fn) {
-  gameTaskCompleteFn = fn
-  currentRules.value = JSON.parse(itemData.rules || {})
-  gamePoint24Flag.value = true
+function onGamePoint24(itemData: TaskForm, fn) {
+  compeleteFn = fn
+  currentTaskItem.value = itemData
+  isGamePoint24.value = true
 }
+
+// 开始单词打卡
+function onLearnEngWord(itemData: TaskForm, fn) {
+  compeleteFn = fn
+  currentTaskItem.value = itemData
+  isLearnEngWord.value = true
+}
+
 async function onComplete() {
-  await gameTaskCompleteFn()
+  await compeleteFn()
 }
 </script>
 
@@ -86,10 +109,19 @@ async function onComplete() {
       </div>
     </template>
     <template #default="{ itemData }">
-      <TheTaskItem :key="itemData.id" :type="taskListType" :date="currentDateTabs" :item="itemData" @game-point24="onGamePoint24" @update="onItemUpdate" />
+      <TheTaskItem
+        :key="itemData.id"
+        :type="taskListType"
+        :date="currentDateTabs"
+        :item="itemData"
+        @game-point24="onGamePoint24"
+        @learn-eng-word="onLearnEngWord"
+        @update="onItemUpdate"
+      />
     </template>
     <template #popup>
-      <ThePoint24Game v-model="gamePoint24Flag" v-bind="currentRules" task @complete="onComplete" />
+      <ThePoint24Game v-model="isGamePoint24" v-bind="rules" task @complete="onComplete" />
+      <TheLearnEngWord v-model="isLearnEngWord" :type="QuesType.TASK" :task-id="taskId" />
     </template>
   </base-main-page>
 </template>
