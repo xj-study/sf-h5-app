@@ -14,5 +14,13 @@ export enum TagType {
 export interface TagItem {
   tag: string | number
   type: TagType
+  value?: number
   select?: boolean
+}
+
+export function getTagValue(index, item: TagItem) {
+  let value = index
+  if (item.value !== undefined && item.value !== null)
+    value = item.value
+  return value
 }

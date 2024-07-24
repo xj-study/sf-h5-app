@@ -1,4 +1,4 @@
-import { TagType } from '@/components/typing'
+import { type TagItem, TagType } from '@/components/typing'
 
 export interface Word {
   id?: number
@@ -8,7 +8,7 @@ export interface Word {
   select?: boolean
 }
 
-export const WordLevels = [
+export const WordLevels: TagItem[] = [
   { tag: 1, type: TagType.GRAY },
   { tag: 2, type: TagType.GREEN },
   { tag: 3, type: TagType.BLUE },

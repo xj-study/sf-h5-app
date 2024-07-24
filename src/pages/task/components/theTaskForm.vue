@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { TaskForm } from '../types'
 import useForm, { type FormProp } from '@/hooks/useForm'
-
-import thePoint24RulesForm from '@/pages/components/rules/thePoint24RulesForm.vue'
-import { RulesConf, RulesTypeOptions } from '@/pages/components/rules/typing'
-import useRulesType from '@/pages/components/rules/useRulesType'
+import theRulesForm from '@/pages/components/rules/theRulesForm.vue'
 
 const props = defineProps<FormProp<TaskForm>>()
 
@@ -14,7 +11,6 @@ const { form } = useForm<TaskForm>({
   init: () => new TaskForm(),
   getItemData: () => props.itemData,
 })
-const { isTypePoint24 } = useRulesType(form, new RulesConf('taskType'))
 function onSubmit() {
   emits('confirm', form)
 }
@@ -44,21 +40,13 @@ function onSubmit() {
       <van-field
         v-model="form.integral"
         label="奖励积分"
+        type="number"
         placeholder="奖励积分"
         clearable
         :rules="[{ required: true, message: '请填写奖励积分' }]"
       />
-      <van-field label="类型">
-        <template #input>
-          <van-radio-group v-model="form.taskType">
-            <van-radio v-for="item in RulesTypeOptions" :key="item.name" class="mt-10" :name="item.name">
-              {{ item.label }}
-            </van-radio>
-          </van-radio-group>
-        </template>
-      </van-field>
 
-      <thePoint24RulesForm v-if="isTypePoint24" v-model="form.rules" />
+      <theRulesForm v-model:type="form.taskType" v-model:rules="form.rules" label="类型" />
 
       <van-field label="是否审批">
         <template #input>
