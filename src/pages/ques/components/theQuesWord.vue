@@ -7,12 +7,13 @@ import TheQuesWordOptions from './theQuesWordOptions.vue'
 
 const props = defineProps<{ item: QuesWordData }>()
 const isTypeSelect = computed(() => isQuesWordTypeSelect(props.item.type))
+const userSelect = defineModel()
 </script>
 
 <template>
   <div v-if="item">
     <TheQuesWordItem :type="item.type" :zh-value="item.zhValue" :en-value="item.enValue" />
-    <TheQuesWordOptions v-if="isTypeSelect" :list="item.optionList" />
+    <TheQuesWordOptions v-if="isTypeSelect" v-model="userSelect" :list="item.optionList" />
     <TheQuesWordFill v-else />
   </div>
 </template>

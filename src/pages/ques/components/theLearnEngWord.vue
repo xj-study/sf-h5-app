@@ -31,6 +31,11 @@ const list = computed<QuesWordData[]>(() => {
   return []
 })
 const current = ref(0)
+const userSelect = ref()
+
+const nextDisabled = computed(() => {
+  return userSelect.value == null
+})
 
 const currentQuesWordData = computed(() => {
   return list.value[current.value]
@@ -48,6 +53,7 @@ async function queryQuesData() {
 }
 function toNext() {
   current.value++
+  userSelect.value = null
 }
 function toExit() {
   show.value = false
@@ -59,10 +65,10 @@ function toExit() {
     <!-- 进度 -->
     <TheQuesProgress :model-value="current" :answers="userAnswers" />
     <!-- 题目 -->
-    <TheQuesWord v-if="currentQuesWordData" :item="currentQuesWordData" />
+    <TheQuesWord v-if="currentQuesWordData" v-model="userSelect" :item="currentQuesWordData" />
     <!-- 操作 -->
     <div class="absolute bottom-8vh left-0 w-[100%] flex justify-between p-10">
-      <base-button bg-translate class="flex-1 text-white" @click="toNext">
+      <base-button :disabled="nextDisabled" bg-translate class="flex-1 text-white" @click="toNext">
         下一题
       </base-button>
       <base-button bg-translate class="ml-10 text-white" @click="toExit">

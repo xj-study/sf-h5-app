@@ -4,7 +4,7 @@ import type { Word } from '@/pages/words/typing'
 defineProps<{ list: Word[] }>()
 const select = defineModel()
 
-const itemCls = 'mb-4 border-gray border-solid p-x-8 p-y-10'
+const itemCls = 'backdrop-blur mb-20 border-gray border-solid p-x-8 p-y-20'
 
 function toSelect(idx) {
   select.value = idx

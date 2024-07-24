@@ -10,16 +10,14 @@ const props = defineProps<Props>()
 const isTypeVideo = computed(() => isQuesWordTypeVideo(props.type))
 const isTypeSelect = computed(() => isQuesWordTypeSelect(props.type))
 const value = computed(() => isTypeSelect.value ? props.enValue : props.zhValue)
-const videoSize = computed(() => isTypeVideo.value ? 'scale-200 m-y-30' : '')
+const videoSize = computed(() => isTypeVideo.value ? 'scale-200' : '')
 </script>
 
 <template>
-  <div>
-    <div class="flex items-center justify-center">
-      <h1 v-if="!isTypeVideo" class="mr-10">
-        {{ value }}
-      </h1>
-      <base-sound :word="enValue" :class="videoSize" />
+  <div class="m-y-80 flex items-center justify-center">
+    <div v-if="!isTypeVideo" class="mr-10 text-40">
+      {{ value }}
     </div>
+    <base-sound :word="enValue" :class="videoSize" />
   </div>
 </template>
