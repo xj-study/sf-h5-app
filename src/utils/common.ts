@@ -2,7 +2,7 @@
  * 返回不重复指定个数的在 [min, max) 之间的随机整数
  * @param max
  * @param size
- * @returns
+ * @returns number[]
  */
 export function randomNum(max: number, size: number = 1, min: number = 0): number[] {
   if (size === 1)
