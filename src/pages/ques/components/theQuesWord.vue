@@ -14,6 +14,6 @@ const userSelect = defineModel()
   <div v-if="item">
     <TheQuesWordItem :type="item.type" :zh-value="item.zhValue" :en-value="item.enValue" />
     <TheQuesWordOptions v-if="isTypeSelect" v-model="userSelect" :list="item.optionList" />
-    <TheQuesWordFill v-else />
+    <TheQuesWordFill v-else :value="item.enValue" :level="item.fillLevel" />
   </div>
 </template>

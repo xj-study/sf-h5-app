@@ -12,6 +12,7 @@ declare module 'vue' {
     BaseContainer: typeof import('./components/baseContainer.vue')['default']
     BaseGiftPrice: typeof import('./components/baseGiftPrice.vue')['default']
     BaseHeadTool: typeof import('./components/baseHeadTool.vue')['default']
+    BaseKeyboard: typeof import('./components/baseKeyboard.vue')['default']
     BaseMainPage: typeof import('./components/baseMainPage.vue')['default']
     BaseNavBar: typeof import('./components/baseNavBar.vue')['default']
     BasePopup: typeof import('./components/basePopup.vue')['default']
