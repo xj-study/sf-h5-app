@@ -15,8 +15,8 @@ export function randomNum(max: number, size: number = 1, min: number = 0): numbe
   return list.slice(0, size)
 }
 
-export function shuffle(target: number[] | number) {
-  let list: number[] = []
+export function shuffle(target: unknown[] | number) {
+  let list = []
   if (typeof target === 'number') {
     for (let i = 0; i < target; i++) {
       list[i] = i

@@ -36,6 +36,7 @@ export interface QuesWordData {
   fillLevel: number
   type: number
   optionList: Word[]
+  randomOptionList: Word[]
 
   answer?: QuesAnswerData
 }

@@ -10,8 +10,15 @@ const emits = defineEmits(['change'])
 
 const isTypeSelect = computed(() => isQuesWordTypeSelect(props.item.type))
 
+const optionList = computed(() => {
+  if (isTypeSelect.value) {
+    return props.item.optionList || []
+  }
+  return []
+})
+
 function optionChange(index) {
-  const right = props.item.enValue === props.item.optionList[index].enValue
+  const right = props.item.enValue === optionList.value[index].enValue
   emits('change', { index, right, status: QuesAnswerStatus.NOT_EMPTY })
 }
 
@@ -28,7 +35,7 @@ function onFillChange(boxs: QuesFillBox[]) {
 <template>
   <div>
     <TheQuesWordItem :type="item.type" :zh-value="item.zhValue" :en-value="item.enValue" />
-    <TheQuesWordOptions v-if="isTypeSelect" :model-value="item.answer.index" :list="item.optionList" @update:model-value="optionChange" />
+    <TheQuesWordOptions v-if="isTypeSelect" :model-value="item.answer.index" :list="optionList" @update:model-value="optionChange" />
     <TheQuesWordFill v-else :value="item.enValue" :answer="item.answer.boxs" :level="item.fillLevel" @change="onFillChange" />
   </div>
 </template>
