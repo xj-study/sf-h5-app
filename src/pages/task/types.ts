@@ -12,21 +12,6 @@ export enum TaskDateType {
   YESTODAY = 2,
 }
 
-export enum TaskType {
-  // 普通
-  COMMON = 0,
-  // 游戏 - 24点
-  GAME_POINT24 = 100,
-  // 学习 - 单词打卡
-  LEARN_ENG_WORD = 200,
-}
-
-export const TaskTypeOptions = [
-  { name: TaskType.COMMON, label: '通用' },
-  { name: TaskType.GAME_POINT24, label: '游戏-24点' },
-  { name: TaskType.LEARN_ENG_WORD, label: '学习-单词打卡' },
-]
-
 export class TaskForm {
   public taskId?: number
   public id?: number

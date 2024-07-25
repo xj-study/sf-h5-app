@@ -12,7 +12,7 @@ function toSelect(idx) {
 
 function getItemSelectCls(index) {
   let result = itemCls
-  result += index === select.value ? ' bg-sky-500/25' : ' bg-[rgba(0,0,0,0.4)]'
+  result += index === select.value ? ' bg-[rgba(255,255,255,.02)]' : ' bg-[rgba(0,0,0,0.4)]'
   return result
 }
 </script>

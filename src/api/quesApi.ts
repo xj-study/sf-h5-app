@@ -7,3 +7,12 @@ export async function quesQuery(id, type): Promise<any> {
     data: { id, type },
   })
 }
+
+export async function quesSubmit(answers): Promise<any> {
+  //
+  return request({
+    method: 'post',
+    url: '/ques/submit',
+    data: answers,
+  })
+}

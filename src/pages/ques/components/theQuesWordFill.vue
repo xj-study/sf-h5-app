@@ -1,58 +1,81 @@
 <script setup lang="ts">
-import { QuesWordFillLevelType } from '../typing'
+import { type QuesFillBox, QuesWordFillLevelType } from '../typing'
 import { randomNum } from '@/utils/common'
 
 interface Props {
   value: string
   level: number
-}
-interface Box {
-  value: string
-  input: boolean
-  select: boolean
-  answer?: string
+  answer?: QuesFillBox[]
 }
 
 const props = defineProps<Props>()
 
-const emits = defineEmits(['input'])
+const emits = defineEmits(['change'])
 
 const PERCENTS = {
   [QuesWordFillLevelType.SIMPLE]: 0.1,
   [QuesWordFillLevelType.DIFFCULTY]: 0.5,
 }
 const boxList = computed(() => {
-  const result: Box[] = props.value.split('').map(val => ({ value: val, input: false, select: false }))
+  if (props.answer) {
+    // 用户数据回显
+    if (isReactive(props.answer))
+      return props.answer
+    return reactive(props.answer)
+  }
+
+  const result: QuesFillBox[] = props.value.split('').map(val => ({ value: val, input: false, select: false }))
   if (props.level === QuesWordFillLevelType.DIFFCULTY) {
-    result.forEach(item => item.input = true)
+    result.forEach(setItemInput)
   } else {
     const len = result.length
     const inputSize = Math.ceil(len * PERCENTS[props.level])
     const randomIdx = randomNum(len, inputSize)
-    randomIdx.forEach(idx => result[idx].input = true)
+    randomIdx.forEach(idx => setItemInput(result[idx]))
   }
   return reactive(result)
 })
 
+function setItemInput(item: QuesFillBox) {
+  item.input = true
+  item.value = ''
+}
+
+function changeAnswer() {
+  emits('change', boxList.value)
+}
+
 function delAnswer() {
   const item = boxList.value.find(item => item.select)
   if (item) {
-    item.answer = ''
+    item.value = ''
   } else {
     // 找到最后一个
     const lastItem = boxList.value.findLast(item => item.input)
-    lastItem.answer = ''
+    lastItem.value = ''
     lastItem.select = true
   }
+  changeAnswer()
 }
 
 function inputAnswer(answer, isNext: boolean = true) {
   const item = boxList.value.find(item => item.select)
   if (item) {
-    item.answer = answer
+    item.value = answer
     // 选中下一个
     isNext && nextInput()
+
+    changeAnswer()
   }
+}
+
+function selectFirstInput() {
+// 找到第一个格子
+  const item = boxList.value.find(item => item.input)
+  item.select = true
+
+  if (!props.answer)
+    changeAnswer()
 }
 
 // 下一个输入
@@ -70,18 +93,13 @@ function nextInput() {
     //
     if (i === boxList.value.length) {
       // 没找到
-      emits('input')
     }
-  } else {
-    // 找到第一个格子
-    const item = boxList.value.find(item => item.input)
-    item.select = true
   }
 }
 
 const boxInputCls = 'h-40 w-40  border-solid border border-[rgba(255,255,255,.3)] box-border'
 const boxLabelCls = 'h-40 p-x-2 border-solid border-transparent'
-function getBoxCls(val: Box) {
+function getBoxCls(val: QuesFillBox) {
   const result = []
   if (val.input) {
     result.push(boxInputCls)
@@ -93,12 +111,8 @@ function getBoxCls(val: Box) {
   }
   return result
 }
-function getBoxVal(item: Box) {
-  if (item.input)
-    return item.answer
-  return item.value
-}
-function toSelect(item: Box) {
+
+function toSelect(item: QuesFillBox) {
   if (item.input)
     item.select = true
 }
@@ -108,15 +122,19 @@ function onInput(val) {
 function onDel() {
   delAnswer()
 }
+
+watch(() => props.value, () => {
+  selectFirstInput()
+})
 onMounted(() => {
-  nextInput()
+  selectFirstInput()
 })
 </script>
 
 <template>
   <div class="flex justify-center text-center text-30">
     <div v-for="val, index in boxList" :key="index" :class="getBoxCls(val)" @click="toSelect(val)">
-      {{ getBoxVal(val) }}
+      {{ val.value }}
     </div>
   </div>
   <base-keyboard @input="onInput" @del="onDel" />

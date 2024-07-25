@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { StoryLevelItem } from '../../typing'
 import useForm, { type FormProp } from '@/hooks/useForm'
-import { RulesConf, RulesTypeOptions } from '@/pages/components/rules/typing'
-import useRulesType from '@/pages/components/rules/useRulesType'
-import thePoint24RulesForm from '@/pages/components/rules/thePoint24RulesForm.vue'
+
+import TheRulesForm from '@/pages/components/rules/theRulesForm.vue'
 
 const props = defineProps<FormProp<StoryLevelItem>>()
 
@@ -13,7 +12,7 @@ const { form } = useForm({
   init: () => new StoryLevelItem(),
   getItemData: () => props.itemData,
 })
-const { isTypePoint24 } = useRulesType(form, new RulesConf('refType', 'refRules'))
+
 function onSubmit() {
   emits('confirm', form)
 }
@@ -56,18 +55,8 @@ function onSubmit() {
         clearable
       />
 
-      <van-field label="类型">
-        <template #input>
-          <van-radio-group v-model="form.refType">
-            <van-radio v-for="item in RulesTypeOptions" :key="item.name" class="mt-10" :name="item.name">
-              {{ item.label }}
-            </van-radio>
-          </van-radio-group>
-        </template>
-      </van-field>
+      <TheRulesForm v-model:type="form.refType" v-model:rules="form.refRules" label="类型" />
     </van-cell-group>
-
-    <thePoint24RulesForm v-if="isTypePoint24" v-model="form.refRules" />
 
     <div class="m-16">
       <base-button :inline="false" :loading="confirmLoading" class="w-full" type="primary" native-type="submit">

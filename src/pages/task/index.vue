@@ -121,7 +121,7 @@ async function onComplete() {
     </template>
     <template #popup>
       <ThePoint24Game v-model="isGamePoint24" v-bind="rules" task @complete="onComplete" />
-      <TheLearnEngWord v-model="isLearnEngWord" :type="QuesType.TASK" :task-id="taskId" />
+      <TheLearnEngWord :id="taskId" v-model="isLearnEngWord" :type="QuesType.TASK" @complete="onComplete" />
     </template>
   </base-main-page>
 </template>

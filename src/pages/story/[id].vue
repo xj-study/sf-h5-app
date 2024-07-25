@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import thePoint24Game from '../game/point24/components/thePoint24Game.vue'
+import { QuesType } from '../typing'
+import TheLearnEngWord from '../ques/components/theLearnEngWord.vue'
+import ThePoint24Game from '../game/point24/components/thePoint24Game.vue'
 import theStoryLevelItem from './level/components/theStoryLevelItem.vue'
 import { type StoryLevelItem, type StoryRecordItem, StoryRecordStatus } from './typing'
 import useMainPage from '@/hooks/useMainPage'
@@ -44,6 +46,7 @@ const { loadingFlag, loading: toActive } = useLoading(async () => {
 
 const currentItem = ref<StoryLevelItem>()
 const gamePoint24Show = ref(false)
+const isLearnEngWord = ref(false)
 const currentRules = computed(() => {
   if (currentItem.value && currentItem.value.refRules) {
     return JSON.parse(currentItem.value.refRules)
@@ -53,6 +56,11 @@ const currentRules = computed(() => {
 function playGamePoint24(item: StoryLevelItem) {
   currentItem.value = item
   gamePoint24Show.value = true
+}
+// 开始单词打卡
+function onLearnEngWord(item: StoryLevelItem) {
+  currentItem.value = item
+  isLearnEngWord.value = true
 }
 
 function toStart(item: StoryLevelItem) {
@@ -102,11 +110,12 @@ async function onComplete() {
       </div>
     </template>
     <template #default="{ itemData }">
-      <theStoryLevelItem :key="itemData.id" :item="itemData" @start="toStart" @start-game-point24="playGamePoint24" />
+      <theStoryLevelItem :key="itemData.id" :item="itemData" @start="toStart" @start-game-point24="playGamePoint24" @learn-eng-word="onLearnEngWord" />
     </template>
 
     <template #popup>
-      <thePoint24Game v-model="gamePoint24Show" v-bind="currentRules" task @complete="onComplete" />
+      <ThePoint24Game v-if="currentItem" v-model="gamePoint24Show" v-bind="currentRules" task @complete="onComplete" />
+      <TheLearnEngWord v-if="currentItem" :id="currentItem.id" v-model="isLearnEngWord" :type="QuesType.STORY_LEVEL" @complete="onComplete" />
     </template>
   </base-main-page>
 </template>
