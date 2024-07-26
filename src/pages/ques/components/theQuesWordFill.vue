@@ -14,7 +14,7 @@ const emits = defineEmits(['change'])
 
 const PERCENTS = {
   [QuesWordFillLevelType.SIMPLE]: 0.1,
-  [QuesWordFillLevelType.DIFFCULTY]: 0.5,
+  [QuesWordFillLevelType.MIDDLE]: 0.5,
 }
 const boxList = computed(() => {
   if (props.answer) {
@@ -48,7 +48,24 @@ function changeAnswer() {
 function delAnswer() {
   const item = boxList.value.find(item => item.select)
   if (item) {
-    item.value = ''
+    if (item.value === '') {
+      // 已经删除了，就找上一个
+      const index = boxList.value.findIndex(v => v === item)
+      let i = index - 1
+      for (;i >= 0; i--) {
+        const tmp = boxList.value[i]
+        if (tmp.input) {
+          tmp.select = true
+          tmp.value = ''
+          break
+        }
+      }
+      if (i >= 0) {
+        item.select = false
+      }
+    } else {
+      item.value = ''
+    }
   } else {
     // 找到最后一个
     const lastItem = boxList.value.findLast(item => item.input)
@@ -69,10 +86,23 @@ function inputAnswer(answer, isNext: boolean = true) {
   }
 }
 
-function selectFirstInput() {
-// 找到第一个格子
-  const item = boxList.value.find(item => item.input)
+function selectInput(item: QuesFillBox) {
+  const current = boxList.value.find(item => item.select)
+  if (current === item)
+    return
+  if (current)
+    current.select = false
   item.select = true
+}
+
+function selectFirstInput() {
+  const selectItem = boxList.value.find(item => item.select)
+  if (!selectItem) {
+    // 找到第一个格子
+    const item = boxList.value.find(item => item.input)
+    item.select = true
+    return
+  }
 
   if (!props.answer)
     changeAnswer()
@@ -88,6 +118,7 @@ function nextInput() {
     for (; i < boxList.value.length; i++) {
       if (boxList.value[i].input) {
         boxList.value[i].select = true
+        break
       }
     }
     //
@@ -113,8 +144,7 @@ function getBoxCls(val: QuesFillBox) {
 }
 
 function toSelect(item: QuesFillBox) {
-  if (item.input)
-    item.select = true
+  selectInput(item)
 }
 function onInput(val) {
   inputAnswer(val)
