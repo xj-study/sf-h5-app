@@ -8,10 +8,12 @@ import { quesQuery, quesSubmit } from '@/api/quesApi'
 import useAppStore from '@/stores/modules/app'
 import useLoading from '@/hooks/useLoading'
 import { shuffle } from '@/utils/common'
+import type { RulesLearnEng } from '@/pages/components/rules/typing'
 
 interface Props {
   id: number
   type: number
+  rules: RulesLearnEng
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['complete'])
@@ -107,7 +109,7 @@ function nextQues() {
 async function queryQuesData() {
   if (props.id === -1 || props.id == null)
     return
-  const result: QuesData = await quesQuery(props.id, props.type)
+  const result: QuesData = await quesQuery(props.id, props.type, JSON.stringify(props.rules))
   quesData.value = result
 
   const rst = quesData.value.list

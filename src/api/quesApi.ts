@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export async function quesQuery(id, type): Promise<any> {
+export async function quesQuery(id, type, rules): Promise<any> {
   return request({
     method: 'post',
     url: '/ques/query',
-    data: { id, type },
+    data: { id, type, rules },
   })
 }
 
