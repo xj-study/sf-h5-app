@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import useTaskTag from '../utils/useTaskTag'
 
-import { type TaskForm, TaskType } from '../types'
+import type { TaskForm } from '../types'
 import useLoading from '@/hooks/useLoading'
 import { recordComplete, recordCompleteByTaskId } from '@/api/taskApi'
 import { ListType } from '@/typing'
+import { RulesType } from '@/pages/components/rules/typing'
 
 interface Props {
   type: ListType
@@ -12,11 +13,11 @@ interface Props {
   date: number
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['update', 'gamePoint24'])
+const emits = defineEmits(['update', 'gamePoint24', 'learnEngWord'])
 
 const toOrOnCompleteText = computed(() => {
   const taskType = props.item.taskType
-  if (TaskType.COMMON === taskType) {
+  if (RulesType.COMMON === taskType) {
     return '打卡'
   } else {
     return '打卡'
@@ -36,9 +37,14 @@ async function updateRecoredComplete() {
 
 const { loadingFlag: completeLoadingFlag, loading: onComplete } = useLoading(async () => {
   const taskType = props.item.taskType
-  if (TaskType.GAME_POINT24 === taskType) {
+  if (RulesType.GAME_POINT24 === taskType) {
     // 24 点游戏
     emits('gamePoint24', props.item, updateRecoredComplete)
+    return
+  }
+  if (RulesType.LEARN_ENG_WORD === taskType) {
+    // 单词打卡
+    emits('learnEngWord', props.item, updateRecoredComplete)
     return
   }
 

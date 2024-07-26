@@ -9,7 +9,7 @@ const props = defineProps<Props>()
 const tagTypes = [TagType.GRAY, TagType.GREEN, TagType.BLUE, TagType.GOLD, TagType.RED]
 const levelTagData = computed(() => {
   const tag = props.item.level
-  return { tag: `${tag}`, type: tagTypes[tag - 1] }
+  return { tag: `${tag} + 1`, type: tagTypes[tag] }
 })
 </script>
 

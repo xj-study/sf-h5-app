@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type StoryLevelItem, StoryLevelType } from '../../typing'
+import type { StoryLevelItem } from '../../typing'
+import { RulesType } from '@/pages/components/rules/typing'
 import { type TagItem, TagType } from '@/components/typing'
 
 // import type { StoryItem } from '../typing'
@@ -9,15 +10,17 @@ interface Props {
 
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['start', 'startGamePoint24'])
+const emits = defineEmits(['start', 'startGamePoint24', 'learnEngWord'])
 const tagItem = computed<TagItem>(() => {
   const tag: number = props.item.levelOrder
   return { type: TagType.GREEN, tag: `${tag}` }
 })
 const isActive = inject('isActive')
 function toStart() {
-  if (props.item.refType === StoryLevelType.GAME_POINT24) {
+  if (props.item.refType === RulesType.GAME_POINT24) {
     emits('startGamePoint24', props.item)
+  } else if (props.item.refType === RulesType.LEARN_ENG_WORD) {
+    emits('learnEngWord', props.item)
   } else {
     emits('start', props.item)
   }

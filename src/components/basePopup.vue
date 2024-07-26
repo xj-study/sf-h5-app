@@ -7,8 +7,8 @@ defineEmits(['update:show'])
 </script>
 
 <template>
-  <van-popup :show="show" position="bottom" @update:show="$emit('update:show', false)">
-    <base-title :title="title" @close="$emit('update:show', false)">
+  <van-popup :show="show" class="max-h-80vh" position="bottom" @update:show="$emit('update:show', false)">
+    <base-title :title="title" offset-top="20vh" @close="$emit('update:show', false)">
       <slot />
     </base-title>
   </van-popup>

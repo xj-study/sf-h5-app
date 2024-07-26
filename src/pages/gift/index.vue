@@ -41,7 +41,8 @@ function toBuy(item: OrderGiftForm) {
 }
 
 const { loadingFlag, loading: onConfirm } = useLoading(async (item: OrderGiftForm) => {
-  await orderBuy(item)
+  const { id, num } = item
+  await orderBuy({ giftId: id, num })
   showToast('礼物兑换成功')
   formData.value = null
   editShowFlag.value = false

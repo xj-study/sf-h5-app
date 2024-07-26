@@ -5,6 +5,7 @@ import { Expression, type INumData, NumData, OpeType, RESULT } from '../typing'
 import TheNumItem from './theNumItem.vue'
 import TheOperationItem from './theOperationItem.vue'
 import TheExpression from './theExpression.vue'
+import useAppStore from '@/stores/modules/app'
 
 interface Config {
   task: boolean
@@ -31,6 +32,11 @@ const props = withDefaults(defineProps<Props>(), {
   count: 4,
 })
 const emits = defineEmits(['update:modelValue', 'complete'])
+
+const { switchScroll } = useAppStore()
+watchEffect(() => {
+  switchScroll(!props.modelValue)
+})
 
 const config = computed<Config>(() => {
   let { count, task, practice } = props

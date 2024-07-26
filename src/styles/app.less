@@ -7,6 +7,8 @@
 html {
   background: var(--van-gray-1);
   color-scheme: light;
+
+  // van-message
 }
 
 html.dark {
@@ -14,10 +16,11 @@ html.dark {
   color-scheme: dark;
 }
 
+html:root {
+  --van-dialog-radius: 0;
+}
+
 #app {
-  // height: 100vh;
-  // Dynamic Viewport Units
-  // height: 100dvh;
   position: relative;
   overflow-x: hidden;
 }
@@ -26,27 +29,6 @@ html.dark {
   width: 0;
   background: transparent;
 }
-
-// .slide-fadein-left-enter-active,
-// .slide-fadein-right-enter-active,
-// .slide-fadein-left-leave-active,
-// .slide-fadein-right-leave-active {
-//   transition:
-//     opacity 0.3s,
-//     transform 0.4s;
-// }
-
-// .slide-fadein-left-enter-from,
-// .slide-fadein-right-leave-to {
-//   transform: translateX(20px);
-//   opacity: 0;
-// }
-
-// .slide-fadein-left-leave-to,
-// .slide-fadein-right-enter-from {
-//   transform: translateX(-20px);
-//   opacity: 0;
-// }
 
 .fade-enter-active,
 .fade-leave-active {

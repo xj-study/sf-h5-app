@@ -51,7 +51,10 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
     showToast('添加成功')
     listUpdate(item)
   }
-  formData.value = null
+
+  setTimeout(() => {
+    formData.value = null
+  }, 50)
   editShowFlag.value = false
 })
 </script>

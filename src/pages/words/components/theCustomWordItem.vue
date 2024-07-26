@@ -6,12 +6,15 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const emits = defineEmits(['select'])
+const emits = defineEmits(['select', 'remove'])
 const levelTagData = computed(() => {
   return WordLevels[props.item.level]
 })
 function toSelect() {
   emits('select', props.item)
+}
+function toRemove() {
+  emits('remove', props.item)
 }
 </script>
 
@@ -27,8 +30,11 @@ function toSelect() {
         {{ item.zhValue }}
       </div>
     </div>
-    <div v-if="!item.select">
-      <base-button @click="toSelect">
+    <div>
+      <base-button size="small" @click="toRemove">
+        删除
+      </base-button>
+      <base-button v-show="!item.select" size="small" class="ml-4" @click="toSelect">
         选中
       </base-button>
     </div>

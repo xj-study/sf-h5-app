@@ -33,15 +33,15 @@ const tagClass = computed(() => {
       result = `text-[rgba(0,0,0,0.5)] bg-[rgba(0,0,0,0.03)]`
       break
   }
-  if (props.select) {
-    result += ' border-1 border-solid'
+  if (!props.select) {
+    result += ' border-transparent'
   }
   return result
 })
 </script>
 
 <template>
-  <div :class="tagClass" class="inline-block p-x-4 p-y-2 text-center text-12">
+  <div :class="tagClass" class="inline-block border-1 border-solid p-x-4 p-y-2 text-center text-12">
     {{ tag }}
   </div>
 </template>
