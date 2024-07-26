@@ -12,6 +12,13 @@ export async function wordQueryList(query): Promise<PageResult> {
   })
 }
 
+export async function wordQueryStat(): Promise<number[]> {
+  return request({
+    method: 'get',
+    url: '/word/stat/query',
+  })
+}
+
 export async function wordAdd(params: Word): Promise<number> {
   return request({
     method: 'post',
@@ -25,6 +32,13 @@ export async function wordUpdate(params: Word): Promise<string> {
     method: 'post',
     url: `/word/update`,
     data: params,
+  })
+}
+
+export async function wordRemove(id: number): Promise<string> {
+  return request({
+    method: 'get',
+    url: `/word/remove/${id}`,
   })
 }
 
