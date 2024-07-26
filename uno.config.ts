@@ -14,7 +14,7 @@ import presetRemToPx from '@unocss/preset-rem-to-px'
 export default defineConfig({
   presets: [
     presetUno({
-      important: '#app',
+      important: 'body',
     }),
     presetAttributify,
     presetIcons(),

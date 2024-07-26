@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { showConfirmDialog } from 'vant'
+import { showConfirmDialog, showDialog } from 'vant'
 import { QuesAnswerStatus, type QuesData, type QuesWordData } from '../typing'
 import TheQuesProgress from './theQuesProgress.vue'
 import TheQuesWord from './theQuesWord.vue'
@@ -49,7 +49,6 @@ function getSubmitAnswer(item: QuesWordData) {
   return item.optionList[answer.index].enValue
 }
 
-const failTip = ref(false)
 // 确定提交
 async function confirmSubmitQues() {
   const answers = list.value.map((item) => {
@@ -65,7 +64,12 @@ async function confirmSubmitQues() {
     emits('complete')
     show.value = false
   } else {
-    failTip.value = true
+    showDialog({
+      title: '结束',
+      message: '有题目做错了哟~~',
+    }).then(() => {
+      toClose()
+    })
   }
 }
 
@@ -79,7 +83,7 @@ function submitQues() {
   const index = userAnswers.value.findIndex(item => item.status === QuesAnswerStatus.EMPTY)
   if (index > -1) {
     showConfirmDialog({
-      title: '温馨提示',
+      title: '提示一下',
       message: `还有题未完成，是否需要前往？`,
       confirmButtonText: '确定前往',
       cancelButtonText: '坚持提交',
@@ -101,7 +105,7 @@ function nextQues() {
 }
 
 async function queryQuesData() {
-  if (props.id === -1)
+  if (props.id === -1 || props.id == null)
     return
   const result: QuesData = await quesQuery(props.id, props.type)
   quesData.value = result
@@ -136,7 +140,6 @@ watchEffect(() => {
 
 function reset() {
   current.value = 0
-  failTip.value = false
   list.value = []
 }
 
@@ -166,14 +169,6 @@ const btnText = computed(() => isLast.value ? '提交' : '下一个')
 
 <template>
   <div v-show="show" class="fixed top-0 z-100 h-screen w-screen bg-[rgba(0,0,0,0.8)] p-10 text-white">
-    <div v-show="failTip" class="absolute bottom-0 left-0 right-0 top-0 z-1 bg-[rgba(0,0,0,0.4)]">
-      <div class="m-auto mt-20vh flex items-center justify-center bg-[rgba(80,0,0,.8)] pb-10 pt-20 text-center backdrop-blur-md">
-        <div>你有题目做错了哟~</div>
-        <base-button bg-translate size="small" class="ml-10 text-white" @click="toClose">
-          关闭
-        </base-button>
-      </div>
-    </div>
     <!-- 进度 -->
     <TheQuesProgress v-model="current" :answers="userAnswers" />
     <!-- 题目 -->

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { QuesType } from '../typing'
 import TheLearnEngWord from '../ques/components/theLearnEngWord.vue'
+import { RulesType } from '../components/rules/typing'
 import TheTaskItem from './components/theTaskItem.vue'
 import type { TaskForm } from './types'
 import { TaskDateType, TaskStatus } from './types'
@@ -73,14 +74,15 @@ const rules = computed(() => {
   }
   return {}
 })
-const taskId = computed(() => {
-  if (currentTaskItem.value)
-    return currentTaskItem.value.taskId
-  return -1
-})
 const isGamePoint24 = ref(false)
 const isLearnEngWord = ref(false)
 let compeleteFn: () => Promise<undefined> = null
+
+const taskId = computed(() => {
+  if (currentTaskItem.value && currentTaskItem.value.taskType === RulesType.LEARN_ENG_WORD)
+    return currentTaskItem.value.taskId
+  return -1
+})
 // 开始游戏 24 点
 function onGamePoint24(itemData: TaskForm, fn) {
   compeleteFn = fn
