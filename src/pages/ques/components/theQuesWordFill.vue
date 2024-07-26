@@ -101,11 +101,10 @@ function selectFirstInput() {
     // 找到第一个格子
     const item = boxList.value.find(item => item.input)
     item.select = true
-    return
-  }
 
-  if (!props.answer)
-    changeAnswer()
+    if (!props.answer)
+      changeAnswer()
+  }
 }
 
 // 下一个输入

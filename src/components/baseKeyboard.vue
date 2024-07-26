@@ -4,7 +4,7 @@ const line1 = 'qwertyuiop'
 const line2 = 'adsfghjkl'
 const line3 = 'xzcvbnm'
 const DEL = 'Del'
-const btnCls = 'text-center btn-k p-x-4 min-w-24 h-40 border-solid border-[rgba(255,255,255,.3)] text-[rgba(255,255,255,.8)] active:bg-[rgba(255,255,255,.2)] m-4 text-30'
+const btnCls = 'text-center btn-k p-x-4 min-w-24 h-40 border-1 border-solid border-[rgba(255,255,255,.3)] text-[rgba(255,255,255,.8)] active:bg-[rgba(255,255,255,.2)] m-4 text-30'
 function onClick(evt: PointerEvent) {
   const target: HTMLElement = evt.target as HTMLElement
   if (target.classList.contains('btn-k')) {
