@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
 import TheStoryForm from './components/theStoryForm.vue'
-import { type StoryItem, StoryStatusType } from './typing'
+import type { StoryItem } from './typing'
 
 import TheCustomStoryItem from './components/theCustomStoryItem.vue'
 import useLoading from '@/hooks/useLoading'
@@ -15,22 +15,10 @@ definePage({
   },
 })
 
-const { mainPageRef, listUpdate, onRefresh } = useMainPage()
-
-const tabs = [
-  { title: '已发布', value: StoryStatusType.PUBLISHED },
-  { title: '下架', value: StoryStatusType.OFF_SHELF },
-  { title: '未发布', value: StoryStatusType.NOT_PUBLISH },
-]
-
-const currentTabs = ref(0)
-
-function onChange() {
-  onRefresh()
-}
+const { mainPageRef, listUpdate } = useMainPage()
 
 async function getList() {
-  const records = await storyQueryList({ status: currentTabs.value })
+  const records = await storyQueryList({})
 
   return records
 }
@@ -51,8 +39,9 @@ function toEdit(item: StoryItem) {
   editShowFlag.value = true
 }
 
-function toRemove(item: StoryItem) {
-  listUpdate(item, 'id', { remove: true })
+function toUpdate(item: StoryItem, status) {
+  item.status = status
+  listUpdate(item, 'id')
 }
 
 const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryItem) => {
@@ -77,10 +66,9 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryItem) =
       <base-button icon="add" @click="toAdd">
         添加活动
       </base-button>
-      <base-tabs v-model="currentTabs" :list="tabs" @change="onChange" />
     </template>
     <template #default="{ itemData }">
-      <TheCustomStoryItem :key="itemData.id" :item="itemData" @remove="toRemove" @edit="toEdit" />
+      <TheCustomStoryItem :key="itemData.id" :item="itemData" @update="toUpdate" @edit="toEdit" />
     </template>
     <template #popup>
       <base-popup v-model:show="editShowFlag" :title="popupTitle">

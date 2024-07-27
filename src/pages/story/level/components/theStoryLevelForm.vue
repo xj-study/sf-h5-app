@@ -30,12 +30,20 @@ function onSubmit() {
       />
 
       <van-field
-        v-model="form.title"
+        v-model="form.prize"
+        label="奖励积分"
+        placeholder="奖励积分"
+        clearable
+      />
 
+      <TheRulesForm v-model:type="form.refType" v-model:rules="form.refRules" label="类型" />
+
+      <van-field
+        v-model="form.title"
+        class="mt-20"
         label="标题"
         placeholder="标题"
         clearable
-        :rules="[{ required: true, message: '请填写标题' }]"
       />
 
       <van-field
@@ -46,16 +54,7 @@ function onSubmit() {
         label="内容"
         placeholder="内容"
         clearable
-        :rules="[{ required: true, message: '请填写内容' }]"
       />
-      <van-field
-        v-model="form.prize"
-        label="奖励积分"
-        placeholder="奖励积分"
-        clearable
-      />
-
-      <TheRulesForm v-model:type="form.refType" v-model:rules="form.refRules" label="类型" />
     </van-cell-group>
 
     <div class="m-16">

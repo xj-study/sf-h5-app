@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import type { StoryLevelItem } from '../../typing'
+import { StoryLevelItem } from '../../typing'
 
 import TheCustomStoryLevelItem from '../components/theCustomStoryLevelItem.vue'
 import TheStoryLevelForm from '../components/theStoryLevelForm.vue'
@@ -27,8 +27,11 @@ const editShowFlag = ref(false)
 const selectStoryItem = ref<StoryLevelItem>(null)
 const popupTitle = ref('')
 
+const listSize = ref(0)
 function toAdd() {
-  selectStoryItem.value = null
+  const data = new StoryLevelItem()
+  data.levelOrder = listSize.value + 1
+  selectStoryItem.value = data
   popupTitle.value = '新增关卡'
   editShowFlag.value = true
 }
@@ -56,10 +59,14 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelIt
 
   editShowFlag.value = false
 })
+
+function onPageChange(data) {
+  listSize.value = data.size
+}
 </script>
 
 <template>
-  <base-main-page ref="mainPageRef" :get-list="getList">
+  <base-main-page ref="mainPageRef" :get-list="getList" reverse @change="onPageChange">
     <template #head-tool>
       <base-button icon="add" @click="toAdd">
         添加关卡
@@ -70,7 +77,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelIt
     </template>
     <template #popup>
       <base-popup v-model:show="editShowFlag" :title="popupTitle">
-        <TheStoryLevelForm :confirm-loading="loadingFlag" :item-data="selectStoryItem" @confirm="onConfirm" />
+        <TheStoryLevelForm :sort="listSize" :confirm-loading="loadingFlag" :item-data="selectStoryItem" @confirm="onConfirm" />
       </base-popup>
     </template>
   </base-main-page>

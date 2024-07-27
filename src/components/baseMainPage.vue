@@ -6,6 +6,7 @@ interface Props {
   paddingX?: number
   headToolPadding?: boolean
   reverse?: boolean
+  finishedText?: string
 }
 withDefaults(defineProps<Props>(), {
   paddingX: 0,
@@ -13,7 +14,12 @@ withDefaults(defineProps<Props>(), {
   reverse: false,
 })
 
+const emits = defineEmits(['change'])
 const listRef = ref()
+
+function onChange(data) {
+  emits('change', data)
+}
 
 defineExpose({
   listRef,
@@ -26,7 +32,7 @@ defineExpose({
       <slot name="head-tool" />
     </base-head-tool>
 
-    <base-refresh-list ref="listRef" class="min-h-70vh" :reverse="reverse" :get-list="getList">
+    <base-refresh-list ref="listRef" class="min-h-70vh" :finished-text="finishedText" :reverse="reverse" :get-list="getList" @change="onChange">
       <template #default="{ itemData }">
         <slot :item-data="itemData" />
       </template>

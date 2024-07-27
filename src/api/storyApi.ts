@@ -1,11 +1,11 @@
-import type { StoryItem, StoryLevelItem, StoryQuery, StoryRecordItem, StoryRecordLevelPassForm, StoryRecordQuery } from '@/pages/story/typing'
+import type { StoryItem, StoryLevelItem, StoryRecordItem, StoryRecordLevelPassForm, StoryRecordQuery } from '@/pages/story/typing'
 import request from '@/utils/request'
 
-export async function storyQueryList(storyQuery: StoryQuery): Promise<any> {
+export async function storyQueryList(data): Promise<any> {
   return request({
     method: 'post',
     url: `/story/query`,
-    data: storyQuery,
+    data,
   })
 }
 

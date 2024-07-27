@@ -3,8 +3,9 @@ import { showToast } from 'vant'
 import { QuesType } from '../typing'
 import TheLearnEngWord from '../ques/components/theLearnEngWord.vue'
 import ThePoint24Game from '../game/point24/components/thePoint24Game.vue'
+import { RulesType } from '../components/rules/typing'
 import theStoryLevelItem from './level/components/theStoryLevelItem.vue'
-import { type StoryLevelItem, type StoryRecordItem, StoryRecordStatus } from './typing'
+import { type StoryLevelItem, type StoryRecordItem, StoryRecordStatus, StoryType } from './typing'
 import useMainPage from '@/hooks/useMainPage'
 import { storyActive, storyPass, storyRecordQuery } from '@/api/storyApi'
 import useLoading from '@/hooks/useLoading'
@@ -22,6 +23,12 @@ const { mainPageRef, onRefresh } = useMainPage()
 const route = useRoute()
 const storyId = (route.params as { id: number }).id
 const storyData = ref<StoryRecordItem>()
+
+const storyType = computed(() => {
+  if (storyData.value)
+    return storyData.value.type || StoryType.DETAIL
+  return StoryType.DETAIL
+})
 
 async function getList() {
   const data = await storyRecordQuery(storyId)
@@ -51,7 +58,12 @@ const currentRules = computed(() => {
   if (currentItem.value && currentItem.value.refRules) {
     return JSON.parse(currentItem.value.refRules)
   }
-  return null
+  return {}
+})
+const levelId = computed(() => {
+  if (currentItem.value && currentItem.value.refType === RulesType.LEARN_ENG_WORD)
+    return currentItem.value.id
+  return -1
 })
 function playGamePoint24(item: StoryLevelItem) {
   currentItem.value = item
@@ -81,7 +93,7 @@ async function onComplete() {
 </script>
 
 <template>
-  <base-main-page ref="mainPageRef" :get-list="getList" reverse>
+  <base-main-page ref="mainPageRef" :get-list="getList" finished-text="">
     <template #head-tool>
       <div v-if="storyData">
         <div class="font-bold">
@@ -91,7 +103,7 @@ async function onComplete() {
         <div class="mt8 text-14">
           {{ storyData.content }}
         </div>
-        <div v-if="isPass" class="mt10">
+        <div v-if="isActive || isPass" class="mt10">
           <base-button size="small" plain type="primary" icon="arrow-left" class="min-w-60" @click="toBack">
             返回
           </base-button>
@@ -110,12 +122,12 @@ async function onComplete() {
       </div>
     </template>
     <template #default="{ itemData }">
-      <theStoryLevelItem :key="itemData.id" :item="itemData" @start="toStart" @start-game-point24="playGamePoint24" @learn-eng-word="onLearnEngWord" />
+      <theStoryLevelItem :key="itemData.id" :type="storyType" :item="itemData" @start="toStart" @start-game-point24="playGamePoint24" @learn-eng-word="onLearnEngWord" />
     </template>
 
     <template #popup>
-      <ThePoint24Game v-if="currentItem" v-model="gamePoint24Show" v-bind="currentRules" task @complete="onComplete" />
-      <TheLearnEngWord v-if="currentItem" :id="currentItem.id" v-model="isLearnEngWord" :rules="currentRules" :type="QuesType.STORY_LEVEL" @complete="onComplete" />
+      <ThePoint24Game v-model="gamePoint24Show" v-bind="currentRules" task @complete="onComplete" />
+      <TheLearnEngWord :id="levelId" v-model="isLearnEngWord" :rules="currentRules" :type="QuesType.STORY_LEVEL" @complete="onComplete" />
     </template>
   </base-main-page>
 </template>

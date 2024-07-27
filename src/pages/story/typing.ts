@@ -17,6 +17,13 @@ export enum StoryStatusType {
   OFF_SHELF = 2,
 }
 
+export enum StoryType {
+  // 复杂类型
+  DETAIL = 0,
+  // 简单类型
+  SIMPLE = 1,
+}
+
 export interface StoryQuery {
   status?: number
 }
@@ -57,4 +64,5 @@ export interface StoryRecordItem {
   status: number
   levelId: number
   levels?: StoryLevelItem[]
+  type: number
 }

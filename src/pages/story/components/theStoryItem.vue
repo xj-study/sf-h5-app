@@ -24,7 +24,7 @@ const isPass = computed(() => props.item.status === StoryRecordStatus.PASS_ALL)
       </div>
     </div>
 
-    <div class="mt-8 text-14">
+    <div class="line-clamp-2 mt-8 overflow-hidden text-ellipsis text-14">
       {{ item.content }}
     </div>
 

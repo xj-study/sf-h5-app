@@ -14,12 +14,14 @@ interface Prop {
 
 const props = withDefaults(defineProps<Prop>(), {
   pageSize: 20,
-  finishedText: '',
+  finishedText: '没有更多了',
   emptyIcon: 'no-record',
   emptyTitle: '暂无内容',
   closeInit: false,
   reverse: false,
 })
+
+const emits = defineEmits(['change'])
 
 const pageNum = ref(1)
 const emptyIconURL = computed(
@@ -36,7 +38,7 @@ const finishedTextStr = computed(() => {
   if (finished.value && !list.value.length) {
     return ''
   }
-  return props.finishedText || '没有更多了'
+  return props.finishedText
 })
 
 const listShow = computed(() => {
@@ -44,6 +46,13 @@ const listShow = computed(() => {
     return list.value.slice().reverse()
   return list.value
 })
+
+function emitChange() {
+  const size = listShow.value.length
+  emits('change', {
+    size,
+  })
+}
 
 function onLoad() {
   if (props.closeInit) {
@@ -99,6 +108,8 @@ async function _getData(showLoading = true) {
     } else {
       list.value.push(...records)
     }
+
+    emitChange()
   } else {
     console.error('getList不能来空')
   }
@@ -132,6 +143,8 @@ function update<T>(item: T, equals: (item: T) => boolean | null | string, option
       list.value.splice(index, 1, { ...item })
     }
   }
+
+  emitChange()
 }
 
 defineExpose({
