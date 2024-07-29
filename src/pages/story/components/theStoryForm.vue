@@ -1,35 +1,51 @@
 <script setup lang="ts">
-import type { StoryItem } from '../typing'
+import { type StoryItem, StoryType, StoryTypeItems } from '../typing'
+import useForm, { type FormProp } from '@/hooks/useForm'
 
-interface Props {
-  confirmLoading: boolean
-  itemData: StoryItem | null
-}
-
-const props = defineProps<Props>()
+const props = defineProps<FormProp<StoryItem>>()
 
 const emits = defineEmits(['confirm'])
 
-const form = reactive<StoryItem>({ id: 0, title: '', content: '', costAmount: 0, status: 0 })
-
-watchEffect(() => {
-  for (const key in form) {
-    if (props.itemData) {
-      form[key] = props.itemData[key]
-    } else {
-      form[key] = ''
-    }
-  }
+const { form } = useForm<StoryItem>({
+  init: () => ({
+    id: 0,
+    title: '',
+    content: '',
+    costAmount: 0,
+    status: 0,
+    type: StoryType.DETAIL,
+  }),
+  getItemData: () => props.itemData,
 })
 
 function onSubmit() {
   emits('confirm', form)
 }
+
+const typeDesc = computed(() => form.type === StoryType.DETAIL ? '显示关卡详情信息' : '关卡更简化')
 </script>
 
 <template>
   <van-form @submit="onSubmit">
     <van-cell-group inset>
+      <van-field label="单词难度">
+        <template #input>
+          <base-tag-select
+            v-model="form.type"
+            tag-cls="text-14"
+            :list="StoryTypeItems"
+          />
+          <div class="text-12 text-gray">
+            {{ typeDesc }}
+          </div>
+        </template>
+      </van-field>
+      <van-field
+        v-model="form.costAmount"
+        label="门票积分"
+        placeholder="门票积分"
+        clearable
+      />
       <van-field
         v-model="form.title"
         name="标题"
@@ -38,7 +54,6 @@ function onSubmit() {
         clearable
         :rules="[{ required: true, message: '请填写标题' }]"
       />
-
       <van-field
         v-model="form.content"
         type="textarea"
@@ -46,13 +61,6 @@ function onSubmit() {
         name="内容"
         label="内容"
         placeholder="内容"
-        clearable
-        :rules="[{ required: true, message: '请填写内容' }]"
-      />
-      <van-field
-        v-model="form.costAmount"
-        label="门票积分"
-        placeholder="门票积分"
         clearable
       />
     </van-cell-group>

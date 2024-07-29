@@ -3,9 +3,7 @@ import { type StoryRecordItem, StoryRecordStatus } from '../typing'
 import { TagType } from '@/components/typing'
 
 interface Props {
-
   item: StoryRecordItem
-
 }
 const props = defineProps<Props>()
 const router = useRouter()

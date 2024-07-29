@@ -30,6 +30,8 @@ const storyType = computed(() => {
   return StoryType.DETAIL
 })
 
+const isTypeDetail = computed(() => storyType.value === StoryType.DETAIL)
+
 async function getList() {
   const data = await storyRecordQuery(storyId)
   storyData.value = data
@@ -39,7 +41,6 @@ async function getList() {
 
 const isPass = computed(() => storyData.value.status === StoryRecordStatus.PASS_ALL)
 const isActive = computed(() => storyData.value.status !== StoryRecordStatus.NOT_ACTIVE)
-provide('isActive', isActive)
 
 function toBack() {
   router.back()
@@ -49,6 +50,9 @@ const { loadingFlag, loading: toActive } = useLoading(async () => {
   const status = await storyActive(storyData.value.id)
   storyData.value.status = status
   showToast('成功激活！')
+
+  // 设置第一个关卡
+  onRefresh()
 })
 
 const currentItem = ref<StoryLevelItem>()
@@ -86,14 +90,14 @@ async function onComplete() {
     levelId: currentItem.value.id,
     storyTitle: storyData.value.title,
   })
-  showToast('恭喜通关！')
+  showToast('挑战成功，可以挑战下个关卡了~~~')
 
   onRefresh()
 }
 </script>
 
 <template>
-  <base-main-page ref="mainPageRef" :get-list="getList" finished-text="">
+  <base-main-page ref="mainPageRef" :get-list="getList" :reverse="isTypeDetail" finished-text="">
     <template #head-tool>
       <div v-if="storyData">
         <div class="font-bold">

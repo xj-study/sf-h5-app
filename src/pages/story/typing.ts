@@ -1,4 +1,5 @@
 import { RulesType } from '../components/rules/typing'
+import { type TagItem, TagType } from '@/components/typing'
 
 export interface StoryItem {
   id?: number
@@ -6,6 +7,7 @@ export interface StoryItem {
   content: string
   costAmount: number
   status: number
+  type: number
 }
 
 export enum StoryStatusType {
@@ -24,6 +26,11 @@ export enum StoryType {
   SIMPLE = 1,
 }
 
+export const StoryTypeItems: TagItem[] = [
+  { tag: '详情', type: TagType.BLUE, value: StoryType.DETAIL },
+  { tag: '简单', type: TagType.BLUE, value: StoryType.SIMPLE },
+]
+
 export interface StoryQuery {
   status?: number
 }
@@ -37,7 +44,7 @@ export class StoryLevelItem {
   refType: number = RulesType.COMMON
   refRules?: string = ''
   storyId?: number
-  pass?: boolean
+  status?: number = 0
 }
 
 export enum StoryRecordStatus {
@@ -45,6 +52,13 @@ export enum StoryRecordStatus {
   ACTIVE,
   PASS_ALL,
 }
+
+export enum StoryLevelStatus {
+  LOCK = 0,
+  PASS,
+  ACTIVE,
+}
+
 export interface StoryRecordQuery {
   recordStatus?: number
 }

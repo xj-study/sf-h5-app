@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { type StoryLevelItem, StoryType } from '../../typing'
+import { type StoryLevelItem, StoryLevelStatus, StoryType } from '../../typing'
 import { RulesType } from '@/pages/components/rules/typing'
 import { TagType } from '@/components/typing'
 
@@ -13,12 +13,13 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits(['start', 'startGamePoint24', 'learnEngWord'])
 
-const isActive: ComputedRef<boolean> = inject('isActive')
-const isPass = computed(() => props.item.pass)
+const isPass = computed(() => props.item.status === StoryLevelStatus.PASS)
+const isActive = computed(() => props.item.status === StoryLevelStatus.ACTIVE)
+const isLock = computed(() => props.item.status === StoryLevelStatus.LOCK)
 
 function toStart() {
-  if (!isActive.value) {
-    showToast('活动还没有激活，先激活一下~~')
+  if (isLock.value) {
+    showToast('关卡还没有解锁哟，少年~~~')
     return
   }
   if (isPass.value) {
@@ -41,7 +42,7 @@ function applyStatus(colors) {
   let result = ''
   if (isPass.value) {
     result = colors[0]
-  } else if (!isActive.value) {
+  } else if (isLock.value) {
     result = colors[2]
   } else {
     result = colors[1]
@@ -50,12 +51,12 @@ function applyStatus(colors) {
 }
 
 const boxCls = computed(() => {
-  const result = ['relative m-10 inline-block h-70 w-70 overflow-hidden rounded-10 border-solid bg-white']
+  const result = ['relative transition m-10 inline-block h-70 w-70 overflow-hidden rounded-10 border-solid bg-white']
   result.push(applyStatus(['border-amber-3', 'border-green-3', 'border-gray-3']))
   return result
 })
 const levelTextCls = computed(() => {
-  const result = ['text-center text-50 text-white leading-60 text-shadow-lg']
+  const result = ['text-center transition text-50 text-white leading-60 text-shadow-lg']
   result.push(applyStatus(['text-shadow-color-amber-6', 'text-shadow-color-green', 'text-shadow-color-gray']))
   return result
 })
@@ -67,7 +68,7 @@ const tipCls = computed(() => {
 })
 
 const prizeCls = computed(() => {
-  const result = ['absolute bottom-0 left-0 right-0 text-center bg-op-90  text-white']
+  const result = ['absolute transition bottom-0 left-0 right-0 text-center bg-op-90  text-white']
   result.push(applyStatus(['bg-amber-5', 'bg-green-5', 'bg-gray-5']))
   return result
 })
