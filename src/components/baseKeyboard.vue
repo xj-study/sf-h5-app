@@ -1,17 +1,33 @@
 <script setup lang="ts">
 const emits = defineEmits(['input', 'del'])
 const line1 = 'qwertyuiop'
-const line2 = 'adsfghjkl'
+const line2 = 'adsfghjkl-'
 const line3 = 'xzcvbnm'
-const DEL = 'Del'
-const btnCls = 'text-center btn-k p-x-4 min-w-24 h-40 border-1 border-solid border-[rgba(255,255,255,.3)] text-[rgba(255,255,255,.8)] active:bg-[rgba(255,255,255,.2)] m-4 text-30'
+
+const isShift = ref(false)
+const SHIFT = 'shift'
+const DEL = 'del'
+
+const btnCls = computed(() => {
+  const result = ['text-center btn-k p-x-4 min-w-24 h-40  text-[rgba(255,255,255,.8)] active:bg-[rgba(255,255,255,.2)] m-4 text-30']
+  if (isShift.value) {
+    result.push('capitalize')
+  }
+  return result
+})
 function onClick(evt: PointerEvent) {
   const target: HTMLElement = evt.target as HTMLElement
   if (target.classList.contains('btn-k')) {
-    const input = target.textContent
+    let input = target.textContent
+
     if (input === DEL) {
       emits('del')
+    } else if (input === SHIFT) {
+      isShift.value = !isShift.value
     } else {
+      if (isShift.value) {
+        input = input.toLocaleUpperCase()
+      }
       emits('input', input)
     }
   }
@@ -31,10 +47,13 @@ function onClick(evt: PointerEvent) {
       </div>
     </div>
     <div class="flex justify-center">
+      <div :class="btnCls" class="i-carbon-mac-shift">
+        {{ SHIFT }}
+      </div>
       <div v-for="c in line3" :key="c" :class="btnCls">
         {{ c }}
       </div>
-      <div :class="btnCls">
+      <div :class="btnCls" class="i-carbon-delete">
         {{ DEL }}
       </div>
     </div>

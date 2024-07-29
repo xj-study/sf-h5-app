@@ -50,9 +50,7 @@ function toCopy() {
       {{ item.levelOrder }}
     </div>
 
-    <div class="absolute right-0 top-0 rounded-4 p-4 text-18 color-green-9" @click.stop="toCopy">
-      <van-icon name="add-o" />
-    </div>
+    <div class="i-carbon-copy absolute right-0 top-0 m-4 rounded-4 text-18 color-green-9" @click.stop="toCopy" />
 
     <div v-if="item.prize" :class="prizeCls">
       <span class="pr-4">{{ item.prize }} </span>

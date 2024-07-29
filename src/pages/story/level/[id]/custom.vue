@@ -30,6 +30,20 @@ const selectStoryItem = ref<StoryLevelItem>(null)
 const popupTitle = ref('')
 
 const listSize = ref(0)
+
+const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelItem, title) => {
+  if (item.id) {
+    await storyLevelUpdate(item)
+    showToast(title || '操作成功')
+  } else {
+    item.storyId = storyId
+    await storyLevelAdd(item)
+    showToast(title || '添加成功')
+  }
+  onRefresh()
+  editShowFlag.value = false
+})
+
 function toAdd() {
   const data = new StoryLevelItem()
   data.levelOrder = listSize.value + 1
@@ -46,28 +60,12 @@ function toEdit(item: StoryLevelItem) {
 
 function toCopy(item: StoryLevelItem) {
   selectStoryItem.value = { ...item, levelOrder: listSize.value + 1, id: null }
-
-  popupTitle.value = '复制关卡'
-  editShowFlag.value = true
+  onConfirm(selectStoryItem.value, '复制成功')
 }
 
 function toRemove(item: StoryLevelItem) {
   listUpdate(item, 'id', { remove: true })
 }
-
-const { loadingFlag, loading: onConfirm } = useLoading(async (item: StoryLevelItem) => {
-  if (item.id) {
-    await storyLevelUpdate(item)
-    showToast('操作成功')
-  } else {
-    item.storyId = storyId
-    await storyLevelAdd(item)
-    showToast('添加成功')
-  }
-  onRefresh()
-
-  editShowFlag.value = false
-})
 
 function onPageChange(data) {
   listSize.value = data.size
