@@ -17,6 +17,8 @@ const isPass = computed(() => props.item.status === StoryLevelStatus.PASS)
 const isActive = computed(() => props.item.status === StoryLevelStatus.ACTIVE)
 const isLock = computed(() => props.item.status === StoryLevelStatus.LOCK)
 
+const isRefTypeCommon = computed(() => props.item.refType === RulesType.COMMON)
+
 function toStart() {
   if (isLock.value) {
     showToast('关卡还没有解锁哟，少年~~~')
@@ -74,6 +76,13 @@ const prizeCls = computed(() => {
 })
 
 const tipText = computed(() => applyStatus(['pass', '', 'lock']))
+const priceText = computed(() => {
+  if (isRefTypeCommon.value) {
+    if (isLock.value)
+      return '??'
+  }
+  return props.item.prize || 0
+})
 </script>
 
 <template>
@@ -85,7 +94,7 @@ const tipText = computed(() => applyStatus(['pass', '', 'lock']))
       {{ tipText }}
     </div>
     <div v-if="item.prize" :class="prizeCls">
-      <span class="pr-4">{{ item.prize }} </span>
+      <span class="pr-4">{{ priceText }} </span>
       <van-icon name="points" />
     </div>
   </div>
@@ -98,7 +107,7 @@ const tipText = computed(() => applyStatus(['pass', '', 'lock']))
       </div>
       <div v-if="!isPass" class="text-14">
         <span> 奖励：</span>
-        <span class="text-20 text-amber-500">{{ item.prize || 0 }}</span>
+        <span class="text-20 text-amber-500">{{ priceText }}</span>
         <span class="pl-8 text-12">积分</span>
       </div>
     </div>
