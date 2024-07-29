@@ -111,9 +111,9 @@ function toGame() {
           </div>
 
           <div v-if="!parentTypeFlag" class="mt-10 flex items-center justify-between">
-            <div class="">
-              <span class="text-20 text-amber-500">{{ user.integral || 0 }}</span>
-              <span class="pl-8 text-12">积分</span>
+            <div class="text-amber-500">
+              <span class="text-20">{{ user.integral || 0 }}</span>
+              <van-icon name="points" class="ml-4" />
             </div>
             <base-text-link @click="toIntegralRecord">
               查看积分明细

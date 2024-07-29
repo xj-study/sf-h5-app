@@ -24,6 +24,8 @@ const priceText = computed(() => {
 
 <template>
   <div>
-    {{ priceText }} <span class="text-12 color-gray">{{ postfix }}</span>
+    {{ priceText }}
+
+    <van-icon name="points" class="ml-4" />
   </div>
 </template>

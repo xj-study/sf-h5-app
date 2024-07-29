@@ -116,7 +116,7 @@ async function onComplete() {
           <div class="text-16">
             <span>门票：</span>
             <span class="text-20 text-amber-500">{{ storyData.costAmount || 0 }}</span>
-            <span class="pl-8 text-12">积分</span>
+            <van-icon name="points text-amber-500" class="ml-4" />
           </div>
 
           <base-button :loading="loadingFlag" type="primary" size="small" class="min-w-120" @click="toActive">

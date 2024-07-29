@@ -22,7 +22,7 @@ const integralCls = computed(() => {
       <div>
         <span class="pr-8 text-14">{{ prefix }}</span>
         <span class="text-20" :class="integralCls">{{ integralText }}</span>
-        <span class="pl-8 text-12">积分</span>
+        <van-icon name="points text-amber-500" class="ml-4" />
       </div>
       <div class="mt-8 text-12">
         {{ item.content }}

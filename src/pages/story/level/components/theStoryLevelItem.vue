@@ -108,7 +108,7 @@ const priceText = computed(() => {
       <div v-if="!isPass" class="text-14">
         <span> 奖励：</span>
         <span class="text-20 text-amber-500">{{ priceText }}</span>
-        <span class="pl-8 text-12">积分</span>
+        <van-icon name="points" class="ml-4 text-amber-500" />
       </div>
     </div>
 
@@ -119,7 +119,10 @@ const priceText = computed(() => {
     <div class="mt-20">
       <div v-if="isPass" class="color-green-700">
         <span>已通关</span>
-        <span v-if="item.prize">，并获得 <span class="text-amber-500">{{ item.prize }}</span> 积分</span>
+        <span v-if="item.prize">，并获得
+          <span class="text-amber-500">{{ item.prize }}</span>
+          <van-icon name="points text-amber-500" class="ml-4" />
+        </span>
       </div>
       <base-button v-else :disabled="!isActive" size="small" plain type="primary" class="min-w-70" @click.stop="toStart">
         挑战

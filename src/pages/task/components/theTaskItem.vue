@@ -69,9 +69,9 @@ const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFl
         <base-tag v-if="tagData.tag" v-bind="tagData" class="mr-10" />
         <span> {{ item.title }} </span>
       </div>
-      <div>
-        <span class="text-20 text-amber-500">{{ item.integral || 0 }}</span>
-        <span class="pl-8 text-12">积分</span>
+      <div class="text-amber-500">
+        <span class="text-20">{{ item.integral || 0 }}</span>
+        <van-icon name="points" class="ml-4" />
       </div>
     </div>
 
