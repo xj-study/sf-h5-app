@@ -4,7 +4,11 @@ import useForm, { type FormProp } from '@/hooks/useForm'
 
 import TheRulesForm from '@/pages/components/rules/theRulesForm.vue'
 
-const props = defineProps<FormProp<StoryLevelItem>>()
+interface Props extends FormProp<StoryLevelItem> {
+  isTypeDetail: boolean
+}
+
+const props = defineProps<Props>()
 
 const emits = defineEmits(['confirm'])
 
@@ -38,23 +42,25 @@ function onSubmit() {
 
       <TheRulesForm v-model:type="form.refType" v-model:rules="form.refRules" label="类型" />
 
-      <van-field
-        v-model="form.title"
-        class="mt-20"
-        label="标题"
-        placeholder="标题"
-        clearable
-      />
+      <div v-if="isTypeDetail">
+        <van-field
+          v-model="form.title"
+          class="mt-20"
+          label="标题"
+          placeholder="标题"
+          clearable
+        />
 
-      <van-field
-        v-model="form.content"
-        type="textarea"
-        rows="2"
+        <van-field
+          v-model="form.content"
+          type="textarea"
+          rows="2"
 
-        label="内容"
-        placeholder="内容"
-        clearable
-      />
+          label="内容"
+          placeholder="内容"
+          clearable
+        />
+      </div>
     </van-cell-group>
 
     <div class="m-16">

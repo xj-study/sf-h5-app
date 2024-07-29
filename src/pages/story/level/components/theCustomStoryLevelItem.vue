@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import type { StoryLevelItem } from '../../typing'
+import { type StoryLevelItem, StoryType } from '../../typing'
 import { type TagItem, TagType } from '@/components/typing'
 
 interface Props {
   item: StoryLevelItem
+  type: number
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['edit', 'remove'])
-function toEdit() {
-  emits('edit', props.item)
-}
+
+const emits = defineEmits(['edit', 'remove', 'copy'])
 
 const tagItem = computed<TagItem>(() => {
   let tag: number | string = props.item.levelOrder
@@ -18,10 +17,50 @@ const tagItem = computed<TagItem>(() => {
   }
   return { type: TagType.GREEN, tag: `${tag}` }
 })
+
+const isTypeSimple = computed(() => props.type === StoryType.SIMPLE)
+const isTypeDetail = computed(() => props.type === StoryType.DETAIL)
+
+const boxCls = computed(() => {
+  const result = ['relative transition m-10 border-blue-5 inline-block h-70 w-70 overflow-hidden rounded-10 border-solid bg-white']
+  return result
+})
+const levelTextCls = computed(() => {
+  const result = ['text-center transition text-50 text-shadow-color-blue text-white leading-60 text-shadow-lg']
+
+  return result
+})
+const prizeCls = computed(() => {
+  const result = ['absolute transition bg-blue-5 bottom-0 left-0 right-0 text-center bg-op-90  text-white']
+
+  return result
+})
+
+function toEdit() {
+  emits('edit', props.item)
+}
+function toCopy() {
+  emits('copy', props.item)
+}
 </script>
 
 <template>
-  <div class="m-10 bg-white p-10">
+  <div v-if="isTypeSimple" :class="boxCls" @click="toEdit">
+    <div :class="levelTextCls">
+      {{ item.levelOrder }}
+    </div>
+
+    <div class="absolute right-0 top-0 rounded-4 p-4 text-18 color-green-9" @click.stop="toCopy">
+      <van-icon name="add-o" />
+    </div>
+
+    <div v-if="item.prize" :class="prizeCls">
+      <span class="pr-4">{{ item.prize }} </span>
+      <van-icon name="points" />
+    </div>
+  </div>
+
+  <div v-if="isTypeDetail" class="m-10 bg-white p-10">
     <div class="flex justify-between text-16">
       <div class="flex items-center">
         <base-tag v-bind="tagItem" class="mr10" />

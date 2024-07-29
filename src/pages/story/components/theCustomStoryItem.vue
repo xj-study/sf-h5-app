@@ -17,7 +17,7 @@ function onEdit() {
 
 const router = useRouter()
 function onLevelManager() {
-  router.push(`/story/level/${props.item.id}/custom`)
+  router.push(`/story/level/${props.item.id}/custom?type=${props.item.type}`)
 }
 
 const { loadingFlag: publishLoading, loading: toPublish } = useLoading(async () => {
