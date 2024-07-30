@@ -45,6 +45,10 @@ function toAdd() {
   editShowFlag.value = true
 }
 
+function toDelete(itemData) {
+  listUpdate(itemData, 'id', { remove: true })
+}
+
 const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) => {
   if (item.taskId) {
     // update
@@ -78,7 +82,7 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
     </template>
 
     <template #default="{ itemData }">
-      <TheCustomTaskItem :key="itemData.id" :item="itemData" @edit="toEdit" />
+      <TheCustomTaskItem :key="itemData.id" :item="itemData" @delete="toDelete" @edit="toEdit" />
     </template>
     <template #popup>
       <base-popup v-model:show="editShowFlag" :title="taskFormTitle">

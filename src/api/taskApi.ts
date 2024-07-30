@@ -49,3 +49,10 @@ export async function taskUpdate(data: TaskForm): Promise<any> {
     data,
   })
 }
+
+export async function taskDelete(taskId: number): Promise<any> {
+  return request({
+    method: 'get',
+    url: `/task/delete/${taskId}`,
+  })
+}
