@@ -27,10 +27,11 @@ export async function recordCompleteByTaskId(taskId: number, date: number): Prom
   })
 }
 
-export async function taskQuery(): Promise<any> {
+export async function taskQuery(query): Promise<any> {
   return request({
     method: 'get',
-    url: '/task/query',
+    url: `/task/query`,
+    params: query,
   })
 }
 

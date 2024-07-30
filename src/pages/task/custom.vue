@@ -15,10 +15,17 @@ definePage({
   },
 })
 
-const { mainPageRef, listUpdate } = useMainPage()
+const { mainPageRef, listUpdate, onRefresh } = useMainPage()
+
+const keyword = ref('')
+function toSearch() {
+  onRefresh()
+}
 
 async function getList() {
-  const records = await taskQuery()
+  const params = { keyword: keyword.value || '' }
+
+  const records = await taskQuery(params)
   return records
 }
 
@@ -62,9 +69,12 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
 <template>
   <base-main-page ref="mainPageRef" :get-list="getList">
     <template #head-tool>
-      <base-button icon="add" @click="toAdd">
-        新增任务
-      </base-button>
+      <div class="flex items-center">
+        <base-search v-model:input="keyword" class="flex-1" @change="toSearch" />
+        <base-button icon="add" size="small" @click="toAdd">
+          新增任务
+        </base-button>
+      </div>
     </template>
 
     <template #default="{ itemData }">

@@ -52,14 +52,23 @@ function onChange() {
   onRefresh()
 }
 
+const keyword = ref('')
+function toSearch() {
+  onRefresh()
+}
+
 const taskListType = computed(() => {
   return routeQuery.value.id ? ListType.MANAGER : ListType.USER
 })
 
 async function getList() {
-  routeQuery.value.date = currentDateTabs.value
-  routeQuery.value.status = currentTabs.value === -1 ? undefined : currentTabs.value
-  const records = await recordQuery(routeQuery.value)
+  const params = { ...routeQuery.value }
+  params.date = currentDateTabs.value
+  params.status = currentTabs.value === -1 ? undefined : currentTabs.value
+  if (keyword.value) {
+    params.keyword = keyword.value
+  }
+  const records = await recordQuery(params)
   return records
 }
 
@@ -105,10 +114,10 @@ async function onComplete() {
 <template>
   <base-main-page ref="mainPageRef" :head-tool-padding="false" :get-list="getList">
     <template #head-tool>
-      <div>
-        <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />
-        <base-tabs v-model="currentTabs" type="card" line-height="2" :border="true" :list="taskTabs" @change="onChange" />
-      </div>
+      <base-search v-model:input="keyword" class="pb-0" @change="toSearch" />
+
+      <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />
+      <base-tabs v-model="currentTabs" type="card" line-height="2" :border="true" :list="taskTabs" @change="onChange" />
     </template>
     <template #default="{ itemData }">
       <TheTaskItem

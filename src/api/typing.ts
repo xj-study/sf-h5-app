@@ -8,6 +8,7 @@ export interface TaskRecordQuery {
   status?: number | string
   date?: number
   tab?: number
+  keyword?: string
 }
 
 export interface ResponseBody<T = any> {
