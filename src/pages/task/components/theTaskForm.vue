@@ -5,7 +5,7 @@ import theRulesForm from '@/pages/components/rules/theRulesForm.vue'
 
 const props = defineProps<FormProp<TaskForm>>()
 
-const emits = defineEmits(['confirm'])
+const emits = defineEmits(['confirm', 'change'])
 
 const { form } = useForm<TaskForm>({
   init: () => new TaskForm(),
@@ -14,24 +14,37 @@ const { form } = useForm<TaskForm>({
 function onSubmit() {
   emits('confirm', form)
 }
+function onTag() {
+  emits('change', 'tag')
+}
 </script>
 
 <template>
   <van-form @submit="onSubmit">
     <van-cell-group inset>
       <van-field
+        :model-value="form.tagStr"
+        label="标签"
+        is-link
+        readonly
+        placeholder="标签"
+
+        @click="onTag"
+      />
+      <van-field
         v-model="form.title"
-        name="标题"
+
         label="标题"
         placeholder="标题"
         clearable
         :rules="[{ required: true, message: '请填写标题' }]"
       />
+
       <van-field
         v-model="form.content"
         type="textarea"
         rows="2"
-        name="内容"
+
         label="内容"
         placeholder="内容"
         clearable

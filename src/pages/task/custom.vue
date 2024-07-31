@@ -68,6 +68,41 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
   }, 50)
   editShowFlag.value = false
 })
+
+const popupRef = ref()
+function onChange() {
+  popupRef.value.open()
+}
+
+const tagKeyword = ref('')
+const tagslist = [
+  { label: '健康', value: 1 },
+  { label: '健康1', value: 2 },
+  { label: '健康2', value: 3 },
+  { label: '健康1', value: 4 },
+  { label: '健康2', value: 5 },
+  { label: '健康1', value: 6 },
+  { label: '健康2', value: 7 },
+  { label: '健康1', value: 8 },
+  { label: '健康2', value: 9 },
+  { label: '健康1', value: 10 },
+  { label: '健康2', value: 11 },
+  { label: '健康1', value: 12 },
+  { label: '健康2', value: 13 },
+]
+// 添加
+function onTagAdd(label: string) {
+  formData.value.tagStr = label
+  popupRef.value.close()
+}
+function onTagConfirm(data) {
+  formData.value.tag = data
+  formData.value.tagStr = data.map((val) => {
+    const item = tagslist.find(ele => ele.value === +val)
+    return item?.label || ''
+  }).join(',')
+  popupRef.value.close()
+}
 </script>
 
 <template>
@@ -85,8 +120,15 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
       <TheCustomTaskItem :key="itemData.id" :item="itemData" @delete="toDelete" @edit="toEdit" />
     </template>
     <template #popup>
-      <base-popup v-model:show="editShowFlag" :title="taskFormTitle">
-        <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @confirm="onConfirm" />
+      <base-popup ref="popupRef" v-model:show="editShowFlag" :title="taskFormTitle">
+        <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @change="onChange" @confirm="onConfirm" />
+        <template #right>
+          <base-select :list="tagslist" class="max-h-60vh" quick-add multi-select @add="onTagAdd" @confirm="onTagConfirm">
+            <template #header>
+              <base-search v-model:input="tagKeyword" placeholder="请输入关键字" />
+            </template>
+          </base-select>
+        </template>
       </base-popup>
     </template>
   </base-main-page>

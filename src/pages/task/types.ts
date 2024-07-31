@@ -18,5 +18,7 @@ export class TaskForm {
   public taskId?: number
   public id?: number
   public rules?: string = ''
+  public tag?: string[]
+  public tagStr?: string = ''
   constructor(public title: string = '', public content: string = '', public integral: number = 10, public taskType: RulesType = RulesType.COMMON, public verifyFlag: boolean = true) {}
 }

@@ -24,3 +24,8 @@ export function getTagValue(index, item: TagItem) {
     value = item.value
   return value
 }
+
+export interface SelectItem {
+  label: string
+  value: string | number
+}
