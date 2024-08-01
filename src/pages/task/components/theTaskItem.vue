@@ -6,6 +6,7 @@ import useLoading from '@/hooks/useLoading'
 import { recordComplete, recordCompleteByTaskId } from '@/api/taskApi'
 import { ListType } from '@/typing'
 import { RulesType } from '@/pages/components/rules/typing'
+import { type TagItem, TagType } from '@/components/typing'
 
 interface Props {
   type: ListType
@@ -25,6 +26,15 @@ const toOrOnCompleteText = computed(() => {
 })
 
 const { tagData, statusInitFlag, statusWaitVerifyFlag } = useTaskTag(props)
+
+const tags = computed<TagItem[]>(() => {
+  if (props.item.tagStr) {
+    const res: TagItem[] = props.item.tagStr.split(',').map(tag => ({ tag, type: TagType.BLUE }))
+    res.unshift(tagData.value)
+    return res
+  }
+  return [tagData.value]
+})
 
 async function updateRecoredComplete() {
   let status: number = 0
@@ -66,7 +76,6 @@ const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFl
   <div class="m-10 bg-white p-10">
     <div class="flex justify-between text-16">
       <div class="flex items-center">
-        <base-tag v-if="tagData.tag" v-bind="tagData" class="mr-10" />
         <span> {{ item.title }} </span>
       </div>
       <div class="text-amber-500">
@@ -74,8 +83,10 @@ const btnVerifyFlag = computed(() => managerTypeFlag.value && statusWaitVerifyFl
         <van-icon name="points" class="ml-4" />
       </div>
     </div>
-
-    <div class="mt-8 text-14">
+    <div class="mt-8">
+      <base-tag v-for="tagItem in tags" :key="tagItem.tag" class="mr-4" v-bind="tagItem" />
+    </div>
+    <div v-if="item.content" class="mt-8 text-14">
       {{ item.content }}
     </div>
     <Transition name="fade-item">

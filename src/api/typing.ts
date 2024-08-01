@@ -9,6 +9,7 @@ export interface TaskRecordQuery {
   date?: number
   tab?: number
   keyword?: string
+  tagId?: number
 }
 
 export interface ResponseBody<T = any> {

@@ -4,13 +4,18 @@ import { type TagItem, getTagValue } from './typing'
 interface Props {
   list: TagItem[]
   tagCls?: string
+  clear?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { clear: true })
 const selectTag = defineModel<number>()
 
 function toSelect(index, item: TagItem) {
   const value = getTagValue(index, item)
-  selectTag.value = value
+  if (props.clear && selectTag.value === value) {
+    selectTag.value = null
+  } else {
+    selectTag.value = value
+  }
 }
 function checkSelect(index, item: TagItem) {
   const value = getTagValue(index, item)

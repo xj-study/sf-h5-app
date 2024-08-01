@@ -26,6 +26,13 @@ export async function recordCompleteByTaskId(taskId: number, date: number): Prom
     },
   })
 }
+export async function tagQuery(): Promise<any> {
+  return request({
+    method: 'get',
+    url: '/task/record/tag/query',
+
+  })
+}
 
 export async function taskQuery(query): Promise<any> {
   return request({

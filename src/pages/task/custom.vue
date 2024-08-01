@@ -61,11 +61,11 @@ function toDelete(itemData) {
 }
 
 const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) => {
-  if (item.taskId) {
+  if (item.id) {
     // update
     await taskUpdate(item)
     showToast('更新成功')
-    listUpdate(item, 'taskId')
+    listUpdate(item, 'id')
   } else {
     // add
     const id = await taskAdd(item)

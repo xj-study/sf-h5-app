@@ -7,8 +7,8 @@ import type { TaskForm } from './types'
 import { TaskDateType, TaskStatus } from './types'
 import ThePoint24Game from '@/pages/game/point24/components/thePoint24Game.vue'
 import type { TaskRecordQuery } from '@/api/typing'
-import { recordQuery } from '@/api/taskApi'
-import type { TabItem } from '@/components/typing'
+import { recordQuery, tagQuery } from '@/api/taskApi'
+import { type TabItem, TagType } from '@/components/typing'
 import { ListType } from '@/typing'
 
 import useMainPage from '@/hooks/useMainPage'
@@ -45,6 +45,7 @@ const routeQuery = computed<TaskRecordQuery>(() => {
 const currentDateTabs = ref(TaskDateType.TODAY)
 const tab = routeQuery.value.tab
 const currentTabs = ref(tab === null ? -1 : +tab)
+const currentTag = ref()
 
 const { mainPageRef, onRefresh, listUpdate } = useMainPage()
 
@@ -67,6 +68,9 @@ async function getList() {
   params.status = currentTabs.value === -1 ? undefined : currentTabs.value
   if (keyword.value) {
     params.keyword = keyword.value
+  }
+  if (currentTag.value) {
+    params.tagId = currentTag.value
   }
   const records = await recordQuery(params)
   return records
@@ -109,6 +113,17 @@ function onLearnEngWord(itemData: TaskForm, fn) {
 async function onComplete() {
   await compeleteFn()
 }
+
+const selectTags = ref([])
+
+async function getTags() {
+  const result = await tagQuery()
+  selectTags.value = result.map(v => ({ tag: v.name, value: v.id, type: TagType.BLUE }))
+}
+
+onMounted(() => {
+  getTags()
+})
 </script>
 
 <template>
@@ -118,6 +133,8 @@ async function onComplete() {
 
       <base-tabs v-model="currentDateTabs" class="pb4" :list="taskDateTabs" @change="onChange" />
       <base-tabs v-model="currentTabs" type="card" line-height="2" :border="true" :list="taskTabs" @change="onChange" />
+
+      <base-tag-select v-model="currentTag" class="m-x-10 mt-10 overflow-x-auto text-nowrap" :list="selectTags" @update:model-value="onChange" />
     </template>
     <template #default="{ itemData }">
       <TheTaskItem
