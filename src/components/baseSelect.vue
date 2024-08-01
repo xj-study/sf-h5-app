@@ -5,14 +5,20 @@ interface Props {
   list: SelectItem[]
   multiSelect?: boolean
   quickAdd?: boolean
+  loading?: boolean
+  emptyIcon?: string
+  emptyTitle?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   multiSelect: false,
+  loading: false,
+  emptyIcon: 'no-record',
+  emptyTitle: '暂无内容',
 })
 
 const emits = defineEmits(['confirm', 'add'])
 
-const select = defineModel<string[] >()
+const select = defineModel<string[] >({ default: [] })
 
 function onClick(item: SelectItem) {
   if (props.multiSelect) {
@@ -71,26 +77,41 @@ const addFiledValue = ref('')
 function onAdd() {
   emits('add', addFiledValue.value)
 }
+
+const emptyIconURL = computed(
+  () => `https://config.lotuscars.com.cn/sales-assistant/placeholder/${props.emptyIcon}.png`,
+)
 </script>
 
 <template>
-  <div class="flex flex-col text-[#222]">
+  <div class="h-full flex flex-col text-[#222]">
     <div>
       <slot name="header" />
     </div>
-    <div class="flex-1 overflow-y-auto">
-      <div
-        v-for="item in list" :key="item.value"
-        class="m-x-14 border-b-1 border-[rgba(0,0,0,.06)] border-b-solid p-y-10 last:border-b-0"
-        @click="onClick(item)"
-      >
-        <div v-if="!$slots.default" class="flex items-center justify-between">
-          <span>
-            {{ item.label }}
-          </span>
-          <div v-show="checkSelect(item)" class="i-carbon-checkmark text-18 text-green-500" />
+    <div class="relative flex-1 overflow-y-auto">
+      <div v-if="loading" class="absolute bottom-0 left-0 right-0 top-0 mt-20 bg-[rgba(255,255,255,.2)] text-center">
+        <van-loading size="20" color="#1989fa" />
+      </div>
+      <div v-if="list.length > 0">
+        <div
+          v-for="item in list" :key="item.value"
+          class="m-x-14 border-b-1 border-[rgba(0,0,0,.06)] border-b-solid p-y-10 last:border-b-0"
+          @click="onClick(item)"
+        >
+          <div v-if="!$slots.default" class="flex items-center justify-between">
+            <span>
+              {{ item.label }}
+            </span>
+            <div v-show="checkSelect(item)" class="i-carbon-checkmark text-18 text-green-500" />
+          </div>
+          <slot v-else />
         </div>
-        <slot v-else />
+      </div>
+      <div v-else class="flex flex-col items-center pt-80 text-slate-400">
+        <img :src="emptyIconURL" alt="" class="mt-8 w-85">
+        <div class="text-12">
+          {{ emptyTitle }}
+        </div>
       </div>
     </div>
     <div v-if="quickAdd" class="m-x-14 flex items-center border-t-1 border-[rgba(0,0,0,.06)] border-t-solid">

@@ -48,7 +48,6 @@ function onTag() {
         label="内容"
         placeholder="内容"
         clearable
-        :rules="[{ required: true, message: '请填写内容' }]"
       />
       <van-field
         v-model="form.integral"

@@ -18,3 +18,7 @@ export interface Page {
   pageNum: number
   pageSize: number
 }
+
+export interface KeywordSearch {
+  keyword?: string
+}

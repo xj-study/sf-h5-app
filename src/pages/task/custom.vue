@@ -2,10 +2,12 @@
 import { showToast } from 'vant'
 import TheCustomTaskItem from './components/theCustomTaskItem.vue'
 import TheTaskForm from './components/theTaskForm.vue'
-import type { TaskForm } from './types'
+import { TaskForm } from './types'
 import useLoading from '@/hooks/useLoading'
 import { taskAdd, taskQuery, taskUpdate } from '@/api/taskApi'
 import useMainPage from '@/hooks/useMainPage'
+import type { SelectItem } from '@/components/typing'
+import { tagAdd, tagQuery } from '@/api/tagApi'
 
 definePage({
   name: 'taskCustom',
@@ -23,24 +25,33 @@ function toSearch() {
 }
 
 async function getList() {
-  const params = { keyword: keyword.value || '' }
+  const params: { keyword?: string } = { }
 
+  if (keyword.value) {
+    params.keyword = keyword.value
+  }
   const records = await taskQuery(params)
   return records
 }
 
 const editShowFlag = ref(false)
-const formData = ref(null)
+const formData = ref<TaskForm>(null)
 const taskFormTitle = ref('')
 
+const formTag = computed(() => {
+  if (formData.value)
+    return formData.value.tag.map(v => `${v}`)
+  return []
+})
+
 function toEdit(itemData) {
-  formData.value = itemData
+  formData.value = { ...itemData }
   taskFormTitle.value = '编辑任务'
   editShowFlag.value = true
 }
 
 function toAdd() {
-  formData.value = null
+  formData.value = new TaskForm()
   taskFormTitle.value = '新增任务'
   editShowFlag.value = true
 }
@@ -57,8 +68,8 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
     listUpdate(item, 'taskId')
   } else {
     // add
-    const taskId = await taskAdd(item)
-    item.taskId = taskId
+    const id = await taskAdd(item)
+    item.id = id
     showToast('添加成功')
     listUpdate(item)
   }
@@ -70,35 +81,40 @@ const { loadingFlag, loading: onConfirm } = useLoading(async (item: TaskForm) =>
 })
 
 const popupRef = ref()
+const tagKeyword = ref('')
+const tagslist = ref<SelectItem[]>([])
+const tagListShow = computed<SelectItem[]>(() => tagslist.value.filter(item => item.label.includes(tagKeyword.value)))
+
+const { loading: loadTags, loadingFlag: loadingTags } = useLoading(async () => {
+  const result = await tagQuery({})
+  tagslist.value = (result || []).map((item) => {
+    const { id, name } = item
+    return { value: id, label: name }
+  })
+})
+
 function onChange() {
   popupRef.value.open()
+  loadTags()
 }
-
-const tagKeyword = ref('')
-const tagslist = [
-  { label: '健康', value: 1 },
-  { label: '健康1', value: 2 },
-  { label: '健康2', value: 3 },
-  { label: '健康1', value: 4 },
-  { label: '健康2', value: 5 },
-  { label: '健康1', value: 6 },
-  { label: '健康2', value: 7 },
-  { label: '健康1', value: 8 },
-  { label: '健康2', value: 9 },
-  { label: '健康1', value: 10 },
-  { label: '健康2', value: 11 },
-  { label: '健康1', value: 12 },
-  { label: '健康2', value: 13 },
-]
 // 添加
-function onTagAdd(label: string) {
-  formData.value.tagStr = label
+async function onTagAdd(label: string) {
+  let item = tagslist.value.find(el => el.label === label)
+  if (!item) {
+    const id = await tagAdd(label)
+    item = { value: id, label }
+  }
+
+  formData.value.tag = [`${item.value}`]
+  formData.value.tagStr = item.label
   popupRef.value.close()
+
+  // 新增标签了
 }
 function onTagConfirm(data) {
   formData.value.tag = data
   formData.value.tagStr = data.map((val) => {
-    const item = tagslist.find(ele => ele.value === +val)
+    const item = tagslist.value.find(ele => ele.value === +val)
     return item?.label || ''
   }).join(',')
   popupRef.value.close()
@@ -123,9 +139,9 @@ function onTagConfirm(data) {
       <base-popup ref="popupRef" v-model:show="editShowFlag" :title="taskFormTitle">
         <TheTaskForm :confirm-loading="loadingFlag" :item-data="formData" @change="onChange" @confirm="onConfirm" />
         <template #right>
-          <base-select :list="tagslist" class="max-h-60vh" quick-add multi-select @add="onTagAdd" @confirm="onTagConfirm">
+          <base-select :list="tagListShow" :model-value="formTag" :loading="loadingTags" class="max-h-60vh" quick-add multi-select @add="onTagAdd" @confirm="onTagConfirm">
             <template #header>
-              <base-search v-model:input="tagKeyword" placeholder="请输入关键字" />
+              <base-search v-model:input="tagKeyword" placeholder="请输入关键字" @change="loadTags" />
             </template>
           </base-select>
         </template>

@@ -96,7 +96,7 @@ async function _getData(showLoading = true) {
     if (Array.isArray(result)) {
       result = { records: result, size: result.length + 1 }
     } else if (result == null) {
-      result = {}
+      result = { records: [] }
     }
     const { records, size } = result
     loading.value = false

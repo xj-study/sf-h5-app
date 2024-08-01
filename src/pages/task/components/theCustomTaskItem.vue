@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import type { TaskForm } from '../types'
 import { taskDelete } from '@/api/taskApi'
+import { type TagItem, TagType } from '@/components/typing'
 import useLoading from '@/hooks/useLoading'
 
-const props = defineProps({
-  item: { type: Object, default: () => ({}) },
-})
+interface Props {
+  item: TaskForm
+}
+const props = defineProps<Props>()
 const emits = defineEmits(['edit', 'delete'])
 
 function onEdit() {
@@ -14,6 +17,13 @@ function onEdit() {
 const { loadingFlag, loading: toDelete } = useLoading(async () => {
   await taskDelete(props.item.taskId)
   emits('delete', props.item)
+})
+
+const tags = computed<TagItem[]>(() => {
+  if (props.item.tagStr) {
+    return props.item.tagStr.split(',').map(tag => ({ tag, type: TagType.BLUE }))
+  }
+  return []
 })
 </script>
 
@@ -27,7 +37,11 @@ const { loadingFlag, loading: toDelete } = useLoading(async () => {
           <van-icon name="points" class="ml-4" />
         </div>
       </div>
-      <div class="mt-8 text-14">
+
+      <div class="mt-8">
+        <base-tag v-for="tagItem in tags" :key="tagItem.tag" class="mr-4" v-bind="tagItem" />
+      </div>
+      <div v-if="item.content" class="mt-8 text-14">
         {{ item.content }}
       </div>
 
