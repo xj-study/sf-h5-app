@@ -39,7 +39,7 @@ const formData = ref<TaskForm>(null)
 const taskFormTitle = ref('')
 
 const formTag = computed(() => {
-  if (formData.value)
+  if (formData.value && formData.value.tag)
     return formData.value.tag.map(v => `${v}`)
   return []
 })
